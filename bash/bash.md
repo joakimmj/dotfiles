@@ -41,10 +41,17 @@ Set `less` as the system pager.
 export SYSTEMD_PAGER=less
 ```
 
-## History
+## History control
 Ignore duplicates and spaces in the git history.
+
+> A value of `ignoredups` causes lines which match the previous history entry 
+> to not be saved.
+
+> A value of `erasedups` causes all previous lines matching the current line 
+> to be removed from the history list before that line is saved.
+
 ```bash tangle:~/.bashrc
-HISTCONTROL=ignoreboth
+HISTCONTROL=ignoreboth:erasedups
 ```
 
 Append to the history file, don't overwrite it
