@@ -1,6 +1,7 @@
 # mj-configs
 
-This is a repository containing most of my configurations.
+This is a repository containing most of my configurations. They are
+tangled with the CLI tool [md_tangle][1].
 
 ## Configurations
 
@@ -10,3 +11,5 @@ This is a repository containing most of my configurations.
 * [conkeror](configurations/conkeror.md)
 * [nano](configurations/nano.md)
 * [Xmodmap](configurations/xmodmap.md)
+
+[1]: https://github.com/joakimmj/md_tangle
