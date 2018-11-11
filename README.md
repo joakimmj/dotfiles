@@ -4,9 +4,9 @@ This is a repository containing most of my configurations.
 
 ## Configurations
 
-* [bash](bash/bash.md)
-  * [.git-completion](bash/.git-completion.bash)
-  * [.git-prompt](bash/.git-prompt.sh)
-* [conkeror](conkeror/conkeror.md)
-* [nano](nano/nano.md)
-* [Xmodmap](xmodmap/xmodmap.md)
+* [bash](configurations/bash.md)
+  * [.git-completion](assets/.git-completion.bash)
+  * [.git-prompt](assets/.git-prompt.sh)
+* [conkeror](configurations/conkeror.md)
+* [nano](configurations/nano.md)
+* [Xmodmap](configurations/xmodmap.md)
