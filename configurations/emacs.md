@@ -4,7 +4,14 @@
 
 Packages to install
 ```lisp tangle:~/.emacs
-(setq package-list '(fill-column-indicator smex ido-vertical-mode))
+(setq
+ my-packages
+ '(
+   fill-column-indicator
+   smex
+   ido-vertical-mode
+   )
+ )
 ```
 
 Add repositories:
@@ -31,7 +38,7 @@ Fetch the list of packages available
 
 Install the missing packages
 ```lisp tangle:~/.emacs
-(dolist (package package-list)
+(dolist (package my-packages)
   (unless (package-installed-p package)
     (package-install package)))
 ```
@@ -82,6 +89,28 @@ From: [EmacsWiki](http://www.emacswiki.org/emacs/CalendarWeekNumbers)
 
 ## Looks and feels
 
+### Font
+```lisp tangle:~/.emacs
+(set-language-environment "UTF-8")
+(set-default-coding-systems 'utf-8-unix)
+
+;; set a default font
+(when (member "DejaVu Sans Mono" (font-family-list))
+  (set-face-attribute 'default nil :font "DejaVu Sans Mono"))
+
+;; specify font for all unicode characters
+(when (member "Symbola" (font-family-list))
+  (set-fontset-font t 'unicode "Symbola" nil 'prepend))
+
+```
+
+### Theme
+```lisp tangle:~/.emacs
+(load-theme 'tango-dark t)
+```
+
+### Editor
+
 Remove splash screen
 ```lisp tangle:~/.emacs
 (setq inhibit-splash-screen t)
@@ -92,7 +121,7 @@ Remove \*scratch\* message
 (setq initial-scratch-message nil)
 ```
 
-Line numbers -> hide
+Hide line numbers
 ```lisp tangle:~/.emacs
 (global-linum-mode 0)
 ```
@@ -117,17 +146,17 @@ Column numbers -> show
 (setq column-number-mode t)
 ```
 
-Tool bar -> hide
+Hide tool bar
 ```lisp tangle:~/.emacs
 (tool-bar-mode -1)
 ```
 
-Scroll bar -> hide
+Hide scroll bar
 ```lisp tangle:~/.emacs
 (scroll-bar-mode -1)
 ```
 
-Menu bar -> hide
+Hide menu bar
 ```lisp tangle:~/.emacs
 (menu-bar-mode -1)
 ```
@@ -147,24 +176,6 @@ Automatically end line when 'full'
            )
 ```
 
-Show date and time
-```lisp tangle:~/.emacs
-(setq display-time-day-and-date t
-   display-time-24hr-format t)
-(setq display-time-format " [%d.%h %H:%M] ")
-(display-time)
-```
-
-Display battery status (when available)
-```lisp tangle:~/.emacs
-(require 'battery)
-(when (and battery-status-function
-           (not (string-match-p "N/A" 
-                                (battery-format "%B"
-                                                (funcall battery-status-function)))))
-  (display-battery-mode 1))
-```
-
 Show vertical line marking the 80 character mark.
 ```lisp tangle:~/.emacs
 (require 'fill-column-indicator)
@@ -174,7 +185,29 @@ Show vertical line marking the 80 character mark.
           (fci-mode)))
 ```
 
-Functional and fast file access with IDO and Smex interface
+### Status bar
+
+#### Show date and time
+```lisp tangle:~/.emacs
+(setq display-time-day-and-date t
+   display-time-24hr-format t)
+(setq display-time-format " [%d.%h %H:%M] ")
+(display-time)
+```
+
+#### Display battery status (when available)
+```lisp tangle:~/.emacs
+(require 'battery)
+(when (and battery-status-function
+           (not (string-match-p "N/A" 
+                                (battery-format "%B"
+                                                (funcall battery-status-function)))))
+  (display-battery-mode 1))
+```
+
+#### Functional and fast file access with IDO and Smex interface
+
+Ido mode
 ```lisp tangle:~/.emacs
 (dolist (mode
          '(ido-mode                   ; Interactivly do.
@@ -187,19 +220,21 @@ Functional and fast file access with IDO and Smex interface
       '(".el" ".scm" ".lisp" ".java" ".c" ".h" ".org" ".tex"))
 
 (add-to-list 'ido-ignore-buffers "*Messages*")
+```
+
+Smex
+```lisp tangle:~/.emacs
+
+(require 'smex)
 (smex-initialize)
+
 (global-set-key (kbd "M-x") 'smex)
+(global-set-key (kbd "M-X") 'smex-major-mode-commands)
 ```
 
-Font
+This is our old M-x.
 ```lisp tangle:~/.emacs
-(when (member "Inconsolata" (font-family-list))
-  (set-face-attribute 'default nil :font "Inconsolata-11"))
-```
-
-Theme
-```lisp tangle:~/.emacs
-(load-theme 'tango-dark t)
+(global-set-key (kbd "C-c C-c M-x") 'execute-extended-command)
 ```
 
 ## Autosaves
