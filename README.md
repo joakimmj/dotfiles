@@ -9,6 +9,7 @@ tangled with the CLI tool [md_tangle][1].
     * [.git-completion](assets/.git-completion.bash)
     * [.git-prompt](assets/.git-prompt.sh)
 * [conkeror](configurations/conkeror.md)
+* [emacs](configurations/emacs.md)
 * [i3](configurations/i3.md)
     * [wallpaper](assets/wallpaper.png)
 * [nano](configurations/nano.md)
