@@ -1,8 +1,87 @@
 # Emacs
 
+## Dependencies
+
+Packages to install
+```lisp tangle:~/.emacs
+(setq package-list '(fill-column-indicator smex ido-vertical-mode))
+```
+
+Add repositories:
+```lisp tangle:~/.emacs
+(setq package-archives '(("melpa" . "http://melpa.org/packages/")))
+```
+
+Other available repositories are:
+- `("elpa" . "http://tromey.com/elpa/")`
+- `("org" . "http://orgmode.org/elpa/")`
+- `("gnu" . "http://elpa.gnu.org/packages/")`
+- `("marmalade" . "http://marmalade-repo.org/packages/")`
+
+Activate all the packages
+```lisp tangle:~/.emacs
+(package-initialize)
+```
+
+Fetch the list of packages available 
+```lisp tangle:~/.emacs
+(unless package-archive-contents
+  (package-refresh-contents))
+```
+
+Install the missing packages
+```lisp tangle:~/.emacs
+(dolist (package package-list)
+  (unless (package-installed-p package)
+    (package-install package)))
+```
+
+## Functions
+
+### Tidy
+Author: [simenheg](https://github.com/simenheg)
+
+Defining a function that sets the right indentation to the marked text, or
+the entire buffer if no text is selected.
+
+```lisp tangle:~/.emacs
+(defun tidy ()
+  "Ident, untabify and unwhitespacify current buffer, or region if active."
+  (interactive)
+  (let ((beg (if (region-active-p) (region-beginning) (point-min)))
+        (end (if (region-active-p) (region-end)       (point-max))))
+    (whitespace-cleanup)
+    (indent-region beg end nil)
+    (untabify beg end)))
+```
+
+### Remove whitespace 
+Author: [larstvei](https://github.com/larstvei) 
+
+Removes whitespace
+
+```lisp tangle:~/.emacs
+(defun remove-whitespace ()
+  "Removes whitespace."
+  (interactive)
+  (just-one-space -1))
+```
+
+### Recently viewed files
+From: [EmacsWiki](http://www.emacswiki.org/emacs/CalendarWeekNumbers)
+
+```lisp tangle:~/.emacs
+(require 'recentf)
+(defun recentf-ido-find-file ()
+  "Find a recent file using Ido."
+  (interactive)
+  (let ((f (ido-completing-read "Choose recent file: " recentf-list nil t)))
+    (when f
+      (find-file f))))
+```
+
 ## Looks and feels
 
-### Sane defaults
 Remove splash screen
 ```lisp tangle:~/.emacs
 (setq inhibit-splash-screen t)
@@ -86,13 +165,13 @@ Display battery status (when available)
   (display-battery-mode 1))
 ```
 
-Mark column number 80
+Show vertical line marking the 80 character mark.
 ```lisp tangle:~/.emacs
-;(require 'fill-column-indicator)
-;(add-hook 'after-change-major-mode-hook
-;       '(lambda ()
-;          (setq fci-rule-column 80)
-;          (fci-mode)))
+(require 'fill-column-indicator)
+(add-hook 'after-change-major-mode-hook
+       '(lambda ()
+          (setq fci-rule-column 80)
+          (fci-mode)))
 ```
 
 Functional and fast file access with IDO and Smex interface
@@ -100,8 +179,7 @@ Functional and fast file access with IDO and Smex interface
 (dolist (mode
          '(ido-mode                   ; Interactivly do.
            ido-everywhere             ; Use Ido for all buffer/file reading.
-          ;ido-vertical-mode          ; Makes ido-mode display vertically.
-          ;flx-ido-mode               ; Toggle flx ido mode.
+           ido-vertical-mode          ; Makes ido-mode display vertically.
            ))
   (funcall mode 1))
 
@@ -109,12 +187,22 @@ Functional and fast file access with IDO and Smex interface
       '(".el" ".scm" ".lisp" ".java" ".c" ".h" ".org" ".tex"))
 
 (add-to-list 'ido-ignore-buffers "*Messages*")
-
-;(smex-initialize)
-;(global-set-key (kbd "M-x") 'smex)
+(smex-initialize)
+(global-set-key (kbd "M-x") 'smex)
 ```
 
-### Autosaves
+Font
+```lisp tangle:~/.emacs
+(when (member "Inconsolata" (font-family-list))
+  (set-face-attribute 'default nil :font "Inconsolata-11"))
+```
+
+Theme
+```lisp tangle:~/.emacs
+(load-theme 'tango-dark t)
+```
+
+## Autosaves
 Change autosave directory.
 
 ```lisp tangle:~/.emacs
@@ -125,7 +213,7 @@ Change autosave directory.
       `((".*" ,emacs-autosave-directory t)))
 ```
 
-### Restore previous session
+## Restore previous session
 Automatically save and restore sessions
 
 Change location for session save file (.emacs.desktop) and enables
@@ -143,25 +231,14 @@ Use only one desktop.
       desktop-base-file-name ".emacs.desktop")
 ```
 
-### Autocomplete
+## Autocomplete
 ```lisp tangle:~/.emacs
 ;(require 'auto-complete-config)
 ;(ac-config-default)
 ;(global-auto-complete-mode t) 
 ```
 
-### Font
-```lisp tangle:~/.emacs
-(when (member "Inconsolata" (font-family-list))
-  (set-face-attribute 'default nil :font "Inconsolata-11"))
-```
-
-### Theme
-```lisp tangle:~/.emacs
-(load-theme 'tango-dark t)
-```
-
-### Keybindings
+## Keybindings
 
 Kill current buffer
 ```lisp tangle:~/.emacs
@@ -202,5 +279,12 @@ Resize buffers
 
 Recently viewed files
 ```lisp tangle:~/.emacs
-;(define-key global-map (kbd "C-x C-r") 'recentf-ido-find-file)
+(define-key global-map (kbd "C-x C-r") 'recentf-ido-find-file)
 ```
+
+Tidy
+```lisp tangle:~/.emacs
+(global-set-key (kbd "<C-tab>")  'tidy)
+```
+
+## Programming-language-modes specifics
