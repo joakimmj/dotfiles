@@ -133,7 +133,7 @@ Aliases for git
 
 ```bash tangle:~/.bashrc
 alias gs='git status'
-alias gl='git log'
+alias gl='git log --oneline --graph'
 alias gd='git diff'
 ```
 
