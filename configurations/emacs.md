@@ -95,15 +95,18 @@ From: [EmacsWiki](http://www.emacswiki.org/emacs/CalendarWeekNumbers)
 ```lisp tangle:~/.emacs
 (set-language-environment "UTF-8")
 (set-default-coding-systems 'utf-8-unix)
+```
 
-;; set a default font
+Set a default font
+```lisp tangle:~/.emacs
 (when (member "DejaVu Sans Mono" (font-family-list))
   (set-face-attribute 'default nil :font "DejaVu Sans Mono"))
+```
 
-;; specify font for all unicode characters
+Specify font for all unicode characters
+```lisp tangle:~/.emacs
 (when (member "Symbola" (font-family-list))
   (set-fontset-font t 'unicode "Symbola" nil 'prepend))
-
 ```
 
 ### Theme
