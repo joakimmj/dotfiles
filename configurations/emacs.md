@@ -11,6 +11,7 @@ Packages to install
    smex
    ido-vertical-mode
    tangotango-theme
+   markdown-mode
    )
  )
 ```
@@ -324,3 +325,19 @@ Tidy
 ```
 
 ## Programming-language-modes specifics
+
+### Markdown
+
+Major mode for editing Markdown files
+```lisp tangle:~/.emacs
+(autoload 'markdown-mode "markdown-mode.el" t)
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
+(add-to-list 'auto-mode-alist '("\\.txt\\'" . markdown-mode))
+```
+
+Major mode for editing GitHub Flavored Markdown files
+```lisp tangle:~/.emacs
+(autoload 'gfm-mode "markdown-mode" t)
+(add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
+```
