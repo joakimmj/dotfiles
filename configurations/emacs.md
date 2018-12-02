@@ -10,6 +10,7 @@ Packages to install
    fill-column-indicator
    smex
    ido-vertical-mode
+   tangotango-theme
    )
  )
 ```
@@ -106,7 +107,7 @@ From: [EmacsWiki](http://www.emacswiki.org/emacs/CalendarWeekNumbers)
 
 ### Theme
 ```lisp tangle:~/.emacs
-(load-theme 'tango-dark t)
+(load-theme 'tangotango t)
 ```
 
 ### Editor
