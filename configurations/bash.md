@@ -134,7 +134,22 @@ Aliases for git
 ```bash tangle:~/.bashrc
 alias gs='git status'
 alias gl='git log --oneline --graph'
+alias gll='git log --oneline --all --graph --decorate'
 alias gd='git diff'
+alias gp='git pull'
+alias gf='git fetch origin'
+alias gb='git branch -a'
+alias gu='git remote update origin --prune'
+```
+
+Aliases for docker
+
+```bash tangle:~/.bashrc
+alias docker-kill-all='docker kill $(docker ps -q)'
+alias docker-clean='docker system prune -a'
+alias docker-clean-volumes='docker volume rm $(docker volume ls -qf dangling=true)'
+alias docker-clean-images='docker rmi $(docker images -q -f dangling=true)'
+alias docker-clean-containers='docker rm $(docker ps -aqf status=exited)'
 ```
 
 ### Programs
