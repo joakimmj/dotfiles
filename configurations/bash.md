@@ -118,6 +118,7 @@ Set aliases for bash
 ```bash tangle:~/.bashrc
 alias ls='ls --color=auto'
 alias l='ls -Fl --color=auto'
+alias ll='ls -Fl --color=auto'
 alias la='ls -AFl --color=auto'
 alias lr='ls -AFlR --color=auto'
 alias cp='cp -i'
