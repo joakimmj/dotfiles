@@ -7,6 +7,9 @@ Add header information
 ```
 
 ## Config
+
+### Set sane defaults
+
 ```bash tangle:~/.nanorc
 set autoindent
 set morespace
@@ -17,55 +20,76 @@ set nowrap
 set smarthome
 set smooth
 set speller spellprog
+```
 
-## Nanorc files
-include "/usr/share/nano/nanorc.nanorc"
+### Add language support
 
-## C/C++
+__C/C++__
+```bash tangle:~/.nanorc
 include "/usr/share/nano/c.nanorc"
+```
 
-## HTML
+__CSS__
+```bash tangle:~/.nanorc
+include "/usr/share/nano/css.nanorc"
+```
+
+__Elisp__
+```bash tangle:~/.nanorc
+include "/usr/share/nano/elisp.nanorc"
+```
+
+__GO__
+```bash tangle:~/.nanorc
+include "/usr/share/nano/go.nanorc"
+```
+
+__HTML__
+```bash tangle:~/.nanorc
 include "/usr/share/nano/html.nanorc"
+```
 
-## TeX
-include "/usr/share/nano/tex.nanorc"
-
-## Quoted emails (under e.g. mutt)
-include "/usr/share/nano/mutt.nanorc"
-
-## Patch files
-include "/usr/share/nano/patch.nanorc"
-
-## Manpages
-include "/usr/share/nano/man.nanorc"
-
-## Groff
-include "/usr/share/nano/groff.nanorc"
-
-## Perl
-include "/usr/share/nano/perl.nanorc"
-
-## Python
-include "/usr/share/nano/python.nanorc"
-
-## Ruby
-include "/usr/share/nano/ruby.nanorc"
-
-## Java
+__Java__
+```bash tangle:~/.nanorc
 include "/usr/share/nano/java.nanorc"
+```
 
-## Assembler
-include "/usr/share/nano/asm.nanorc"
+__JavaScript__
+```bash tangle:~/.nanorc
+include "/usr/share/nano/javascript.nanorc"
+```
 
-## Bourne shell scripts
+__JSON__
+```bash tangle:~/.nanorc
+include "/usr/share/nano/json.nanorc"
+```
+
+__Nanorc files__
+```bash tangle:~/.nanorc
+include "/usr/share/nano/nanorc.nanorc"
+```
+
+__Python__
+```bash tangle:~/.nanorc
+include "/usr/share/nano/python.nanorc"
+```
+
+__Rust__
+```bash tangle:~/.nanorc
+include "/usr/share/nano/rust.nanorc"
+```
+
+__Bash scripts__
+```bash tangle:~/.nanorc
 include "/usr/share/nano/sh.nanorc"
+```
 
-## POV-Ray
-include "/usr/share/nano/pov.nanorc"
+__TeX__
+```bash tangle:~/.nanorc
+include "/usr/share/nano/tex.nanorc"
+```
 
-## PHP
-include "/usr/share/nano/php.nanorc"
-
-## JavaScript
-include "/usr/share/nano/js.nanorc"
+__XML__
+```bash tangle:~/.nanorc
+include "/usr/share/nano/xml.nanorc"
 ```
