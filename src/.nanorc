@@ -1,0 +1,26 @@
+# .nanorc
+# AUTHOR: Joakim Myrvoll Johansen
+# EMAIL:  joakimmyrvoll@gmail.com
+set autoindent
+set morespace
+set historylog
+set mouse
+set nohelp
+set nowrap
+set smarthome
+set smooth
+set speller spellprog
+include "/usr/share/nano/c.nanorc"
+include "/usr/share/nano/css.nanorc"
+include "/usr/share/nano/elisp.nanorc"
+include "/usr/share/nano/go.nanorc"
+include "/usr/share/nano/html.nanorc"
+include "/usr/share/nano/java.nanorc"
+include "/usr/share/nano/javascript.nanorc"
+include "/usr/share/nano/json.nanorc"
+include "/usr/share/nano/nanorc.nanorc"
+include "/usr/share/nano/python.nanorc"
+include "/usr/share/nano/rust.nanorc"
+include "/usr/share/nano/sh.nanorc"
+include "/usr/share/nano/tex.nanorc"
+include "/usr/share/nano/xml.nanorc"

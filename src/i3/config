@@ -1,0 +1,249 @@
+set $super Mod4
+set $alt Mod1
+set $ctrl Control
+set $print 107
+set $shift 50
+set $f5 71
+set $f6 72
+set $f8 74
+floating_modifier $super
+# for_window [class="Slack"] floating enable
+font pango:Inconsolata 9
+#font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
+hide_edge_borders both
+
+# startup apps and window decs
+default_orientation auto
+workspace_layout default
+new_window 1pixel
+
+# window colours        border  backgr. text    indicator
+client.focused          #4c7899 #285577 #ffffff #2e9ef4
+client.focused_inactive #333333 #5f676a #ffffff #484e50
+client.unfocused        #333333 #222222 #888888 #292d2e
+client.urgent           #2f343a #900000 #ffffff #900000
+client.background       #ffffff
+
+focus_follows_mouse no
+workspace_auto_back_and_forth no
+for_window [class="^.*"] border none
+exec_always --no-startup-id chmod 755 ~/.config/i3/autostart.sh
+exec_always --no-startup-id chmod 755 ~/.config/i3/win_menu.py
+exec_always --no-startup-id chmod 755 ~/.config/i3/init_json.sh
+exec --no-startup-id ~/.config/i3/autostart.sh
+exec_always --no-startup-id i3-msg 'workspace 2:default'
+exec --no-startup-id gnome-terminal
+# terminal
+bindsym $super+t exec gnome-terminal
+
+# web browser (chrome)
+bindsym $super+w workspace 1:www;exec google-chrome
+bindsym Shift+$super+w exec google-chrome
+bindsym $ctrl+$super+w exec google-chrome --incognito
+
+# emacs
+bindsym $super+e workspace 3:edit;exec emacs
+bindsym Shift+$super+e exec emacs
+
+#Chat
+##bindsym $super+p workspace 6:chat;exec gnome-terminal -e finch
+
+# graphic (kolourpaint)
+bindsym $super+g workspace 5:graphics;exec kolourpaint
+bindsym Shift+$super+g exec kolourpaint
+
+# spotify
+bindsym $super+s workspace 4:music;exec spotify
+bindsym Shift+$super+s exec spotify
+
+# file-browser
+bindsym $super+f exec nautilus --browser --no-desktop
+
+# start dmenu
+bindsym $super+Return exec --no-startup-id i3-dmenu-desktop
+
+# print help
+bindsym $super+h exec xterm -T "HELP" -bg black -fg white -ls -e 'cat ~/.config/i3/keybindings.txt | less'
+
+# volume
+bindsym $super+v exec xterm -bg black -fg white -ls -e alsamixer
+
+# Lock screen
+#bindsym $ctrl+$super+l exec xscreensaver-command -lock
+
+# Brightness
+#bindsym $ctrl+$f5 exec xbacklight -dec 5
+#bindsym $ctrl+$f6 exec xbacklight -inc 5
+
+# list windows
+bindsym $super+Tab exec ~/.config/i3/win_menu.py
+
+# printscreen
+bindcode $print exec xfce4-screenshooter -s ~/Pictures/
+
+# monitor manager
+bindcode $super+$f8 exec arandr
+
+# Launch Task Manager with Ctrl+Alt+Del
+bindsym $ctrl+$alt+Delete exec xterm -bg black -fg white -ls -e htop
+
+# reload the configuration file
+bindsym $super+Shift+c reload
+
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $super+Shift+r restart
+#toggle border
+#bindsym $ctrl+$alt+Up border toggle
+
+# change focus
+#bindsym $super+j focus left
+#bindsym $super+k focus down
+#bindsym $super+l focus up
+#bindsym $super+semicolon focus right
+
+# move focused window
+#bindsym $super+Shift+j move left
+#bindsym $super+Shift+k move down
+#bindsym $super+Shift+l move up
+#bindsym $super+Shift+semicolon move right
+
+# split in horizontal orientation
+#bindsym $super+h split h
+
+# split in vertical orientation
+#bindsym $super+v split v
+
+# toggle tiling / floating
+bindsym $super+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+#bindsym $super+space focus mode_toggle
+
+# focus the parent container
+#bindsym $super+a focus parent
+
+# focus the child container
+#bindsym $super+d focus child
+
+# move focus
+bindsym $super+Left focus left
+bindsym $super+Down focus down
+bindsym $super+Up focus up
+bindsym $super+Right focus right
+
+# move focused window
+bindsym $alt+Shift+Left move left
+bindsym $alt+Shift+Down move down
+bindsym $alt+Shift+Up move up
+bindsym $alt+Shift+Right move right
+
+# kill focused window
+bindsym $super+q kill
+bindsym $alt+F4 kill
+
+# enter fullscreen mode for the focused container
+bindsym $super+F11 fullscreen
+          
+# change container layout (stacked, tabbed, toggle split)
+bindsym $super+$alt+Left layout stacking
+bindsym $super+$alt+Right layout tabbed
+bindsym $super+$alt+Up layout toggle split
+
+# switch to workspace
+bindsym $super+1 workspace 1:www
+bindsym $super+2 workspace 2:default
+bindsym $super+3 workspace 3:edit
+bindsym $super+4 workspace 4:music
+bindsym $super+5 workspace 5:graphics
+bindsym $super+6 workspace 6:chat
+bindsym $super+7 workspace 7
+bindsym $super+8 workspace 8
+bindsym $super+9 workspace 9
+bindsym $super+0 workspace 10
+bindsym $super+$ctrl+Right workspace next 
+bindsym $super+$ctrl+Left workspace prev
+
+# move focused container to workspace
+bindsym $alt+Shift+1 move container to workspace 1:www; workspace 1:www
+bindsym $alt+Shift+2 move container to workspace 2:default; workspace 2:default
+bindsym $alt+Shift+3 move container to workspace 3:edit; workspace 3:edit
+bindsym $alt+Shift+4 move container to workspace 4:music; workspace 4:music
+bindsym $alt+Shift+5 move container to workspace 5:graphics; workspace 5:graphics
+bindsym $alt+Shift+6 move container to workspace 6:chat; workspace 6:chat
+bindsym $alt+Shift+7 move container to workspace 7; workspace 7
+bindsym $alt+Shift+8 move container to workspace 8; workspace 8
+bindsym $alt+Shift+9 move container to workspace 9; workspace 9
+bindsym $alt+Shift+0 move container to workspace 10; workspace 10
+bindsym $super+Shift+Right move to workspace next; workspace next
+bindsym $super+Shift+Left move to workspace prev; workspace prev
+set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (p) shutdown
+mode "$mode_system" {
+    bindsym l exec --no-startup-id i3lock, mode "default", exec pkill i3-nagbar
+    bindsym e exec --no-startup-id i3-msg exit, mode "default", exec pkill i3-nagbar
+    bindsym s exec --no-startup-id gksudo pm-suspend, mode "default", exec pkill i3-nagbar
+    bindsym h exec --no-startup-id gksudo pm-hibernate, mode "default", exec pkill i3-nagbar
+    
+    bindsym r exec gksudo reboot
+    bindsym p exec gksudo poweroff
+    
+    # back to normal: Enter or Escape
+    bindsym Return mode "default" exec pkill i3-nagbar
+    bindsym Escape mode "default" exec pkill i3-nagbar
+}
+bindsym $super+x mode "$mode_system" exec "i3-nagbar -t warning -m '(l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (p) shutdown'"
+mode "resize" {
+    # These bindings trigger as soon as you enter the resize mode
+    
+    # Pressing left will shrink the window’s width.
+    # Pressing right will grow the window’s width.
+    # Pressing up will shrink the window’s height.
+    # Pressing down will grow the window’s height.
+    bindsym j resize shrink width 10 px or 10 ppt
+    bindsym k resize grow height 10 px or 10 ppt
+    bindsym l resize shrink height 10 px or 10 ppt
+    bindsym semicolon resize grow width 10 px or 10 ppt
+    
+    # same bindings, but for the arrow keys
+    bindsym Left resize shrink width 10 px or 10 ppt
+    bindsym Down resize grow height 10 px or 10 ppt
+    bindsym Up resize shrink height 10 px or 10 ppt
+    bindsym Right resize grow width 10 px or 10 ppt
+    
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $super+r mode "resize"
+mode "ide" {
+    # These bindings trigger as soon as you enter the ide mode
+    
+    #IDE (Pycharm)
+    bindsym p workspace 3:edit;exec pycharm, mode "default", exec pkill i3-nagbar
+    bindsym Shift+p exec pycharm, mode "default", exec pkill i3-nagbar
+    
+    #IDE (IntelliJ IDEA)
+    bindsym i workspace 3:edit;exec idea, mode "default", exec pkill i3-nagbar
+    bindsym Shift+i exec idea, mode "default", exec pkill i3-nagbar
+    
+    #Editor (Emacs)
+    bindsym e workspace 3:edit;exec emacs, mode "default", exec pkill i3-nagbar
+    bindsym Shift+e exec emacs, mode "default", exec pkill i3-nagbar
+    
+    # back to normal: Enter or Escape
+    bindsym Return mode "default" exec pkill i3-nagbar
+    bindsym Escape mode "default" exec pkill i3-nagbar
+}
+bindsym $super+i mode "ide" exec "i3-nagbar -t warning -m '(i) IntelliJ IDEA (p) Pycharm, (e) Emacs'"
+bar {
+    status_command $HOME/.config/i3/init_json.sh
+    position top
+    font pango:Inconsolata 12
+    separator_symbol " | "
+    workspace_buttons yes
+    strip_workspace_numbers no
+    binding_mode_indicator no
+    colors {
+        background #2E3434
+        separator #666666
+    }
+}

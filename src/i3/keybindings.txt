@@ -1,0 +1,54 @@
+===[ KEYBINDIGS  ]==============================================================
+
+#--[ APPLICATION  ]------------------------------------------------------------#
+
+Terminal - $super+t
+Web-browser - $super+w (current workspace: Shift+$super+w)
+Web-browser Incognito - $ctrl+$super+w
+Editor - $super+e (current workspace: Shift+$super+e)
+IDE - $super+i
+Graphic - $super+g (current workspace: Shift+$super+g)
+Spotify - $super+s (current workspace: Shift+$super+s)
+File-browser - $super+f
+Dmenu - $super+Return
+
+#--[ SYSTEM  ]-----------------------------------------------------------------#
+
+Volume - $super+v
+System menu - $super+x
+List windows - $super+Tab
+Printscreen - $print
+Monitor manager - $super+$f8
+Task Manager - Ctrl+Alt+Delete
+Reload the configuration file - $super+Shift+c
+Restart i3 inplace - $super+Shift+r
+
+#--[ Desktop orientation  ]----------------------------------------------------#
+
+Change focus - $super+[arrows]
+Move focused window - $super+Shift+[arrows]
+Kill focused window - $super+q, $alt+F4
+Fullscreen mode - F11
+Change container layout:
+- stacked: $super+$alt+Left
+- tabbed: $super+$alt+Right
+- toggle split: $super+$alt+Up
+Switch to workspace - $super+[0-9]
+Switch to next workspace - $ctrl+$alt+Right
+Switch to prev workspace - $ctrl+$alt+Left
+Move focused to workspace - $alt+Shift+[0-9]
+Move focused to next workspace - $alt+Shift+Right
+Move focused to prev workspace - $alt+Shift+Left
+
+#--[ Unused  ]-----------------------------------------------------------------#
+
+Split in horizontal orientation - $super+h
+Split in vertical orientation - $super+v
+Toggle tiling / floating - $super+Shift+space
+Change focus between tiling / floating windows - $super+space
+Focus the parent container - $super+a
+Focus the child container - $super+d
+
+================================================================================
+q = quit
+

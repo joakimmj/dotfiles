@@ -1,0 +1,122 @@
+// .conkerorrc
+// AUTHOR: Joakim Myrvoll Johansen
+// EMAIL:  joakimmyrvoll@gmail.com
+homepage = "http://en.wikipedia.org/wiki/Special:Random";
+define_webjump("google", "www.google.com/");
+define_webjump("g", "http://www.google.com/search?q=%s");
+define_webjump("translate", "http://translate.google.no/?hl=en&tab=TT");
+define_webjump("gmail", "www.gmail.com/");
+//ADD-ONS
+session_pref("xpinstall.whitelist.required", false);  
+user_pref("extensions.checkCompatibility", false);  
+
+//SET DEFAULT DOWNLOAD-DIRECTORY
+cwd=get_home_directory();
+cwd.append("Downloads");
+
+//NO NEW WINDOW FOR DOWNLOADS
+download_buffer_automatic_open_target=OPEN_NEW_BUFFER;
+
+//OPEN EXTERNEL LINKS IN NEW BUFFER (for Emacs)
+url_remoting_fn = load_url_in_new_buffer;
+
+//USE EMACSCLIENT AS EXTERNAK EDITOR
+editor_shell_command = "emacsclient -c"
+
+//ADD MOUSE-OVER TEXT
+xkcd_add_title = true;
+
+//CLEAR HISTORY AFTER 1 DAY
+//session_pref('browser.history_expire_days', 1);
+
+//REDUCE MEMORY CONSUMPTION
+session_pref('browser.cache.memory.capacity', 4096);
+session_pref('browser.cache.memory.enable', false);
+
+//REDUCE AMOUNT OF TIME FIREFOX STORES UNCOMPRESSES IMAGES IN MEMORY
+session_pref('mage.mem.min_discard_timeout_ms', 100000);
+
+//CLEAR DOWNLOADS HISTORY ON COMPLETION
+session_pref('browser.download.manager.retention', 0);
+
+//LOAD URL IN NEW BUFFER
+url_remoting_fn = load_url_in_new_buffer;
+
+//PDF
+external_content_handlers.set("application/pdf", "acroread");
+
+//ALLOW FOR 'contrib' STUFF
+load_paths.unshift("chrome://conkeror-contrib/content/");
+
+//MODE-LINE
+mode_line_mode(true);
+
+//AUTO COMPLETION IN THE MINIBUFFER
+minibuffer_auto_complete_default = true;
+url_completion_use_history = true;
+url_completion_use_bookmarks = true;
+
+//DISPLAY THE URL BEFORE GOINT TO IT IN HINTS MODE
+hints_display_url_panel = true;
+
+//LOAD SESSION MODULE
+require("session.js");
+session_auto_save_auto_load = true; // auto-load session
+
+//THEME
+//theme_load_paths.push("~/conkeror/themes/");
+//theme_load("blackened");
+
+//RESTORE KILLED BUFFER
+var kill_buffer_original = kill_buffer_original || kill_buffer;
+
+var killed_buffer_urls = [];
+
+kill_buffer = function (buffer, force) {
+ if (buffer.display_uri_string) {
+     killed_buffer_urls.push(buffer.display_uri_string);
+ }
+
+ kill_buffer_original(buffer,force);
+};
+
+interactive("restore-killed-buffer-url", "Loads url from a previously killed buffer",
+         function restore_killed_buffer_url (I) {
+             if (killed_buffer_urls.length !== 0) {
+                 var url = yield I.minibuffer.read(
+                     $prompt = "Restore killed url:",
+                     $completer = all_word_completer($completions = killed_buffer_urls),
+                     $default_completion = killed_buffer_urls[killed_buffer_urls.length - 1],
+                     $auto_complete = "url",
+                     $auto_complete_initial = true,
+                     $auto_complete_delay = 0,
+                     $match_required);
+
+                 load_url_in_new_buffer(url);
+             } else {
+                 I.window.minibuffer.message("No killed buffer urls");
+             }
+         });
+
+//CAPTURE TEXT
+function org_capture (url, title, selection, window) {
+ var cmd_str =
+     'emacsclient \"org-protocol:/capture:/w/'+url+'/'+title+'/'+selection+'\"';
+ if (window != null) {
+     window.minibuffer.message('Issuing ' + cmd_str);
+ }
+ shell_command_blind(cmd_str);
+}
+
+interactive("org-capture", "Clip url, title, and selection to capture via org-protocol",
+         function (I) {
+             org_capture(encodeURIComponent(I.buffer.display_uri_string),
+                         encodeURIComponent(I.buffer.document.title),
+                         encodeURIComponent(I.buffer.top_frame.getSelection()),
+                         I.window);
+         });
+define_key(content_buffer_normal_keymap, "F", "follow-new-buffer");
+define_key(default_global_keymap, "C-x k", "kill-current-buffer");
+define_key(default_global_keymap, "C-x K", "kill-other-buffers");
+define_key(default_global_keymap, "C-K", "restore-killed-buffer-url");
+define_key(content_buffer_normal_keymap, "C-c c", "org-capture");

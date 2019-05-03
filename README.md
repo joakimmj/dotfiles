@@ -16,4 +16,9 @@ tangled with the CLI tool [md_tangle][1].
 * [nano](configurations/nano.md)
 * [Xmodmap](configurations/xmodmap.md)
 
+## Source
+
+The tangled source can be found [here](src).
+
+
 [1]: https://github.com/joakimmj/md_tangle
