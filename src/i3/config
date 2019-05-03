@@ -225,6 +225,10 @@ mode "ide" {
     bindsym i workspace 3:edit;exec idea, mode "default", exec pkill i3-nagbar
     bindsym Shift+i exec idea, mode "default", exec pkill i3-nagbar
     
+    #IDE (WebStorm)
+    bindsym w workspace 3:edit;exec webstorm, mode "default", exec pkill i3-nagbar
+    bindsym Shift+w exec webstorm, mode "default", exec pkill i3-nagbar
+    
     #Editor (Emacs)
     bindsym e workspace 3:edit;exec emacs, mode "default", exec pkill i3-nagbar
     bindsym Shift+e exec emacs, mode "default", exec pkill i3-nagbar
@@ -233,7 +237,7 @@ mode "ide" {
     bindsym Return mode "default" exec pkill i3-nagbar
     bindsym Escape mode "default" exec pkill i3-nagbar
 }
-bindsym $super+i mode "ide" exec "i3-nagbar -t warning -m '(i) IntelliJ IDEA (p) Pycharm, (e) Emacs'"
+bindsym $super+i mode "ide" exec "i3-nagbar -t warning -m '(i) IntelliJ IDEA (p) Pycharm (w) WebStorm (e) Emacs'"
 bar {
     status_command $HOME/.config/i3/init_json.sh
     position top
