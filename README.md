@@ -12,6 +12,7 @@ tangled with the CLI tool [md_tangle][1].
 * [emacs](configurations/emacs.md)
 * [i3](configurations/i3.md)
     * [wallpaper](assets/wallpaper.png)
+* [git](configurations/git.md)
 * [nano](configurations/nano.md)
 * [Xmodmap](configurations/xmodmap.md)
 

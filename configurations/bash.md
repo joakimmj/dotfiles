@@ -128,19 +128,7 @@ alias bashrc='nano ~/.bashrc'
 alias which='type -all'
 #alias texpdf="latexmk -pdflatex='pdflatex -shell-escape -interaction nonstopmode' -pdf -f "
 #alias texcc="latexmk -c "
-```
-
-Aliases for git
-
-```bash tangle:~/.bashrc
-alias gs='git status'
-alias gl='git log --oneline --graph'
-alias gll='git log --oneline --all --graph --decorate'
-alias gd='git diff'
-alias gp='git pull'
-alias gf='git fetch origin'
-alias gb='git branch -a'
-alias gu='git remote update origin --prune'
+alias gs='git status -sb'
 ```
 
 Aliases for docker
@@ -165,4 +153,7 @@ Add shortcuts for directories, ssh clients, etc.
 
 ```bash tangle:~/.bashrc
 alias projects='cd ~/projects'
+
+# default: 810
+alias brightness='sudo nano /sys/class/backlight/intel_backlight/brightness'
 ```
