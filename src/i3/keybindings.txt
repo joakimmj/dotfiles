@@ -26,28 +26,22 @@ Restart i3 inplace - $super+Shift+r
 #--[ Desktop orientation  ]----------------------------------------------------#
 
 Change focus - $super+[arrows]
-Move focused window - $super+Shift+[arrows]
 Kill focused window - $super+q, $alt+F4
-Fullscreen mode - F11
-Change container layout:
-- stacked: $super+$alt+Left
-- tabbed: $super+$alt+Right
-- toggle split: $super+$alt+Up
+Fullscreen mode - $super+F11
 Switch to workspace - $super+[0-9]
-Switch to next workspace - $ctrl+$alt+Right
-Switch to prev workspace - $ctrl+$alt+Left
-Move focused to workspace - $alt+Shift+[0-9]
-Move focused to next workspace - $alt+Shift+Right
-Move focused to prev workspace - $alt+Shift+Left
+Switch to next workspace - $super+$ctrl+Right
+Switch to prev workspace - $super+$ctrl+Left
 
-#--[ Unused  ]-----------------------------------------------------------------#
+#--[ Modes  ]-----------------------------------------------------------------#
 
-Split in horizontal orientation - $super+h
-Split in vertical orientation - $super+v
-Toggle tiling / floating - $super+Shift+space
-Change focus between tiling / floating windows - $super+space
-Focus the parent container - $super+a
-Focus the child container - $super+d
+Exit mode - Escape, Return
+Enter mode
+    System - $super + x
+    Resize - $super + r
+    Layout - $super + l
+    Orientation - $super + o
+    Move - $super + m
+    IDE's - $super + i
 
 ================================================================================
 q = quit

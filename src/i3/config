@@ -6,6 +6,23 @@ set $shift 50
 set $f5 71
 set $f6 72
 set $f8 74
+set $wp1 1:www
+set $wp2 2:default
+set $wp3 3:edit
+set $wp4 4:music
+set $wp5 5:graphics
+set $wp6 6:chat
+set $wp7 7
+set $wp8 8
+set $wp9 9
+set $wp10 10
+set $mode-default "default"
+set $mode-system "(l) lock (e) logout (s) suspend (h) hibernate (r) reboot (p) shutdown"
+set $mode-resize "Resize windows"
+set $mode-layout "(n) normal (t) tabbed (s) stacked (f) floating (F11) fullscreen"
+set $mode-orientation "Desktop orientation"
+set $mode-move "Move window to workspace (Shift) / display (Ctrl)"
+set $mode-ide "(i) IntelliJ IDEA (p) Pycharm (w) WebStorm (e) Emacs"
 floating_modifier $super
 # for_window [class="Slack"] floating enable
 font pango:Inconsolata 9
@@ -31,29 +48,29 @@ exec_always --no-startup-id chmod 755 ~/.config/i3/autostart.sh
 exec_always --no-startup-id chmod 755 ~/.config/i3/win_menu.py
 exec_always --no-startup-id chmod 755 ~/.config/i3/init_json.sh
 exec --no-startup-id ~/.config/i3/autostart.sh
-exec_always --no-startup-id i3-msg 'workspace 2:default'
+exec_always --no-startup-id i3-msg 'workspace $wp2'
 exec --no-startup-id gnome-terminal
 # terminal
 bindsym $super+t exec gnome-terminal
 
 # web browser (chrome)
-bindsym $super+w workspace 1:www;exec google-chrome
+bindsym $super+w workspace $wp1;exec google-chrome
 bindsym Shift+$super+w exec google-chrome
 bindsym $ctrl+$super+w exec google-chrome --incognito
 
 # emacs
-bindsym $super+e workspace 3:edit;exec emacs
+bindsym $super+e workspace $wp3;exec emacs
 bindsym Shift+$super+e exec emacs
 
 #Chat
-##bindsym $super+p workspace 6:chat;exec gnome-terminal -e finch
+##bindsym $super+p workspace $wp6;exec gnome-terminal -e finch
 
 # graphic (kolourpaint)
-bindsym $super+g workspace 5:graphics;exec kolourpaint
+bindsym $super+g workspace $wp5;exec kolourpaint
 bindsym Shift+$super+g exec kolourpaint
 
 # spotify
-bindsym $super+s workspace 4:music;exec spotify
+bindsym $super+s workspace $wp4;exec spotify
 bindsym Shift+$super+s exec spotify
 
 # file-browser
@@ -92,50 +109,11 @@ bindsym $super+Shift+c reload
 
 # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
 bindsym $super+Shift+r restart
-#toggle border
-#bindsym $ctrl+$alt+Up border toggle
-
-# change focus
-#bindsym $super+j focus left
-#bindsym $super+k focus down
-#bindsym $super+l focus up
-#bindsym $super+semicolon focus right
-
-# move focused window
-#bindsym $super+Shift+j move left
-#bindsym $super+Shift+k move down
-#bindsym $super+Shift+l move up
-#bindsym $super+Shift+semicolon move right
-
-# split in horizontal orientation
-#bindsym $super+h split h
-
-# split in vertical orientation
-#bindsym $super+v split v
-
-# toggle tiling / floating
-bindsym $super+Shift+space floating toggle
-
-# change focus between tiling / floating windows
-#bindsym $super+space focus mode_toggle
-
-# focus the parent container
-#bindsym $super+a focus parent
-
-# focus the child container
-#bindsym $super+d focus child
-
 # move focus
 bindsym $super+Left focus left
 bindsym $super+Down focus down
 bindsym $super+Up focus up
 bindsym $super+Right focus right
-
-# move focused window
-bindsym $alt+Shift+Left move left
-bindsym $alt+Shift+Down move down
-bindsym $alt+Shift+Up move up
-bindsym $alt+Shift+Right move right
 
 # kill focused window
 bindsym $super+q kill
@@ -144,100 +122,127 @@ bindsym $alt+F4 kill
 # enter fullscreen mode for the focused container
 bindsym $super+F11 fullscreen
           
-# change container layout (stacked, tabbed, toggle split)
-bindsym $super+$alt+Left layout stacking
-bindsym $super+$alt+Right layout tabbed
-bindsym $super+$alt+Up layout toggle split
-
 # switch to workspace
-bindsym $super+1 workspace 1:www
-bindsym $super+2 workspace 2:default
-bindsym $super+3 workspace 3:edit
-bindsym $super+4 workspace 4:music
-bindsym $super+5 workspace 5:graphics
-bindsym $super+6 workspace 6:chat
-bindsym $super+7 workspace 7
-bindsym $super+8 workspace 8
-bindsym $super+9 workspace 9
-bindsym $super+0 workspace 10
+bindsym $super+1 workspace $wp1
+bindsym $super+2 workspace $wp2
+bindsym $super+3 workspace $wp3
+bindsym $super+4 workspace $wp4
+bindsym $super+5 workspace $wp5
+bindsym $super+6 workspace $wp6
+bindsym $super+7 workspace $wp7
+bindsym $super+8 workspace $wp8
+bindsym $super+9 workspace $wp9
+bindsym $super+0 workspace $wp10
 bindsym $super+$ctrl+Right workspace next 
 bindsym $super+$ctrl+Left workspace prev
-
-# move focused container to workspace
-bindsym $alt+Shift+1 move container to workspace 1:www; workspace 1:www
-bindsym $alt+Shift+2 move container to workspace 2:default; workspace 2:default
-bindsym $alt+Shift+3 move container to workspace 3:edit; workspace 3:edit
-bindsym $alt+Shift+4 move container to workspace 4:music; workspace 4:music
-bindsym $alt+Shift+5 move container to workspace 5:graphics; workspace 5:graphics
-bindsym $alt+Shift+6 move container to workspace 6:chat; workspace 6:chat
-bindsym $alt+Shift+7 move container to workspace 7; workspace 7
-bindsym $alt+Shift+8 move container to workspace 8; workspace 8
-bindsym $alt+Shift+9 move container to workspace 9; workspace 9
-bindsym $alt+Shift+0 move container to workspace 10; workspace 10
-bindsym $super+Shift+Right move to workspace next; workspace next
-bindsym $super+Shift+Left move to workspace prev; workspace prev
-set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (p) shutdown
-mode "$mode_system" {
-    bindsym l exec --no-startup-id i3lock, mode "default", exec pkill i3-nagbar
-    bindsym e exec --no-startup-id i3-msg exit, mode "default", exec pkill i3-nagbar
-    bindsym s exec --no-startup-id gksudo pm-suspend, mode "default", exec pkill i3-nagbar
-    bindsym h exec --no-startup-id gksudo pm-hibernate, mode "default", exec pkill i3-nagbar
-    
+mode $mode-system {
+    bindsym l exec --no-startup-id i3lock, mode $mode-default, exec pkill i3-nagbar
+    bindsym e exec --no-startup-id i3-msg exit, mode $mode-default, exec pkill i3-nagbar
+    bindsym s exec --no-startup-id gksudo pm-suspend, mode $mode-default, exec pkill i3-nagbar
+    bindsym h exec --no-startup-id gksudo pm-hibernate, mode $mode-default, exec pkill i3-nagbar
     bindsym r exec gksudo reboot
     bindsym p exec gksudo poweroff
     
     # back to normal: Enter or Escape
-    bindsym Return mode "default" exec pkill i3-nagbar
-    bindsym Escape mode "default" exec pkill i3-nagbar
+    bindsym Return mode $mode-default exec pkill i3-nagbar
+    bindsym Escape mode $mode-default exec pkill i3-nagbar
 }
-bindsym $super+x mode "$mode_system" exec "i3-nagbar -t warning -m '(l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (p) shutdown'"
-mode "resize" {
-    # These bindings trigger as soon as you enter the resize mode
-    
-    # Pressing left will shrink the window’s width.
-    # Pressing right will grow the window’s width.
-    # Pressing up will shrink the window’s height.
-    # Pressing down will grow the window’s height.
-    bindsym j resize shrink width 10 px or 10 ppt
-    bindsym k resize grow height 10 px or 10 ppt
-    bindsym l resize shrink height 10 px or 10 ppt
-    bindsym semicolon resize grow width 10 px or 10 ppt
-    
-    # same bindings, but for the arrow keys
+bindsym $super+x mode $mode-system exec i3-nagbar -t warning -m $mode-system -b 'edit config' 'exec i3-sensible-editor ~/.config/i3/config'
+mode $mode-resize  {
     bindsym Left resize shrink width 10 px or 10 ppt
     bindsym Down resize grow height 10 px or 10 ppt
     bindsym Up resize shrink height 10 px or 10 ppt
     bindsym Right resize grow width 10 px or 10 ppt
-    
+
     # back to normal: Enter or Escape
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
+    bindsym Return mode $mode-default exec pkill i3-nagbar
+    bindsym Escape mode $mode-default exec pkill i3-nagbar
 }
-bindsym $super+r mode "resize"
-mode "ide" {
-    # These bindings trigger as soon as you enter the ide mode
+bindsym $super+r mode $mode-resize exec i3-nagbar -t warning -m $mode-resize
+mode $mode-layout {
+    bindsym n layout toggle split
+    bindsym t layout tabbed
+    bindsym s layout stacking
+    bindsym F11 fullscreen
+    bindsym f floating toggle
+
+    # back to normal: Enter or Escape
+    bindsym Return mode $mode-default exec pkill i3-nagbar
+    bindsym Escape mode $mode-default exec pkill i3-nagbar
+}
+bindsym $super+l mode $mode-layout exec i3-nagbar -t warning -m $mode-layout
+mode $mode-orientation {
+    bindsym 1 workspace $wp1
+    bindsym 2 workspace $wp2
+    bindsym 3 workspace $wp3
+    bindsym 4 workspace $wp4
+    bindsym 5 workspace $wp5
+    bindsym 6 workspace $wp6
+    bindsym 7 workspace $wp7
+    bindsym 8 workspace $wp8
+    bindsym 9 workspace $wp9
+    bindsym 0 workspace $wp10
+    bindsym Right workspace next
+    bindsym Left workspace prev
+
+    # back to normal: Enter or Escape
+    bindsym Return mode $mode-default exec pkill i3-nagbar
+    bindsym Escape mode $mode-default exec pkill i3-nagbar
+}
+bindsym $super+o mode $mode-orientation exec i3-nagbar -t warning -m $mode-orientation
+mode $mode-move  {
+    # move focused window
+    bindsym Left move left
+    bindsym Down move down
+    bindsym Up move up
+    bindsym Right move right
     
+    # move focused container to workspace
+    bindsym 1 move container to workspace $wp1; workspace $wp1
+    bindsym 2 move container to workspace $wp2; workspace $wp2
+    bindsym 3 move container to workspace $wp3; workspace $wp3
+    bindsym 4 move container to workspace $wp4; workspace $wp4
+    bindsym 5 move container to workspace $wp5; workspace $wp5
+    bindsym 6 move container to workspace $wp6; workspace $wp6
+    bindsym 7 move container to workspace $wp7; workspace $wp7
+    bindsym 8 move container to workspace $wp8; workspace $wp8
+    bindsym 9 move container to workspace $wp9; workspace $wp9
+    bindsym 0 move container to workspace $wp10; workspace $wp10
+    
+    bindsym Shift+Right move to workspace next; workspace next
+    bindsym Shift+Left move to workspace prev; workspace prev
+
+    # move workspace to display
+    bindsym $ctrl+Left move workspace to output left
+    bindsym $ctrl+Right move workspace to output right
+
+    # back to normal: Enter or Escape
+    bindsym Return mode $mode-default exec pkill i3-nagbar
+    bindsym Escape mode $mode-default exec pkill i3-nagbar
+}
+bindsym $super+m mode $mode-move exec i3-nagbar -t warning -m $mode-move
+mode $mode-ide {
     #IDE (Pycharm)
-    bindsym p workspace 3:edit;exec pycharm, mode "default", exec pkill i3-nagbar
-    bindsym Shift+p exec pycharm, mode "default", exec pkill i3-nagbar
+    bindsym p workspace $wp3;exec pycharm, mode $mode-default, exec pkill i3-nagbar
+    bindsym Shift+p exec pycharm, mode $mode-default, exec pkill i3-nagbar
     
     #IDE (IntelliJ IDEA)
-    bindsym i workspace 3:edit;exec idea, mode "default", exec pkill i3-nagbar
-    bindsym Shift+i exec idea, mode "default", exec pkill i3-nagbar
+    bindsym i workspace $wp3;exec idea, mode $mode-default, exec pkill i3-nagbar
+    bindsym Shift+i exec idea, mode $mode-default, exec pkill i3-nagbar
     
     #IDE (WebStorm)
-    bindsym w workspace 3:edit;exec webstorm, mode "default", exec pkill i3-nagbar
-    bindsym Shift+w exec webstorm, mode "default", exec pkill i3-nagbar
+    bindsym w workspace $wp3;exec webstorm, mode $mode-default, exec pkill i3-nagbar
+    bindsym Shift+w exec webstorm, mode $mode-default, exec pkill i3-nagbar
     
     #Editor (Emacs)
-    bindsym e workspace 3:edit;exec emacs, mode "default", exec pkill i3-nagbar
-    bindsym Shift+e exec emacs, mode "default", exec pkill i3-nagbar
+    bindsym e workspace $wp3;exec emacs, mode $mode-default, exec pkill i3-nagbar
+    bindsym Shift+e exec emacs, mode $mode-default, exec pkill i3-nagbar
     
     # back to normal: Enter or Escape
-    bindsym Return mode "default" exec pkill i3-nagbar
-    bindsym Escape mode "default" exec pkill i3-nagbar
+    bindsym Return mode $mode-default exec pkill i3-nagbar
+    bindsym Escape mode $mode-default exec pkill i3-nagbar
 }
-bindsym $super+i mode "ide" exec "i3-nagbar -t warning -m '(i) IntelliJ IDEA (p) Pycharm (w) WebStorm (e) Emacs'"
+bindsym $super+i mode $mode-ide exec i3-nagbar -t warning -m $mode-ide
 bar {
     status_command $HOME/.config/i3/init_json.sh
     position top
