@@ -22,7 +22,7 @@ set $mode-resize "Resize windows"
 set $mode-layout "(n) normal (t) tabbed (s) stacked (f) floating (F11) fullscreen"
 set $mode-orientation "Desktop orientation"
 set $mode-move "Move window to workspace (Shift) / display (Ctrl)"
-set $mode-ide "(i) IntelliJ IDEA (p) Pycharm (w) WebStorm (e) Emacs"
+set $mode-ide "(i) IntelliJ IDEA (p) Pycharm (w) WebStorm (r) Rider (e) Emacs"
 floating_modifier $super
 # for_window [class="Slack"] floating enable
 font pango:Inconsolata 9
@@ -234,6 +234,10 @@ mode $mode-ide {
     bindsym w workspace $wp3;exec webstorm, mode $mode-default, exec pkill i3-nagbar
     bindsym Shift+w exec webstorm, mode $mode-default, exec pkill i3-nagbar
     
+    #IDE (Rider)
+    bindsym r workspace $wp3;exec rider, mode $mode-default, exec pkill i3-nagbar
+    bindsym Shift+r exec rider, mode $mode-default, exec pkill i3-nagbar
+
     #Editor (Emacs)
     bindsym e workspace $wp3;exec emacs, mode $mode-default, exec pkill i3-nagbar
     bindsym Shift+e exec emacs, mode $mode-default, exec pkill i3-nagbar
