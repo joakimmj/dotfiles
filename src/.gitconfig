@@ -4,17 +4,18 @@
 [core]
     editor = vim
 [alias]
-    alias       = config --get-regexp alias                 # List all aliases
-    changed     = whatchanged --since='2 weeks ago'         # Changes last two weeks
-    cleanup     = git gc --prune=now --aggressive           # Cleanup local state
-    discard     = checkout -p                               # Discard changes in patches
-    discard-all = checkout .                                # Discard all changes
-    last        = log -1 HEAD                               # Show last commit
-    last-3      = log -3 HEAD                               # Show last three commits
-    log-blame   = log --oneline --graph --decorate --pretty=format:'%C(yellow)%h%C(reset) %C(bold blue)%an%C(reset) %C(green)%cr%C(reset) %C(red)%d%C(reset) %s'
-    staged      = diff --staged                             # Show staged changes
-    unstage     = reset HEAD --                             # Unstage changes
-    update      = remote update origin --prune              # Update remote info
+    alias        = config --get-regexp alias                 # List all aliases
+    changed      = whatchanged --since='2 weeks ago'         # Changes last two weeks
+    cleanup      = git gc --prune=now --aggressive           # Cleanup local state
+    discard      = checkout -p                               # Discard changes in patches
+    discard-all  = checkout .                                # Discard all changes
+    last         = log -1 HEAD                               # Show last commit
+    last-3       = log -3 HEAD                               # Show last three commits
+    log-blame    = log --oneline --graph --decorate --pretty=format:'%C(yellow)%h%C(reset) %C(bold blue)%an%C(reset) %C(green)%cr%C(reset) %C(red)%d%C(reset) %s'
+    staged       = diff --staged                             # Show staged changes
+    unstage      = reset HEAD --                             # Unstage changes
+    unstage-last = reset HEAD~                               # Unstage changes from last commit (used to undo/split commit)
+    update       = remote update origin --prune              # Update remote info
     a           = add                                       # Add changes
     aa          = add -A                                    # Add all changes
     ap          = add -p                                    # Add changes in patches
@@ -32,7 +33,8 @@
     l           = log --oneline --graph --decorate          # Changelog
     ll          = log --oneline --graph --decorate --all    # Changelog (all changes)
     p           = pull                                      # Pull your changes to remote
-    s           = status -sb                                # Show status
+    s           = status -sb                                # Show status (minified)
+    ss          = status                                    # Show status
     st          = stash                                     # Stash changes
     stu         = stash -u                                  # Stash changes (also untracked)
     stus        = stash save --keep-index                   # Stash changes (unstaged)
