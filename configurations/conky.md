@@ -1,3 +1,8 @@
+# Conky 
+
+## Config
+
+```text tangle:~/.config/conky/conky.conf
 conky.config = {
   alignment = 'top_right',
   background = false,
@@ -30,7 +35,7 @@ ${font sans-serif:bold:size=11}${color0}CPU ${hr 4}${font}
 ${color1}  CPU Usage:${color2}    $cpu% ${cpubar 10,150}
 ${color1}  RAM Usage:${color2}    $memperc% of $memmax
 ${color1}  Frequency:${color2}    $freq MHz ($freq_g GHz)
-${color1}  Processes:${color2}    $processes (running: $running_processes)
+${color1}  Processes:${color2}    $processes (active: $running_processes)
 
 ${color1}  Name          $alignr PID   CPU%   MEM%   
 ${color2}  ${top name 1} $alignr ${top pid 1} ${top cpu 1} ${top mem 1}   
@@ -49,3 +54,4 @@ ${color1}  6:  ${color2}${cpu cpu6}%$alignr ${cpubar cpu6 6,360}
 ${color1}  7:  ${color2}${cpu cpu7}%$alignr ${cpubar cpu7 6,360}   
 ${color1}  8:  ${color2}${cpu cpu8}%$alignr ${cpubar cpu8 6,360}   
 ]]
+```
