@@ -29,13 +29,15 @@ ${font sans-serif:bold:size=11}${color0}SYSTEM ${hr 4}${font}
 ${color1}  System:${color2}       $sysname $kernel $machine
 ${color1}  Uptime:${color2}       $uptime
 ${color1}  Battery:${color2}      ${battery_percent}%
-${color1}  Disk usage:${color2}   $fs_used_perc% of ${fs_size}
+${color1}  Disk usage:${color2}   ${fs_used_perc}% of ${fs_size}
+${color1}  Disk I/O:${color2}     ${diskio /dev/sda}
 
 ${font sans-serif:bold:size=11}${color0}CPU ${hr 4}${font}
 ${color1}  CPU Usage:${color2}    $cpu% ${cpubar 10,150}
 ${color1}  RAM Usage:${color2}    $memperc% of $memmax
 ${color1}  Frequency:${color2}    $freq MHz ($freq_g GHz)
 ${color1}  Processes:${color2}    $processes (active: $running_processes)
+${color1}  Temperature:${color2}  ${acpitemp}°C
 
 ${color1}  Name          $alignr PID   CPU%   MEM%   
 ${color2}  ${top name 1} $alignr ${top pid 1} ${top cpu 1} ${top mem 1}   

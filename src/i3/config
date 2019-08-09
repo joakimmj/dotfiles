@@ -6,6 +6,14 @@ set $shift 50
 set $f5 71
 set $f6 72
 set $f8 74
+set $brightness-up XF86MonBrightnessUp
+set $brightness-down XF86MonBrightnessDown
+set $volume-up XF86AudioRaiseVolume
+set $volume-down XF86AudioLowerVolume
+set $volume-mute XF86AudioMute
+set $audio-play XF86AudioPlay
+set $audio-next XF86AudioNext
+set $audio-prev XF86AudioPrev
 set $wp1 1:www
 set $wp2 2:default
 set $wp3 3:edit
@@ -47,6 +55,7 @@ for_window [class="^.*"] border none
 exec_always --no-startup-id chmod 755 ~/.config/i3/autostart.sh
 exec_always --no-startup-id chmod 755 ~/.config/i3/win_menu.py
 exec_always --no-startup-id chmod 755 ~/.config/i3/init_json.sh
+exec_always --no-startup-id chmod 755 ~/.config/i3/spotify_info.sh
 exec --no-startup-id ~/.config/i3/autostart.sh
 exec_always --no-startup-id i3-msg 'workspace $wp2'
 exec --no-startup-id gnome-terminal
@@ -82,15 +91,24 @@ bindsym $super+Return exec --no-startup-id i3-dmenu-desktop
 # print help
 bindsym $super+h exec xterm -T "HELP" -bg black -fg white -ls -e 'cat ~/.config/i3/keybindings.txt | less'
 
-# volume
+# Volume
+bindsym $volume-up exec --no-startup-id pactl -- set-sink-volume 0 +5%
+bindsym $volume-down exec --no-startup-id pactl -- set-sink-volume 0 -5%
+bindsym $volume-mute exec --no-startup-id pactl set-sink-mute 0 toggle
 bindsym $super+v exec xterm -bg black -fg white -ls -e alsamixer
+
+# Media
+#bindsym XF86AudioPause exec playerctl pause
+bindsym $audio-play exec playerctl play-pause
+bindsym $audio-next exec playerctl next
+bindsym $audio-prev exec playerctl previous
 
 # Lock screen
 #bindsym $ctrl+$super+l exec xscreensaver-command -lock
 
 # Brightness
-#bindsym $ctrl+$f5 exec xbacklight -dec 5
-#bindsym $ctrl+$f6 exec xbacklight -inc 5
+bindsym $brightness-down exec xbacklight -dec 10
+bindsym $brightness-up exec xbacklight -inc 10
 
 # list windows
 bindsym $super+Tab exec ~/.config/i3/win_menu.py
@@ -136,7 +154,7 @@ bindsym $super+0 workspace $wp10
 bindsym $super+$ctrl+Right workspace next 
 bindsym $super+$ctrl+Left workspace prev
 mode $mode-system {
-    bindsym l exec --no-startup-id i3lock, mode $mode-default, exec pkill i3-nagbar
+    bindsym l exec --no-startup-id i3lock -p "win" -f -i ~/.config/i3/lock-screen.png -c 2d3333, mode $mode-default, exec pkill i3-nagbar
     bindsym e exec --no-startup-id i3-msg exit, mode $mode-default, exec pkill i3-nagbar
     bindsym s exec --no-startup-id gksudo pm-suspend, mode $mode-default, exec pkill i3-nagbar
     bindsym h exec --no-startup-id gksudo pm-hibernate, mode $mode-default, exec pkill i3-nagbar
