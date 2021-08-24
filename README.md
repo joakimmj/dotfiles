@@ -1,4 +1,4 @@
-# mj-configs
+# dotfiles
 
 This is a repository containing most of my configurations. They are
 tangled with the CLI tool [md-tangle][1].
