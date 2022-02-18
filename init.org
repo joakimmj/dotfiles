@@ -1,0 +1,602 @@
+#+TITLE:  Emacs Configuration File
+#+AUTHOR: Joakim Myrvoll Johansen ([[https://github.com/joakimmj][joakimmj]])
+#+EMAIL:  joakimmyrvoll@gmail.com
+
+Tangle: C-c C-v t (or C-c C-v C-t)
+
+* Package
+** Init
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     (require 'package)
+     (package-initialize)
+   #+END_SRC
+
+** Mirrors
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     (add-to-list 'package-archives
+                  '("melpa" . "http://melpa.milkbox.net/packages/"))
+     (add-to-list 'package-archives
+                  '("org" . "http://orgmode.org/elpa/"))
+   #+END_SRC
+   
+   Other available mirrors:
+   ("gnu" . "http://elpa.gnu.org/packages/")
+   ("marmalade" . "http://marmalade-repo.org/packages/")
+
+** Update packages
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+
+   #+END_SRC
+
+* Load features
+** Require
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     (dolist (feature
+              '(auto-complete-config     ; a configuration for auto-complete-mode
+                jedi                     ; auto-completion for python
+                ox-latex                 ; the latex-exporter (from org)
+                ox-md                    ; Markdown exporter (from org)
+                recentf                  ; recently opened files
+                tex-mode))               ; TeX, LaTeX, and SliTeX mode commands
+       (require feature))
+   #+END_SRC
+** Modes
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     (dolist (mode
+              '(abbrev-mode                ; E.g. sopl -> System.out.println.
+                column-number-mode         ; Show column number in mode line.
+                delete-selection-mode      ; Replace selected text.
+                dirtrack-mode              ; directory tracking in *shell*
+                recentf-mode               ; Recently opened files.
+                show-paren-mode))          ; Highlight matching parentheses.
+       (funcall mode 1))
+   #+END_SRC
+
+** Functions
+*** tidy
+    Author: [[https://github.com/simenheg][simenheg]]
+
+    Defining a function that sets the right indentation to the marked text, or
+    the entire buffer if no text is selected.
+
+    #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+      (defun tidy ()
+        "Ident, untabify and unwhitespacify current buffer, or region if active."
+        (interactive)
+        (let ((beg (if (region-active-p) (region-beginning) (point-min)))
+              (end (if (region-active-p) (region-end)       (point-max))))
+          (whitespace-cleanup)
+          (indent-region beg end nil)
+          (untabify beg end)))
+    #+END_SRC
+*** switch-to-shell
+    Author: [[https://github.com/larstvei][larstvei]]
+    
+    Jumps to eshell or back.
+    
+    #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+      (defun switch-to-shell ()
+        "Jumps to eshell or back."
+        (interactive)
+        (if (string= (buffer-name) "*shell*")
+            (switch-to-prev-buffer)
+          (shell)))
+    #+END_SRC
+
+*** remove-whitespace
+    Author: [[https://github.com/larstvei][larstvei]]
+    
+    Removes whitespace
+    
+    #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+      (defun remove-whitespace ()
+        "Removes whitespace."
+        (interactive)
+        (just-one-space -1))
+    #+END_SRC
+
+*** recentf
+    From: [[http://www.emacswiki.org/emacs/CalendarWeekNumbers][EmacsWiki]]
+    
+    #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+      (defun recentf-ido-find-file ()
+        "Find a recent file using Ido."
+        (interactive)
+        (let ((f (ido-completing-read "Choose recent file: " recentf-list nil t)))
+          (when f
+            (find-file f))))
+    #+END_SRC
+
+* Looks and feels
+** Defaults
+
+   Remove \*scratch\* message
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     (setq initial-scratch-message nil)
+   #+END_SRC
+   
+   Remove splash screen
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el     
+     (setq inhibit-splash-screen t)
+   #+END_SRC
+
+   Line numbers -> hide
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el     
+     (global-linum-mode 0)
+   #+END_SRC
+
+   Highlight parenteses-pair
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el     
+     ;;(show-paren-mode t)
+   #+END_SRC
+
+   Yes-or-no -> y-or-n   
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el     
+     (fset 'yes-or-no-p 'y-or-n-p)
+   #+END_SRC
+
+   Functional and fast file access with IDO and Smex interface
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     (dolist (mode
+              '(ido-mode                   ; Interactivly do.
+                ido-everywhere             ; Use Ido for all buffer/file reading.
+                ido-vertical-mode          ; Makes ido-mode display vertically.
+                flx-ido-mode))             ; Toggle flx ido mode.
+       (funcall mode 1))
+
+     (setq ido-file-extensions-order
+           '(".el" ".scm" ".lisp" ".java" ".c" ".h" ".org" ".tex"))
+
+     (add-to-list 'ido-ignore-buffers "*Messages*")
+
+     (smex-initialize)
+     (global-set-key (kbd "M-x") 'smex)
+
+   #+END_SRC
+
+   Marked text wil be overwritten
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el     
+     ;;(delete-selection-mode 1)
+   #+END_SRC
+
+   Column numbers -> show
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el     
+     (setq column-number-mode t)
+   #+END_SRC
+
+   Display battery status (when available)
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el     
+     (require 'battery)
+     (when (and battery-status-function
+            (not (string-match-p "N/A" 
+                     (battery-format "%B"
+                             (funcall battery-status-function)))))
+       (display-battery-mode 1))
+   #+END_SRC
+
+   Tool bar -> hide
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el     
+     (tool-bar-mode -1)
+   #+END_SRC
+
+   Scroll bar -> hide
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el     
+     (scroll-bar-mode -1)
+   #+END_SRC
+
+   Menu bar -> hide
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el     
+     (menu-bar-mode -1)
+   #+END_SRC
+
+   Show date and time
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el     
+     (setq display-time-day-and-date t
+           display-time-24hr-format t)
+     (setq display-time-format " [%d.%h %H:%M] ")
+     (display-time)
+   #+END_SRC
+
+   Split window vertically
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el     
+     (setq split-width-threshold 0
+           split-height-threshold nil)
+   #+END_SRC
+
+   Automatically end line when 'full'
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el   
+     (setq-default fill-column 80                   ; Maximum line width.
+                   indent-tabs-mode nil             ; Use spaces instead of tabs.
+                   split-width-threshold 100        ; Split verticly by default.
+                   auto-fill-function 'do-auto-fill ; Auto-fill-mode everywhere.
+                   )
+   #+END_SRC
+
+   Mark column number 80
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el     
+     (require 'fill-column-indicator)
+     (add-hook 'after-change-major-mode-hook
+               '(lambda ()
+                  (setq fci-rule-column 80)
+                  (fci-mode)))
+   #+END_SRC
+
+   Tetris highscore
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el     
+     (setq tetris-score-file (concat user-emacs-directory "/tetris-scores"))
+   #+END_SRC
+
+   Input method -> TeX. This will allow you to enter characters that are not
+   supported by your keyboard. Toggle: 'C-\'
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el     
+     (setq default-input-method "TeX")
+   #+END_SRC
+
+** Restore previous session
+   
+   Automatically save and restore sessions
+
+   Change location for session save file (.emacs.desktop) and enables
+   desktop-save-mode. 
+
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     (setq desktop-dirname "~/.emacs.desk/"
+           desktop-path (list desktop-dirname)
+           desktop-save t)
+     (desktop-save-mode 1)
+   #+END_SRC
+
+** Bookmarks
+
+   Change bookmark location
+
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     (setq bookmark-default-file  (concat user-emacs-directory "bookmarks"))
+   #+END_SRC
+
+** Autosaves
+
+   Change autosave directory.
+
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     (defvar emacs-autosave-directory (concat user-emacs-directory "autosaves/"))
+     (setq backup-directory-alist
+           `((".*" . ,emacs-autosave-directory))
+           auto-save-file-name-transforms
+           `((".*" ,emacs-autosave-directory t)))
+   #+END_SRC
+
+** Autocomplete
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     (require 'auto-complete-config)
+     (ac-config-default)
+     (global-auto-complete-mode t) 
+   #+END_SRC
+
+** Font
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     (when (member "Inconsolata" (font-family-list))
+       (set-face-attribute 'default nil :font "Inconsolata-11"))
+   #+END_SRC
+
+** Theme
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     (load-theme 'tangotango t)
+   #+END_SRC
+
+** Keybindings
+
+   Jump to 'bla'
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     (key-chord-mode 1)
+     (key-chord-define-global ";'" 'ace-jump-mode)
+   #+END_SRC
+
+   Shell (terminal)
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     (global-set-key (kbd "C-x t") 'switch-to-shell)
+   #+END_SRC
+
+   Kill current buffer
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     (global-set-key (kbd "C-x k") 'kill-this-buffer)
+   #+END_SRC
+
+   Tidy() 
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     (global-set-key (kbd "<C-tab>")  'tidy)
+   #+END_SRC
+
+   Remove whitespace 
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     (global-set-key (kbd "C-c j")  'remove-whitespace)
+   #+END_SRC
+
+   Magit (git)
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     (global-set-key (kbd "C-c m") 'magit-status)
+   #+END_SRC
+
+   Resize buffers
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     (global-set-key (kbd "<M-left>")
+                     (lambda () (interactive)
+                       (enlarge-window -1 t)))
+     (global-set-key (kbd "<M-right>")
+                     (lambda () (interactive)
+                       (enlarge-window 1 t)))
+     (global-set-key (kbd "<M-up>")
+                     (lambda () (interactive)
+                       (enlarge-window -1)))
+     (global-set-key (kbd "<M-down>")
+                     (lambda () (interactive)
+                       (enlarge-window 1)))
+   #+END_SRC
+
+   Recently viewed files
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     (define-key global-map (kbd "C-x C-r")  'recentf-ido-find-file)
+   #+END_SRC
+
+* Programming-language-modes specifics
+** Java
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     ;; adding shortcuts to java-mode, writing the shortcut folowed by a
+     ;; non-word character will cause an expansion.
+     (defun java-shortcuts ()
+       (define-abbrev-table 'java-mode-abbrev-table
+         '(("psv" "public static void main(String[] args) {" nil 0)
+           ("sop" "System.out.printf" nil 0)
+           ("sopl" "System.out.println" nil 0)))
+       (abbrev-mode t))
+     
+     ;; the shortcuts are only useful in java-mode so we'll load them to
+     ;; java-mode-hook.
+     (add-hook 'java-mode-hook 'java-shortcuts)
+     
+     ;; we want to set a default compile-command for java-mode, we make
+     ;; this variable buffer-local so that changing it for java-mode does
+     ;; not effect other modes
+     (make-variable-buffer-local 'compile-command)
+     
+     ;; defining a function that guesses a compile command and bindes the
+     ;; compile-function to C-c C-c
+     (defun compile-java ()
+       (setq compile-command (concat "javac " (buffer-name)))
+       (local-set-key (kbd "C-c C-c") 'compile))
+     
+     ;; this is a java-spesific function, so we only load it when entering
+     ;; java-mode
+     (add-hook 'java-mode-hook 'compile-java)
+     
+     ;;(autoload 'java-extras "java-extras" "Fold brackets")
+     ;;(add-hook 'java-mode-hook 'java-extras)
+     ;;TODO Fix this ugliness
+   #+END_SRC
+
+** C
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     ;;(load-library "hideshow-on")
+     
+     ;; defining a function that sets more accessible keyboard-bindings to
+     ;; hiding/showing code-blocs
+     (defun hideshow-on ()
+       (local-set-key (kbd "C-c <right>") 'hs-show-block)
+       (local-set-key (kbd "C-c C-<right>") 'hs-show-block)
+       (local-set-key (kbd "C-c <left>")  'hs-hide-block)
+       (local-set-key (kbd "C-c C-<left>")  'hs-hide-block)
+       (local-set-key (kbd "C-c <up>")    'hs-hide-all)
+       (local-set-key (kbd "C-c C-<up>")    'hs-hide-all)
+       (local-set-key (kbd "C-c <down>")  'hs-show-all)
+       (local-set-key (kbd "C-c C-<down>")  'hs-show-all)
+       (hs-minor-mode t))
+     
+     ;; now we have to tell emacs where to load these functions. Showing
+     ;; and hiding codeblocks could be useful for all c-like programming
+     ;; (java is c-like) languages, so we add it to the c-mode-common-hook.
+     (add-hook 'c-mode-common-hook 'hideshow-on)
+   #+END_SRC
+
+** Lisp
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     ;; Show λ in Lisp code.
+     (defun sm-lambda-mode-hook ()
+       (font-lock-add-keywords
+        nil `(("\\<lambda\\>"
+               (0 (progn (compose-region (match-beginning 0) (match-end 0)
+                                         ,(make-char 'greek-iso8859-7 107))
+                         nil))))))
+     (dolist (h '(lisp-mode-hook
+                  scheme-mode-hook
+                  emacs-lisp-mode-hook
+                  slime-repl-mode-hook
+                  inferior-lisp-mode-hook
+                  inferior-scheme-mode-hook
+                  lisp-interaction-mode-hook))
+       (progn
+         (add-hook h (lambda () (paredit-mode 1)))
+         (add-hook h 'sm-lambda-mode-hook)))
+     
+     (when (file-exists-p "~/.quicklisp/slime-helper.el")
+       (load (expand-file-name "~/.quicklisp/slime-helper.el")))
+     
+     (setq inferior-lisp-program "sbcl")
+     
+     (add-hook 'slime-mode-hook 'set-up-slime-ac)
+     (add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
+     (add-hook 'lisp-mode-hook
+               (lambda ()
+                 (let ((buf (current-buffer)))
+                   (when (or (string-match-p ".*.lisp$" (buffer-name buf))
+                             (string-match-p ".*.lsp$" (buffer-name buf)))
+                     (if (member "*inferior-lisp*"
+                                 (mapcar 'buffer-name (buffer-list)))
+                         (switch-to-buffer-other-window "*slime-repl sbcl*")
+                       (slime)))
+                   (switch-to-buffer-other-window buf))))
+     
+     (eval-after-load "auto-complete"
+       '(add-to-list 'ac-modes 'slime-repl-mode))
+   #+END_SRC
+
+** Scheme
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     (require 'quack)
+     
+     (autoload 'scheme-smart-complete "scheme-complete" nil t)
+     (eval-after-load 'scheme
+       '(define-key scheme-mode-map "\t" 'scheme-complete-or-indent))
+     (autoload 'scheme-get-current-symbol-info "scheme-complete" nil t)
+     (add-hook 'scheme-mode-hook
+               (lambda ()
+                 (make-local-variable 'eldoc-documentation-function)
+                 (setq eldoc-documentation-function
+                       'scheme-get-current-symbol-info)
+                 (eldoc-mode)))
+     
+     (setq scheme-program-name "csi -:c")
+     (setq quack-default-program "csi")
+     ;;(setq scheme-program-name "racket -:c")
+     ;;(setq quack-default-program "racket")
+   #+END_SRC
+
+** Python
+*** Jedi
+    #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+      (require 'jedi)
+      (setq jedi:server-command
+            (cons "python3" (cdr jedi:server-command))
+            python-shell-interpreter "python3")
+      (add-hook 'python-mode-hook 'jedi:ac-setup)
+    #+END_SRC
+
+** Web
+*** html
+    #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+      (require 'multi-web-mode)
+      (setq mweb-default-major-mode 'html-mode)
+      (setq mweb-tags
+            '((php-mode "<\\?php\\|<\\? \\|<\\?=" "\\?>")
+              (js-mode  "<script +\\(type=\"text/javascript\"\\|language=\"javascript\"\\)[^>]*>" "</script>")
+              (css-mode "<style +type=\"text/css\"[^>]*>" "</style>")))
+      (setq mweb-filename-extensions '("php" "htm" "html" "ctp" "phtml" "php4" "php5"))
+      (multi-web-global-mode 1)
+    #+END_SRC
+
+** LaTeX and org-mode LaTeX export
+   Author: [[https://github.com/larstvei][larstvei]]
+   
+   =.tex=-files should be associated with =latex-mode= instead of
+   =tex-mode=.
+
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     (add-to-list 'auto-mode-alist '("\\.tex\\'" . latex-mode))
+   #+END_SRC
+
+   Use ~biblatex~ for bibliography.
+
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     (setq-default bibtex-dialect 'biblatex)
+   #+END_SRC
+
+   When exporting from Org to LaTeX, use ~latexmk~ for compilation.
+
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     (eval-after-load 'ox-latex
+       '(setq org-latex-pdf-process
+              '("latexmk -pdflatex='pdflatex -shell-escape -interaction nonstopmode' -pdf -f %f")))
+   #+END_SRC
+
+   Author: [[https://github.com/joakimmj][Me]]
+
+   To include my own package.
+
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     ;; (unless (boundp 'org-export-latex-classes)
+     ;;   (setq org-export-latex-classes nil))
+
+     ;; (eval-after-load 'ox-latex
+     ;;   '(add-to-list 'org-export-latex-classes
+     ;;                 '("article"
+     ;;                   "\\documentclass{article}"
+     ;;                   ("\\section{%s}" . "\\section*{%s}")
+     ;;                   ("\\subsection{%s}" . "\\subsection*{%s}")
+     ;;                   ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+     ;;                   ("\\paragraph{%s}" . "\\paragraph*{%s}")
+     ;;                   ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+
+     ;; (eval-after-load 'ox-latex
+     ;;   '(add-to-list 'org-export-latex-classes
+     ;;                 '("report"
+     ;;                   "\\documentclass{report}"
+     ;;                   ("\\part{%s}" . "\\part*{%s}")
+     ;;                   ("\\chapter{%s}" . "\\chapter*{%s}")
+     ;;                   ("\\section{%s}" . "\\section*{%s}")
+     ;;                   ("\\subsection{%s}" . "\\subsection*{%s}")
+     ;;                   ("\\subsubsection{%s}" . "\\subsubsection*{%s}"))))
+
+
+     (defun org-to-latex ()
+       "exports to a .pdf file without any preamble"
+       (interactive)
+       (org-latex-export-to-latex nil nil nil t nil))
+     ;;(org-latex-export-to-latex nil nil nil t org-export-latex-classes)
+     ;;(org-export-as-latex nil nil nil t nil))
+
+     (defun org-to-pdf ()
+       "exports to a .pdf file without any preamble"
+       (interactive)
+       (org-latex-export-to-pdf nil nil nil t nil nil))
+     ;;(org-latex-export-to-pdf nil nil nil t nil org-export-latex-classes)
+     ;;(org-export-as-pdf nil nil nil t nil))
+
+     (add-hook 'org-mode-hook
+               (lambda ()
+                 (local-set-key (kbd "C-c l") 'org-to-latex)
+                 (local-set-key (kbd "C-c p") 'org-to-pdf)))
+   #+END_SRC
+
+** Markdown
+   Author: [[https://github.com/larstvei][larstvei]]
+   
+   This makes =.md=-files open in =markdown-mode=.
+
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+   #+END_SRC
+
+   I sometimes use a specialized markdown format, where inline math-blocks
+   can be achieved by surrounding a LaTeX formula with =$math$= and
+   =$/math$=. Writing these out became tedious, so I wrote a small function.
+
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     (defun insert-markdown-inline-math-block ()
+       "Inserts an empty math-block if no region is active, otherwise wrap a
+     math-block around the region."
+       (interactive)
+       (let* ((beg (region-beginning))
+              (end (region-end))
+              (body (if (region-active-p) (buffer-substring beg end) "")))
+         (when (region-active-p)
+           (delete-region beg end))
+         (insert (concat "$math$ " body " $/math$"))
+         (search-backward " $/math$")))
+   #+END_SRC
+
+   Most of my writing in this markup is in Norwegian, so the dictionary is
+   set accordingly. The markup is also sensitive to line breaks, so
+   =auto-fill-mode= is disabled. Of course we want to bind our lovely
+   function to a key!
+
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     (add-hook 'markdown-mode-hook
+               (lambda ()
+                 (auto-fill-mode 0)
+                 (ispell-change-dictionary "norsk")
+                 (local-set-key (kbd "C-c b") 'insert-markdown-inline-math-block)) t)
+   #+END_SRC
+
+** Javascript
+   #+BEGIN_SRC emacs-lisp :tangle ~/Dropbox/skole/.emacs.d/init.el
+     (setq js-indent-level 2)
+   #+END_SRC

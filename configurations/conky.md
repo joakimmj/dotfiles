@@ -28,12 +28,13 @@ conky.text = [[
 ${font sans-serif:bold:size=21}${color0}${time %d.%m.%y}, ${time %H:%M} ${hr 7}${font}
 
 ${font sans-serif:bold:size=11}${color0}SYSTEM ${hr 4}${font}
+${color1}  Distro:${color2}       ${exec lsb_release -a | grep 'Description:' | cut -b14-}
 ${color1}  System:${color2}       ${sysname} ${kernel} ${machine}
 ${color1}  Uptime:${color2}       ${uptime}
 ${if_match "charging" >= "${exec upower -i /org/freedesktop/UPower/devices/battery_BAT0 | grep 'state:' | cut -b26-}"}\
 ${color1}  Battery:${color4}      ${battery_percent}% (charging)
 ${else}\
-${if_match ${battery_percent}<20}\
+${if_match ${battery_percent}<30}\
 ${color1}  Battery:${color5}      ${battery_percent}%
 ${else}\
 ${color1}  Battery:${color2}      ${battery_percent}%

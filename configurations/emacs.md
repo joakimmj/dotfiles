@@ -344,3 +344,182 @@ Major mode for editing GitHub Flavored Markdown files
 (autoload 'gfm-mode "markdown-mode" t)
 (add-to-list 'auto-mode-alist '("README\\.md\\'" . gfm-mode))
 ```
+
+### Java
+
+*not included in config*
+```lisp
+;; adding shortcuts to java-mode, writing the shortcut folowed by a
+;; non-word character will cause an expansion.
+(defun java-shortcuts ()
+  (define-abbrev-table 'java-mode-abbrev-table
+    '(("psv" "public static void main(String[] args) {" nil 0)
+      ("sop" "System.out.printf" nil 0)
+      ("sopl" "System.out.println" nil 0)))
+  (abbrev-mode t))
+
+;; the shortcuts are only useful in java-mode so we'll load them to
+;; java-mode-hook.
+(add-hook 'java-mode-hook 'java-shortcuts)
+
+;; we want to set a default compile-command for java-mode, we make
+;; this variable buffer-local so that changing it for java-mode does
+;; not effect other modes
+(make-variable-buffer-local 'compile-command)
+
+;; defining a function that guesses a compile command and bindes the
+;; compile-function to C-c C-c
+(defun compile-java ()
+  (setq compile-command (concat "javac " (buffer-name)))
+  (local-set-key (kbd "C-c C-c") 'compile))
+
+;; this is a java-spesific function, so we only load it when entering
+;; java-mode
+(add-hook 'java-mode-hook 'compile-java)
+
+;;(autoload 'java-extras "java-extras" "Fold brackets")
+;;(add-hook 'java-mode-hook 'java-extras)
+```
+
+### C
+
+*not included in config*
+```lisp
+;;(load-library "hideshow-on")
+
+;; defining a function that sets more accessible keyboard-bindings to
+;; hiding/showing code-blocs
+(defun hideshow-on ()
+  (local-set-key (kbd "C-c <right>") 'hs-show-block)
+  (local-set-key (kbd "C-c C-<right>") 'hs-show-block)
+  (local-set-key (kbd "C-c <left>")  'hs-hide-block)
+  (local-set-key (kbd "C-c C-<left>")  'hs-hide-block)
+  (local-set-key (kbd "C-c <up>")    'hs-hide-all)
+  (local-set-key (kbd "C-c C-<up>")    'hs-hide-all)
+  (local-set-key (kbd "C-c <down>")  'hs-show-all)
+  (local-set-key (kbd "C-c C-<down>")  'hs-show-all)
+  (hs-minor-mode t))
+
+;; now we have to tell emacs where to load these functions. Showing
+;; and hiding codeblocks could be useful for all c-like programming
+;; (java is c-like) languages, so we add it to the c-mode-common-hook.
+(add-hook 'c-mode-common-hook 'hideshow-on)
+```
+
+### Lisp
+
+*not included in config*
+```lisp
+;; Show λ in Lisp code.
+(defun sm-lambda-mode-hook ()
+  (font-lock-add-keywords
+   nil `(("\\<lambda\\>"
+          (0 (progn (compose-region (match-beginning 0) (match-end 0)
+                                    ,(make-char 'greek-iso8859-7 107))
+                    nil))))))
+(dolist (h '(lisp-mode-hook
+             scheme-mode-hook
+             emacs-lisp-mode-hook
+             slime-repl-mode-hook
+             inferior-lisp-mode-hook
+             inferior-scheme-mode-hook
+             lisp-interaction-mode-hook))
+  (progn
+    (add-hook h (lambda () (paredit-mode 1)))
+    (add-hook h 'sm-lambda-mode-hook)))
+
+(when (file-exists-p "~/.quicklisp/slime-helper.el")
+  (load (expand-file-name "~/.quicklisp/slime-helper.el")))
+
+(setq inferior-lisp-program "sbcl")
+
+(add-hook 'slime-mode-hook 'set-up-slime-ac)
+(add-hook 'slime-repl-mode-hook 'set-up-slime-ac)
+(add-hook 'lisp-mode-hook
+          (lambda ()
+            (let ((buf (current-buffer)))
+              (when (or (string-match-p ".*.lisp$" (buffer-name buf))
+                        (string-match-p ".*.lsp$" (buffer-name buf)))
+                (if (member "*inferior-lisp*"
+                            (mapcar 'buffer-name (buffer-list)))
+                    (switch-to-buffer-other-window "*slime-repl sbcl*")
+                  (slime)))
+              (switch-to-buffer-other-window buf))))
+
+(eval-after-load "auto-complete"
+  '(add-to-list 'ac-modes 'slime-repl-mode))
+```
+
+###  Scheme
+
+*not included in config*
+```lisp
+(require 'quack)
+
+(autoload 'scheme-smart-complete "scheme-complete" nil t)
+(eval-after-load 'scheme
+  '(define-key scheme-mode-map "\t" 'scheme-complete-or-indent))
+(autoload 'scheme-get-current-symbol-info "scheme-complete" nil t)
+(add-hook 'scheme-mode-hook
+          (lambda ()
+            (make-local-variable 'eldoc-documentation-function)
+            (setq eldoc-documentation-function
+                  'scheme-get-current-symbol-info)
+            (eldoc-mode)))
+
+(setq scheme-program-name "csi -:c")
+(setq quack-default-program "csi")
+;;(setq scheme-program-name "racket -:c")
+;;(setq quack-default-program "racket")
+```
+
+### Python
+
+*not included in config*
+```lisp
+(require 'jedi)
+(setq jedi:server-command
+      (cons "python3" (cdr jedi:server-command))
+      python-shell-interpreter "python3")
+(add-hook 'python-mode-hook 'jedi:ac-setup)
+```
+
+### HTML
+
+*not included in config*
+```lisp
+(require 'multi-web-mode)
+(setq mweb-default-major-mode 'html-mode)
+(setq mweb-tags
+      '((php-mode "<\\?php\\|<\\? \\|<\\?=" "\\?>")
+        (js-mode  "<script +\\(type=\"text/javascript\"\\|language=\"javascript\"\\)[^>]*>" "</script>")
+        (css-mode "<style +type=\"text/css\"[^>]*>" "</style>")))
+(setq mweb-filename-extensions '("php" "htm" "html" "ctp" "phtml" "php4" "php5"))
+(multi-web-global-mode 1)
+```
+
+### LaTeX and org-mode LaTeX export
+
+*not included in config*
+```lisp
+
+```
+
+
+
+### 
+
+*not included in config*
+```lisp
+
+```
+
+
+
+### 
+
+*not included in config*
+```lisp
+
+```
+

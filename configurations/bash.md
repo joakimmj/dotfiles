@@ -139,6 +139,8 @@ alias mv='mv -i'
 alias bcalc='bc -l -q'
 alias bashrc='nano ~/.bashrc'
 alias which='type -all'
+#alias texpdf="latexmk -pdflatex='pdflatex -shell-escape -interaction nonstopmode' -pdf -f "
+#alias texcc="latexmk -c "
 alias gs='git status -sb'
 ```
 
@@ -164,4 +166,7 @@ Add shortcuts for directories, ssh clients, etc.
 
 ```bash tangle:~/.bash_aliases
 alias projects='cd ~/projects'
+
+# default: 810
+alias brightness='sudo nano /sys/class/backlight/intel_backlight/brightness'
 ```
