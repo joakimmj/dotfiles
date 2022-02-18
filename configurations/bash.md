@@ -68,6 +68,26 @@ GIT_PS1_SHOWDIRTYSTATE=true
 GIT_PS1_SHOWUNTRACKEDFILES=true
 ```
 
+Add tags if:
+* chrooting inside a sub system
+* logged in as root
+* logged into a SSH client
+
+```bash tangle:~/.bashrc
+unset tags;
+tags=()
+
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+    tags=$(cat /etc/debian_chroot)
+fi
+if [ $(id -u) -eq 0 ]; then
+  tags+=("root")
+fi
+if [ -n "$SSH_CLIENT" ]; then
+  tags+=("ssh")
+fi
+```
+
 Colors:
 * `\[\e[0;34m\]` = BLUE
 * `\[\e[0;32m\]` = GREEN
@@ -91,31 +111,24 @@ Prompt commands:
 * `\W` : the basename of the current working directory, with $HOME abbreviated with a tilde
 * `\$` : if the effective UID is 0, a #, otherwise a $
 
-Set prompt dependent on if you're root or not. If `id -u` returns 0, you're root.
-The color of the prompt is set to green if root.
-
 ```bash tangle:~/.bashrc
-if [ $(id -u) -eq 0 ];
-then 
-  PS1="\[\e[0;32m\][\\A \u:\\W]\$ "
-else
-  PS1='[\A$(declare -F __git_ps1 &>/dev/null && __git_ps1 " (%s)") \u:\W]\$ '
-fi
-```
+green="\[\033[01;32m\]"
+reset="\[\033[00m\]"
 
-If logged into a SSH client, add `(ssh)` to prompt.
-
-```bash tangle:~/.bashrc
-if [ -n "$SSH_CLIENT" ];
-then
-  PS1='[\A (ssh)$(declare -F __git_ps1 &>/dev/null && __git_ps1 " (%s)") \u:\W]\$ '
-fi
+PS1="${tags:+$green(${tags[*]})$reset }[\A\$(__git_ps1) \u:\W]\$ "
 ```
 
 ## Alias
-Set aliases for bash
 
+Load aliases from `.bash_aliases`
 ```bash tangle:~/.bashrc
+if [ -f ~/.bash_aliases ]; then
+    . ~/.bash_aliases
+fi
+```
+
+Set aliases for bash
+```bash tangle:~/.bash_aliases
 alias ls='ls --color=auto'
 alias l='ls -Fl --color=auto'
 alias ll='ls -Fl --color=auto'
@@ -126,14 +139,12 @@ alias mv='mv -i'
 alias bcalc='bc -l -q'
 alias bashrc='nano ~/.bashrc'
 alias which='type -all'
-#alias texpdf="latexmk -pdflatex='pdflatex -shell-escape -interaction nonstopmode' -pdf -f "
-#alias texcc="latexmk -c "
 alias gs='git status -sb'
 ```
 
 Aliases for docker
 
-```bash tangle:~/.bashrc
+```bash tangle:~/.bash_aliases
 alias docker-kill-all='docker kill $(docker ps -q)'
 alias docker-clean='docker system prune -a'
 alias docker-clean-volumes='docker volume rm $(docker volume ls -qf dangling=true)'
@@ -144,16 +155,13 @@ alias docker-clean-containers='docker rm $(docker ps -aqf status=exited)'
 ### Programs
 Add keybindings to downloaded programs.
 
-```bash tangle:~/.bashrc
+```bash tangle:~/.bash_aliases
 
 ```
 
 ### Shortcuts
 Add shortcuts for directories, ssh clients, etc.
 
-```bash tangle:~/.bashrc
+```bash tangle:~/.bash_aliases
 alias projects='cd ~/projects'
-
-# default: 810
-alias brightness='sudo nano /sys/class/backlight/intel_backlight/brightness'
 ```

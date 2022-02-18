@@ -98,7 +98,6 @@ bindsym $volume-mute exec --no-startup-id pactl set-sink-mute 0 toggle
 bindsym $super+v exec xterm -bg black -fg white -ls -e alsamixer
 
 # Media
-#bindsym XF86AudioPause exec playerctl pause
 bindsym $audio-play exec playerctl play-pause
 bindsym $audio-next exec playerctl next
 bindsym $audio-prev exec playerctl previous
