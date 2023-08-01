@@ -88,6 +88,8 @@ selectp -t 0
 ## Scripts
 
 ### TMUX session
+> Author: [ThePrimeagen](https://github.com/ThePrimeagen)  
+> Source: [tmux-sessionizer](https://github.com/ThePrimeagen/.dotfiles/blob/master/bin/.local/scripts/tmux-sessionizer)
 
 Use `tmuxs <directory> (optional)` to start new session.
 ``` tangle:~/bin/tmuxs
