@@ -2,6 +2,18 @@
 
 ## Cheat sheet
 
+Cheat sheet (ref. https://cht.sh)
+``` tangle:~/bin/cht-sh
+#!/usr/bin/env bash
+
+echo "---[ C-c to quit, ':help' for help ]-------------------------------------------"
+while true
+do
+  read -p "curl https://cht.sh/" query
+  curl -s cht.sh/"$query" | less -R
+done
+```
+
 Cheat sheet for programming languages (e.g. `golang`, `java`, etc.)
 ``` tangle:~/bin/cht-lang
 #!/usr/bin/env bash
