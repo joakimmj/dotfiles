@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+read -p "Enter programming language: " language
+read -p "Enter query: " query
+curl -s cht.sh/"$language"/"$query" | less -R
