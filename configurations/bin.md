@@ -8,7 +8,7 @@ Cheat sheet for programming languages (e.g. `golang`, `java`, etc.)
 
 read -p "Enter programming language: " language
 read -p "Enter query: " query
-curl -s cht.sh/"$language"/"$query" | less -R
+curl -s cht.sh/"${language}${query:+/$query}" | less -R
 ```
 
 Cheat sheet for core utils (e.g. `cat`, `curl`, etc.)
@@ -17,5 +17,5 @@ Cheat sheet for core utils (e.g. `cat`, `curl`, etc.)
 
 read -p "Enter core util: " util
 read -p "Enter query: " query
-curl -s cht.sh/"$util"~"$query" | less -R
+curl -s cht.sh/"${util}${query:+~$query}" | less -R
 ```

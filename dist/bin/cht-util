@@ -2,4 +2,4 @@
 
 read -p "Enter core util: " util
 read -p "Enter query: " query
-curl -s cht.sh/"$util"~"$query" | less -R
+curl -s cht.sh/"${util}${query:+~$query}" | less -R
