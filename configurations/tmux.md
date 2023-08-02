@@ -61,6 +61,8 @@ set -g status-right "%d.%m.%y, %H:%M"
 
 #### Change defaults
 
+TODO: add `-N` to the rebinds
+
 Remove confirmation before killing window (default: `confirm-before -p "kill-window #W? (y/n)" kill-window`).
 ``` tangle:~/.tmux.conf
 bind-key -T prefix & kill-window
@@ -75,6 +77,13 @@ Show keybindings in popup (default: `list-keys -N`).
 ``` tangle:~/.tmux.conf
 bind-key -T prefix ? display-popup -E "(echo 'My keys'; tmux list-keys -N -T my-keys -P 'C-q '; printf '\nLayouts\n'; tmux list-keys -N -T my-layouts -P 'C-w '; printf '\nBuilt in\n'; tmux list-keys -N) | less"
 ```
+
+Vim-like pane switching
+bind-key -T prefix -r Space last-window
+bind -r k select-pane -U
+bind -r j select-pane -D
+bind -r h select-pane -L
+bind -r l select-pane -R
 
 #### My bindings
 
