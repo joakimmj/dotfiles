@@ -16,6 +16,7 @@ tangled with the CLI tool [md-tangle][1].
     * [lock-screen](assets/lock-screen.png)
 * [git](configurations/git.md)
 * [nano](configurations/nano.md)
+* [nvim](configurations/nvim.md)
 * [tmux](configurations/tmux.md)
 * [Xmodmap](configurations/xmodmap.md)
 
