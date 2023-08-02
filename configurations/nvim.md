@@ -10,7 +10,7 @@ require("my.netrw")
 ```
 
 ## Options
-``` tangle:~/.config/nvim/my/options.lua
+``` tangle:~/.config/nvim/lua/my/options.lua
 vim.opt.number = true
 vim.opt.relativenumber = true
 
@@ -47,13 +47,13 @@ vim.opt.colorcolumn = "80"
 ## Keymaps
 
 Change `<leader>` to `Space`
-``` tangle:~/.config/nvim/my/mappings.lua
+``` tangle:~/.config/nvim/lua/my/mappings.lua
 vim.g.mapleader = " "
 vim.keymap.set("n", "<leader>pv", function() vim.cmd("Ex") end)
 ```
 
 ## Netrw
 
-``` tangle:~/.config/nvim/my/netrw.lua
+``` tangle:~/.config/nvim/lua/my/netrw.lua
 vim.g.netrw_bufsettings="noma nomod nu nobl nowrap ro"
 ```
