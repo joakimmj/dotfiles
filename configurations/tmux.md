@@ -61,29 +61,29 @@ set -g status-right "%d.%m.%y, %H:%M"
 
 #### Change defaults
 
-TODO: add `-N` to the rebinds
-
 Remove confirmation before killing window (default: `confirm-before -p "kill-window #W? (y/n)" kill-window`).
 ``` tangle:~/.tmux.conf
-bind-key -T prefix & kill-window
+bind-key -T prefix -N "Kill the current window" & kill-window
 ```
 
 Remove confirmation before killing pane (default: `confirm-before -p "kill-pane #P? (y/n)" kill-pane`).
 ``` tangle:~/.tmux.conf
-bind-key -T prefix x kill-pane
+bind-key -T prefix -N "Kill the current pane" x kill-pane
 ```
 
 Show keybindings in popup (default: `list-keys -N`).
 ``` tangle:~/.tmux.conf
-bind-key -T prefix ? display-popup -E "(echo 'My keys'; tmux list-keys -N -T my-keys -P 'C-q '; printf '\nLayouts\n'; tmux list-keys -N -T my-layouts -P 'C-w '; printf '\nBuilt in\n'; tmux list-keys -N) | less"
+bind-key -T prefix -N "List all key bindings" ? display-popup -E "(echo 'My keys'; tmux list-keys -N -T my-keys -P 'C-q '; printf '\nLayouts\n'; tmux list-keys -N -T my-layouts -P 'C-w '; printf '\nBuilt in\n'; tmux list-keys -N) | less"
 ```
 
-Vim-like pane switching
-bind-key -T prefix -r Space last-window
-bind -r k select-pane -U
-bind -r j select-pane -D
-bind -r h select-pane -L
-bind -r l select-pane -R
+Vim-like pane switching. The only default this changes is for selecting previously current window (`C-a l`).
+``` tangle:~/.tmux.conf
+bind-key -T prefix -r -N "Select the previously current window" ^ last-window
+bind-key -T prefix -r -N "Select the pane above the active pane" k select-pane -U
+bind-key -T prefix -r -N "Select the pane below the active pane" j select-pane -D
+bind-key -T prefix -r -N "Select the pane to the right of the active pane" h select-pane -L
+bind-key -T prefix -r -N "Select the pane to the left of the active pane" l select-pane -R
+```
 
 #### My bindings
 
