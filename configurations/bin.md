@@ -31,3 +31,31 @@ read -p "Enter core util: " util
 read -p "Enter query: " query
 curl -s cht.sh/"${util}${query:+~$query}" | less -R
 ```
+
+## JWT
+
+Decode JWT token
+```js tangle:~/bin/decode-jwt
+#!/bin/node
+
+function parseJwt(token) {
+    const base64Url = token?.split('.')?.[1];
+    const base64 = base64Url?.replace(/-/g, '+')?.replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+        Buffer.from(base64, 'base64')
+            .toString()
+            .split('')
+            .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+            .join('')
+    );
+    console.dir(JSON.parse(jsonPayload), {depth: null});
+}
+
+const token = process.argv?.[2];
+try {
+    parseJwt(token);
+} catch {
+    console.warn(`Invalid JWT token [token='${token}']`);
+}
+```
+

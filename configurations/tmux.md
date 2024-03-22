@@ -14,7 +14,17 @@ bind-key C-a send-prefix
 Enable mouse usage
 ``` tangle:~/.tmux.conf
 set -g mouse on
+
+set -g escape-time 0             # zero-out escape time delay
+set -g history-limit 1000000     # increase history size (from 2,000)
+set -g set-clipboard on          # use system clipboard
+
+# Change the default $TERM to tmux-256color
+set-option -g default-terminal 'screen-254color'
+set-option -g terminal-overrides ',xterm-256color:RGB'
+set -g default-terminal "${TERM}"
 ```
+
 No bells
 ``` tangle:~/.tmux.conf
 set -g bell-action none
@@ -34,12 +44,19 @@ set -g mode-keys vi
 
 Add underscore to active window
 ``` tangle:~/.tmux.conf
-set -g window-status-current-style "underscore"
+#set -g window-status-current-style "underscore"
+
+set -g status-position top
+
+set -g window-status-current-style bg=white,fg=DarkRed #"underscore" # bg=red,fg=white
+set -g status-bg DarkRed #cyan
+set -g status-fg white #cyan
+set -g window-status-style "underscore" #bg=yellow
 ```
 
 Allow longer session names
 ``` tangle:~/.tmux.conf
-set -g status-left-length 20
+set -g status-left-length 30
 ```
 
 Align windows to center
@@ -50,6 +67,9 @@ set -g status-justify centre
 Start window index on 1
 ``` tangle:~/.tmux.conf
 set -g base-index 1
+
+# renumber all windows when any window is closed
+set -g renumber-windows on
 ```
 
 Format right status
@@ -60,6 +80,30 @@ set -g status-right "%d.%m.%y, %H:%M"
 ### Key tables
 
 #### Change defaults
+
+# Change defaults
+bind-key -T prefix -N "Kill the current window" & kill-window
+bind-key -T prefix -N "Kill the current pane" x kill-pane
+bind-key -T prefix -N "List all key bindings" ? display-popup -E "(echo 'My keys'; tmux list-keys -N -T my-keys -P 'C-q '; printf '\nLayouts\n'; tmux list-keys -N -T my-layouts -P 'C-w '; printf '\nBuilt in\n'; tmux list-keys -N) | less"
+bind-key -T prefix -r -N "Select the previously current window" ^ last-window
+bind-key -T prefix -r -N "Select the pane above the active pane" k select-pane -U
+bind-key -T prefix -r -N "Select the pane below the active pane" j select-pane -D
+bind-key -T prefix -r -N "Select the pane to the right of the active pane" h select-pane -L
+bind-key -T prefix -r -N "Select the pane to the left of the active pane" l select-pane -R
+
+# My bindings
+bind-key -T root C-q switch-client -T my-keys
+bind-key -T my-keys -N "Reload config" r source-file ~/.tmux.conf \; display-message "~/.tmux.conf reloaded"
+bind-key -T my-keys -N "Edit config" e send-keys "nvim ~/.tmux.conf" Enter
+bind-key -T my-keys -N "Edit config" v display-popup -E "less ~/.tmux/vim-motions.md"
+bind-key -T my-keys -N "Jump to last window" Space last-window
+bind-key -T my-keys -N "Popup terminal" t display-popup -E
+bind-key -T my-keys -N "Jump to directory" j send-keys ". goto" Enter
+bind-key -T my-keys -N "Popup search and create" f display-popup -E "tmuxs"
+bind-key -T my-keys -N "Cheatsheet" c display-popup -E "cht-sh"
+bind-key -T my-keys -N "Cheatsheet (programming languages)" l display-popup -E "cht-lang"
+bind-key -T my-keys -N "Cheatsheet (utils)" u display-popup -E "cht-util"
+
 
 Remove confirmation before killing window (default: `confirm-before -p "kill-window #W? (y/n)" kill-window`).
 ``` tangle:~/.tmux.conf
@@ -107,6 +151,8 @@ neww -c "#{pane_current_path}" -n dev nvim .
 splitw -c "#{pane_current_path}" -t 0 -l 20
 selectp -t 0
 ```
+.tmux/todo-layout
+splitw -c "#{pane_current_path}" -t 0 -l 20 "vim NOTES.log"
 
 ## Scripts
 
@@ -144,8 +190,8 @@ tmux_running=$(pgrep tmux)
 
 Starts a session if tmux is not running.
 ``` tangle:~/bin/tmuxs
-if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
-    tmux new-session -s $selected_name -c $selected
+if [[ -z $TMUX ]] || [[ -z $tmux_running ]]; then
+    tmux new-session -As $selected_name -c $selected
     exit 0
 fi
 ```
