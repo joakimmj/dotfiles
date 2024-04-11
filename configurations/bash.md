@@ -129,6 +129,13 @@ bind -m vi-command 'Control-l: clear-screen'
 bind -m vi-insert 'Control-l: clear-screen'
 ```
 
+Set `vi` mode
+```bash tangle:~/.bashrc
+set -o vi
+bind -m vi-command 'Control-l: clear-screen'
+bind -m vi-insert 'Control-l: clear-screen'
+```
+
 ## Alias
 
 Load aliases from `.bash_aliases`

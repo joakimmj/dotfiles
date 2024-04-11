@@ -36,6 +36,9 @@ PS1="${tags:+$green(${tags[*]})$reset }[\A$green\$(__git_ps1)$reset \u:\W]\$ "
 set -o vi
 bind -m vi-command 'Control-l: clear-screen'
 bind -m vi-insert 'Control-l: clear-screen'
+set -o vi
+bind -m vi-command 'Control-l: clear-screen'
+bind -m vi-insert 'Control-l: clear-screen'
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
