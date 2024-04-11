@@ -6,5 +6,6 @@ md-tangle configurations/emacs.md -f -d dist/
 md-tangle configurations/git.md -f -d dist/
 md-tangle configurations/i3.md -f -d dist/i3/
 md-tangle configurations/nano.md -f -d dist/
+md-tangle configurations/nvim.md -f -d dist/nvim/
 md-tangle configurations/tmux.md -f -d dist/tmux/
 md-tangle configurations/xmodmap.md -f -d dist/
