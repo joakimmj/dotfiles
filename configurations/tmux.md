@@ -4,13 +4,6 @@
 
 ### Options
 
-Change the prefix key to `C-a`
-``` tangle:~/.tmux.conf
-unbind C-b
-set-option -g prefix C-a
-bind-key C-a send-prefix
-```
-
 Enable mouse usage
 ``` tangle:~/.tmux.conf
 set -g mouse on
@@ -109,10 +102,10 @@ bind-key -T prefix -N "Kill the current pane" x kill-pane
 
 Show keybindings in popup (default: `list-keys -N`).
 ``` tangle:~/.tmux.conf
-bind-key -T prefix -N "List all key bindings" ? display-popup -E "(echo 'My keys'; tmux list-keys -N -T my-keys -P 'C-q '; printf '\nLayouts\n'; tmux list-keys -N -T my-layouts -P 'C-w '; printf '\nBuilt in\n'; tmux list-keys -N) | less"
+bind-key -T prefix -N "List all key bindings" ? display-popup -E "(echo 'My keys'; tmux list-keys -N -T my-keys -P 'C-a '; printf '\nCheatsheet\n'; tmux list-keys -N -T cheatsheet -P 'C-a c '; printf '\nLayouts\n'; tmux list-keys -N -T my-layouts -P 'C-a l '; printf '\nBuilt in\n'; tmux list-keys -N) | less"
 ```
 
-Vim-like pane switching. The only default this changes is for selecting previously current window (`C-a l`).
+Vim-like pane switching. The only default this changes is for selecting previously current window (`C-b l`).
 ``` tangle:~/.tmux.conf
 bind-key -T prefix -r -N "Select the previously current window" ^ last-window
 bind-key -T prefix -r -N "Select the pane above the active pane" k select-pane -U
@@ -123,26 +116,33 @@ bind-key -T prefix -r -N "Select the pane to the left of the active pane" l sele
 
 #### My bindings
 
-Prefixed with `C-q`
+Prefixed with `C-a`
 ``` tangle:~/.tmux.conf
-bind-key -T root C-q switch-client -T my-keys
+bind-key -T root C-a switch-client -T my-keys
 bind-key -T my-keys -N "Reload config" r source-file ~/.tmux.conf \; display-message "~/.tmux.conf reloaded"
 bind-key -T my-keys -N "Edit config" e send-keys "nvim ~/.tmux.conf" Enter
-bind-key -T my-keys -N "Cheatsheet for vim motions" v display-popup -E "less ~/.tmux/vim-motions.md"
 bind-key -T my-keys -N "Jump to last window" Space last-window
 bind-key -T my-keys -N "Popup terminal" t display-popup -E
 bind-key -T my-keys -N "Popup search and create" f display-popup -E "tmuxs"
 bind-key -T my-keys -N "Jump to directory" j send-keys ". goto" Enter
-bind-key -T my-keys -N "Cheatsheet" c display-popup -E "cht-sh"
-bind-key -T my-keys -N "Cheatsheet (programming languages)" l display-popup -E "cht-lang"
-bind-key -T my-keys -N "Cheatsheet (utils)" u display-popup -E "cht-util"
 ```
 
-#### Preconfigured sessions
+##### Cheatsheet
 
-Prefixed with `C-w`
+Prefixed with `C-a c`
 ``` tangle:~/.tmux.conf
-bind-key -T root C-w switch-client -T my-layouts
+bind-key -T my-keys c switch-client -T cheatsheets
+bind-key -T cheatsheets -N "Cheatsheet" c display-popup -E "cht-sh"
+bind-key -T cheatsheets -N "Cheatsheet (programming languages)" l display-popup -E "cht-lang"
+bind-key -T cheatsheets -N "Cheatsheet (utils)" u display-popup -E "cht-util"
+bind-key -T cheatsheets -N "Cheatsheet for vim motions" v display-popup -E "less ~/.tmux/vim-motions.md"
+```
+
+##### Preconfigured layouts
+
+Prefixed with `C-a l`
+``` tangle:~/.tmux.conf
+bind-key -T my-keys l switch-client -T my-layouts
 bind-key -T my-layouts -N "Development layout" d source-file ~/.tmux/dev-layout
 ```
 
