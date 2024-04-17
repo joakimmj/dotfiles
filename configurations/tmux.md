@@ -139,7 +139,6 @@ Prefixed with `C-a`
 bind-key -T root C-a switch-client -T my-keys
 bind-key -T my-keys -N "Reload config" r source-file ~/.tmux.conf \; display-message "~/.tmux.conf reloaded"
 bind-key -T my-keys -N "Edit config" e send-keys "nvim ~/.tmux.conf" Enter
-bind-key -T my-keys -N "Cheatsheet for vim motions" v display-popup -E "less ~/.tmux/vim-motions.md"
 bind-key -T my-keys -N "Jump to last window" Space last-window
 bind-key -T my-keys -N "Popup terminal" t display-popup -E
 bind-key -T my-keys -N "Popup search and create session" s display-popup -E "tmuxs"
