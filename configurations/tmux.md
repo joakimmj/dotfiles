@@ -102,7 +102,7 @@ bind-key -T prefix -N "Kill the current pane" x kill-pane
 
 Show keybindings in popup (default: `list-keys -N`).
 ``` tangle:~/.tmux.conf
-bind-key -T prefix -N "List all key bindings" ? display-popup -E "(echo 'My keys'; tmux list-keys -N -T my-keys -P 'C-a '; printf '\nCheatsheet\n'; tmux list-keys -N -T cheatsheet -P 'C-a c '; printf '\nLayouts\n'; tmux list-keys -N -T my-layouts -P 'C-a l '; printf '\nBuilt in\n'; tmux list-keys -N) | less"
+bind-key -T prefix -N "List all key bindings" ? display-popup -E "(echo 'My keys'; tmux list-keys -N -T my-keys -P 'C-a '; printf '\nCheatsheets\n'; tmux list-keys -N -T cheatsheets -P 'C-a c '; printf '\nLayouts\n'; tmux list-keys -N -T my-layouts -P 'C-a l '; printf '\nBuilt in\n'; tmux list-keys -N) | less"
 ```
 
 Vim-like pane switching. The only default this changes is for selecting previously current window (`C-b l`).
