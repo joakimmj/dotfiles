@@ -23,3 +23,13 @@ vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
 -- replace all of word under cursor
 vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
 
+-- go between quickfix list entries
+vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")
+vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz")
+
+-- disable arrow keys in normal mode
+vim.keymap.set('n', '<left>', '<Nop>')
+vim.keymap.set('n', '<right>', '<Nop>')
+vim.keymap.set('n', '<up>', '<Nop>')
+vim.keymap.set('n', '<down>', '<Nop>')
+
