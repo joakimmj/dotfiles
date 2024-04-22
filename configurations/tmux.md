@@ -124,7 +124,7 @@ bind-key -T my-keys -N "Edit config" e send-keys "nvim ~/.tmux.conf" Enter
 bind-key -T my-keys -N "Jump to last window" Space last-window
 bind-key -T my-keys -N "Popup terminal" t display-popup -E
 bind-key -T my-keys -N "Popup search and create" f display-popup -E "tmuxs"
-bind-key -T my-keys -N "Jump to directory" j send-keys ". goto" Enter
+bind-key -T my-keys -N "Jump to directory" j send-keys "cd $(find -L ~/dev ~/projects ~/.config -mindepth 1 -maxdepth 1 -type d | fzf)" Enter
 ```
 
 ##### Cheatsheet
