@@ -1,4 +1,5 @@
 vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 vim.keymap.set("n", "<leader>pv", function() vim.cmd("Lex") end)
 
 -- remove highlight from search
@@ -22,6 +23,9 @@ vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
 
 -- replace all of word under cursor
 vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
+
+-- Diagnostic keymaps
+vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 
 -- go between quickfix list entries
 vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz")
