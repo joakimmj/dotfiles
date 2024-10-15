@@ -14,6 +14,7 @@ tangled with the CLI tool [md-tangle][1].
 * [i3](configurations/i3.md)
     * [wallpaper](assets/wallpaper.png)
     * [lock-screen](assets/lock-screen.png)
+* [ideavimrc](configurations/ideavimrc.md)
 * [git](configurations/git.md)
 * [nano](configurations/nano.md)
 * [tmux](configurations/tmux.md)

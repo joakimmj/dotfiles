@@ -1,0 +1,143 @@
+set number
+set relativenumber
+
+set ignorecase
+set smartcase
+set hlsearch
+set incsearch
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set expandtab
+
+set smartindent
+
+set wrap
+
+set scrolloff=8
+set signcolumn=yes
+set colorcolumn=80
+
+set list
+set listchars=tab:» ,trail:.,nbsp:␣
+set cursorline
+set breakindent
+set showmode
+set showcmd
+set visualbell
+let mapleader=" "
+Plug 'machakann/vim-highlightedyank'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-surround'
+Plug 'easymotion/vim-easymotion'
+Plug 'preservim/nerdtree'
+map <leader>\ :NERDTreeToggle<CR>
+set which-key
+set notimeout
+set timeoutlen=5000
+
+let g:WhichKey_ShowVimActions = "true"
+
+let g:WhichKeyDesc_idea = "<leader>i IDEA"
+let g:WhichKeyDesc_idea_config = "<leader>ic IDEA config"
+let g:WhichKeyDesc_idea_config_edit = "<leader>ice [e]dit"
+let g:WhichKeyDesc_idea_config_reload = "<leader>icr [r]eload"
+let g:WhichKeyDesc_idea_config_actions = "<leader>ica list [a]ctions"
+let g:WhichKeyDesc_idea_run = "<leader>ir [r]un"
+let g:WhichKeyDesc_idea_debug = "<leader>id [d]ebug"
+let g:WhichKeyDesc_idea_mode = "<leader>im Mode"
+let g:WhichKeyDesc_idea_mode_zen = "<leader>imz [z]en mode"
+let g:WhichKeyDesc_idea_mode_presentation = "<leader>imp [p]resentation mmode"
+
+let g:WhichKeyDesc_previous = "[ Previous"
+let g:WhichKeyDesc_previous_method = "[m previous method"
+let g:WhichKeyDesc_next = "] Next"
+let g:WhichKeyDesc_next_method = "]m next method"
+
+let g:WhichKeyDesc_yank_system = "<leader>y yank to system clipboard"
+let g:WhichKeyDesc_yank_line_system = "<leader>Y yank line to system clipboard"
+
+let g:WhichKeyDesc_document = "<leader>d Document"
+let g:WhichKeyDesc_document_replace_word = "<leader>dr [d]ocument [r]eplace word"
+
+let g:WhichKeyDesc_search = "<leader>s Search"
+let g:WhichKeyDesc_search_file = "<leader>sf search [f]ile"
+let g:WhichKeyDesc_search_grep = "<leader>sg search [g]rep"
+let g:WhichKeyDesc_search_version_control = "<leader>sv search [v]ersion control"
+let g:WhichKeyDesc_search_recent = "<leader>s. search recent files"
+
+let g:WhichKeyDesc_format = "<leader>f [f]ormat document"
+
+let g:WhichKeyDesc_version_control = "<leader>h Version control [h]unk"
+let g:WhichKeyDesc_version_control_blame = "<leader>hb [b]lame"
+let g:WhichKeyDesc_version_control_diff = "<leader>hd [d]iff"
+let g:WhichKeyDesc_version_control_reset = "<leader>hr [r]eset"
+let g:WhichKeyDesc_version_control_reset_buffer = "<leader>hR [R]eset document"
+let g:WhichKeyDesc_version_control_diff_preview = "<leader>hp [p]review diff under cursor"
+
+let g:WhichKeyDesc_lsp = "g LSP"
+let g:WhichKeyDesc_lsp_definition = "gd [g]oto [d]efinition"
+let g:WhichKeyDesc_lsp_references = "gr [g]oto [r]eferences"
+let g:WhichKeyDesc_lsp_implementation = "gI [g]oto [I]mplementation"
+let g:WhichKeyDesc_lsp2 = "<leader>g LSP"
+let g:WhichKeyDesc_lsp_type_def = "<leader>gt [g]oto [t]ype definition"
+let g:WhichKeyDesc_lsp_type_def2 = "<leader>gT [g]oto [T]ype declaration"
+
+let g:WhichKeyDesc_rename = "<leader>r [r]ename"
+let g:WhichKeyDesc_rename_rename = "<leader>rn [r]e[n]ame"
+
+let g:WhichKeyDesc_code = "<leader>c [c]ode"
+let g:WhichKeyDesc_code_action = "<leader>ca [c]ode [a]ction"
+map <leader>ice :e ~/.ideavimrc<CR>
+map <leader>icr :source ~/.ideavimrc<CR>
+map <leader>ica <action>(VimFindActionIdAction)
+map <leader>ir :action ChooseRunConfiguration<CR>
+map <leader>id :action ChooseDebugConfiguration<CR>
+map <leader>imz <action>(ToggleFullScreen)<action>(ToggleZenMode)
+map <leader>imp <action>(TogglePresentationMode)
+nmap <ESC> :nohlsearch<CR>
+vmap K :m '<-2<CR>gv=gv
+vmap J :m '>+1<CR>gv=gv
+nmap <C-u> <C-u>zz
+nmap <C-d> <C-d>zz
+map [m <Action>(MethodUp)
+map ]m <Action>(MethodDown)
+vmap < <gv
+vmap > >gv
+nmap <leader>y "+y
+vmap <leader>y "+y
+nmap <leader>Y "+Y
+nmap <leader>dr :%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>
+nmap <tab> za
+map <leader>sf <action>(SearchEverywhere)
+map <leader>sg <action>(FindInPath)
+map <leader>sv <action>(ActivateCommitToolWindow)
+map <leader>s. <action>(RecentFiles)
+nmap <leader>f <action>(ReformatCode)
+map <leader>hb <action>(Annotate)
+map <leader>hd <action>(ActivateCommitToolWindow)
+map <leader>hr <action>(Vcs.RollbackChangedLines)
+map <leader>hR ggVG<action>(Vcs.RollbackChangedLines)<ESC><C-t><C-t>zz
+map <leader>hp <action>(VcsShowCurrentChangeMarker)
+nmap gd <action>(GotoDeclaration)
+nmap gr <action>(ShowUsages)
+nmap gI <action>(GotoImplementation)
+nmap <leader>gt <action>(QuickTypeDefinition)
+nmap <leader>gT <action>(GotoTypeDeclaration)
+nmap <leader>rn <action>(RenameElement)
+nmap <leader>ca <action>(ShowIntentionActions)
+nmap <Up> <Nop>
+nmap <Down> <Nop>
+nmap <Left> <Nop>
+nmap <Right> <Nop>
+
+""" Cheatsheet -----------------------------------------------------------------
+" <C-w> h|j|k|l  -> move between windows
+" <C-w> v        -> split window vertical
+" <C-w> s        -> split window horizontal
+" <C-w> c        -> close current window
+" <C-w> o        -> close other window
+" gt             -> next tab
+" gT             -> previous tab
+" *              -> next occurrence of word under cursor
+" #              -> previous occurrence of word under cursor
