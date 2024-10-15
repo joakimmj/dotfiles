@@ -3,7 +3,7 @@ Add header information
 ```bash tangle:~/.bashrc
 # .bashrc
 # AUTHOR: Joakim Myrvoll Johansen
-# EMAIL:  joakimmyrvoll@gmail.com
+# EMAIL:  joakim@myrvoll.dev
 ```
 
 ## Git sources
@@ -19,8 +19,7 @@ source ~/.git-prompt.sh
 Add `~/bin/` to `$PATH`, and set `JDK_HOME`.
 
 ```bash tangle:~/.bashrc
-export PATH="$PATH:~/bin/"
-export JDK_HOME='/usr/lib/jvm/java-8-openjdk-amd64/'
+export PATH="$PATH:~/bin/:~/.local/bin/"
 ```
 
 ## Source global definitions
@@ -118,6 +117,13 @@ reset="\[\033[00m\]"
 PS1="${tags:+$green(${tags[*]})$reset }[\A\$(__git_ps1) \u:\W]\$ "
 ```
 
+Set `vi` mode
+```bash tangle:~/.bashrc
+set -o vi
+bind -m vi-command 'Control-l: clear-screen'
+bind -m vi-insert 'Control-l: clear-screen'
+```
+
 ## Alias
 
 Load aliases from `.bash_aliases`
@@ -156,7 +162,10 @@ alias docker-clean-containers='docker rm $(docker ps -aqf status=exited)'
 Add keybindings to downloaded programs.
 
 ```bash tangle:~/.bash_aliases
-
+alias gl="git log --oneline --pretty=format:'%h | %<(70,trunc)%s | %cd | %an' --date=format:'%d.%m.%y %H:%M' | fzf --multi --preview 'git show {+1}' | awk '{print \$1}' | xargs git show"
+alias manual="man -k . | fzf --preview 'man {+1}' | awk '{print \$1}' | xargs man"
+alias kill-intellij="ps -ux | grep '[i]ntellij' | awk '{print \$2}' | xargs --verbose -r kill -9"
+alias tldrfzf="tldr --list | sed 's/,/\\n/g' | fzf --preview 'tldr {+1}' | xargs tldr -t ocean"
 ```
 
 ### Shortcuts

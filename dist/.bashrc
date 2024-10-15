@@ -1,10 +1,9 @@
 # .bashrc
 # AUTHOR: Joakim Myrvoll Johansen
-# EMAIL:  joakimmyrvoll@gmail.com
+# EMAIL:  joakim@myrvoll.dev
 source ~/.git-completion.bash
 source ~/.git-prompt.sh
-export PATH="$PATH:~/bin/"
-export JDK_HOME='/usr/lib/jvm/java-8-openjdk-amd64/'
+export PATH="$PATH:~/bin/:~/.local/bin/"
 if [ -f /etc/bashrc ]; then
   . /etc/bashrc
 fi
@@ -33,6 +32,9 @@ green="\[\033[01;32m\]"
 reset="\[\033[00m\]"
 
 PS1="${tags:+$green(${tags[*]})$reset }[\A\$(__git_ps1) \u:\W]\$ "
+set -o vi
+bind -m vi-command 'Control-l: clear-screen'
+bind -m vi-insert 'Control-l: clear-screen'
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
