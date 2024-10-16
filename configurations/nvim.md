@@ -179,6 +179,22 @@ Disable default folding when opening file
 vim.opt.foldlevelstart = 99
 ```
 
+Configure statusline
+```lua tangle:~/.config/nvim/lua/my/options.lua
+vim.cmd "highlight StatusGeneral guibg=#A6E3A1 guifg=#2E3434"
+vim.cmd "highlight StatusFlags guibg=#FABD2F guifg=#2E3434"
+vim.cmd "highlight StatusBlank guibg=none guifg=#2E3434"
+
+vim.o.statusline = "%#StatusGeneral#"
+	.. " %F "
+	.. "%#StatusFlags#"
+	.. " [%{strlen(&fenc)?&fenc:&enc}] [%{&ff}] %y [%{&spelllang}] [0x%04B] %m "
+	.. "%#StatusBlank#"
+	.. "%="
+	.. "%#StatusGeneral#"
+	.. " [%n] %l/%L (%p%%), %c "
+```
+
 ## Netrw
 
 ```lua tangle:~/.config/nvim/lua/my/netrw.lua
