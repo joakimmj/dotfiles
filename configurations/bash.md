@@ -135,17 +135,36 @@ fi
 
 Set aliases for bash
 ```bash tangle:~/.bash_aliases
+alias ..='cd ..'
+alias -='cd -'
 alias ls='ls --color=auto'
 alias l='ls -Fl --color=auto'
 alias ll='ls -Fl --color=auto'
 alias la='ls -AFl --color=auto'
 alias lr='ls -AFlR --color=auto'
-alias cp='cp -i'
-alias mv='mv -i'
 alias bcalc='bc -l -q'
 alias bashrc='nano ~/.bashrc'
 alias which='type -all'
 alias gs='git status -sb'
+```
+
+Create directory with parent directories and verbose output
+```bash tangle:~/.bash_aliases
+alias mkdir='mkdir -pv'
+```
+
+Search commands
+```bash tangle:~/.bash_aliases
+alias s-env='printenv | fzf'
+alias s-path="echo $PATH | sed 's/:/\\n/g' | fzf"
+```
+
+Interactive commands with confirmation
+```bash tangle:~/.bash_aliases
+alias cp='cp -i'
+alias mv='mv -i'
+alias rm='rm -i'
+alias ln='ln -i'
 ```
 
 Aliases for docker
