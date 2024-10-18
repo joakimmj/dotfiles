@@ -5,3 +5,10 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 		vim.highlight.on_yank()
 	end,
 })
+vim.api.nvim_create_autocmd("VimLeave", {
+	desc = "Save session on exit",
+	group = vim.api.nvim_create_augroup("augroup-session-manage", { clear = true }),
+	callback = function()
+		vim.cmd([[silent! mksession! .session.vim]])
+	end,
+})
