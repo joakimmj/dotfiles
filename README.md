@@ -19,6 +19,7 @@ tangled with the CLI tool [md-tangle][1].
 * [nano](configurations/nano.md)
 * [nvim](configurations/nvim.md)
 * [tmux](configurations/tmux.md)
+* [WexTerm](configurations/wezterm.md)
 * [Xmodmap](configurations/xmodmap.md)
 
 ## Source
