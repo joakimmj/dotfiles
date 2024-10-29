@@ -17,6 +17,6 @@ return {
 
 		-- Configure highlights
 		vim.cmd.hi("Comment gui=none")
-		vim.cmd.hi("ColorColumn guibg=#A6E3A1")
+		vim.cmd.hi("ColorColumn guibg=#374641")
 	end,
 }

@@ -124,7 +124,7 @@ vim.opt.termguicolors = true
 vim.opt.scrolloff = 8
 vim.opt.signcolumn = "yes"
 
-vim.opt.colorcolumn = "80"
+vim.opt.colorcolumn = "80,120"
 
 vim.opt.isfname:append("@-@")
 ```
@@ -188,9 +188,9 @@ vim.opt.foldlevelstart = 99
 
 Configure statusline
 ```lua tangle:~/.config/nvim/lua/my/options.lua
-vim.cmd "highlight StatusGeneral guibg=#A6E3A1 guifg=#2E3434"
-vim.cmd "highlight StatusFlags guibg=#FABD2F guifg=#2E3434"
-vim.cmd "highlight StatusBlank guibg=none guifg=#2E3434"
+vim.cmd "highlight StatusGeneral guibg=#374641 guifg=#A6E3A1"
+vim.cmd "highlight StatusFlags guibg=#A6E3A1 guifg=#2E3434"
+vim.cmd "highlight StatusBlank guibg=none guifg=#A6E3A1"
 
 vim.o.statusline = "%#StatusGeneral#"
 	.. " %F "
@@ -953,7 +953,7 @@ return {
 
 		-- Configure highlights
 		vim.cmd.hi("Comment gui=none")
-		vim.cmd.hi("ColorColumn guibg=#A6E3A1")
+		vim.cmd.hi("ColorColumn guibg=#374641")
 	end,
 }
 ```
