@@ -145,7 +145,13 @@ alias lr='ls -AFlR --color=auto'
 alias bcalc='bc -l -q'
 alias bashrc='nano ~/.bashrc'
 alias which='type -all'
+```
+
+Set aliases for git
+```bash tangle:~/.bash_aliases
 alias gs='git status -sb'
+alias gd='git diff'
+alias gds='git diff --staged'
 ```
 
 Create directory with parent directories and verbose output
