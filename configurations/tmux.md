@@ -61,9 +61,10 @@ set -g status-fg "#2E3434"
 set -g window-status-style "underscore"
 ```
 
-Allow longer session names
+Add git branch to left status (default length: 10)
 ``` tangle:~/.tmux.conf
-set -g status-left-length 30
+set -g status-left "[#S] #(cd #{pane_current_path}; git rev-parse --abbrev-ref HEAD)"
+set -g status-left-length 80
 ```
 
 Align windows to center
@@ -81,9 +82,19 @@ Re-number all windows when any window is closed
 set -g renumber-windows on
 ```
 
-Format right status
+Change default pane info and format time for right status
 ``` tangle:~/.tmux.conf
-set -g status-right "%d.%m.%y, %H:%M"
+set -g status-right "[#{=21:pane_index}:#{=21:pane_current_command}] %d.%m.%y, %H:%M"
+```
+
+Adjust right status length (default 40)
+``` tangle:~/.tmux.conf
+set -g status-right-length 40
+```
+
+Set update interval (default: 15 sec)
+``` tangle:~/.tmux.conf
+set-option -g status-interval 10
 ```
 
 ### Key tables
