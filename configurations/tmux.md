@@ -183,46 +183,48 @@ selectp -t 0
 Use `tmuxs <directory> (optional)` to start new session.
 ``` tangle:~/bin/tmuxs
 #!/usr/bin/env bash
-
-if [[ $# -eq 1 ]]; then
-    selected=$1
 ```
 
-If no directory is given we use fuzzy search (`fzf`) the following directories (`~/dev` and `~/dev/private`).
+Directories to search (`~/dev` and `~/dev/private`)
 ``` tangle:~/bin/tmuxs
+dirs="~/dev ~/dev/private"
+```
+
+If no directory is given we use fuzzy search (`fzf`) the directories defined above.
+``` tangle:~/bin/tmuxs
+if [[ $# -eq 1 ]]; then
+    path=$1
 else
-    selected=$(find -L ~/dev ~/dev/private -mindepth 1 -maxdepth 1 -type d | fzf)
+    path=$(eval "find -L $dirs -mindepth 1 -maxdepth 1 -type d | fzf")
 fi
 ```
 
 If nothing gets selected, we exit the script
 ``` tangle:~/bin/tmuxs
-if [[ -z $selected ]]; then
+if [[ -z $path ]]; then
     exit 0
 fi
 ```
 
-Extract session name based on folder name.
+Extract session name based on directory name.
 ``` tangle:~/bin/tmuxs
-selected_name=$(basename "$selected" | tr . _)
-tmux_running=$(pgrep tmux)
+selected_dir=$(basename "$path" | tr . _)
 ```
 
-Starts a session if tmux is not running.
+Create session if it does not exist
 ``` tangle:~/bin/tmuxs
-if [[ -z $TMUX ]] || [[ -z $tmux_running ]]; then
-    tmux new-session -As $selected_name -c $selected
-    exit 0
+if ! tmux has-session -t $selected_dir 2> /dev/null; then
+    tmux new-session -d -x - -y - -s $selected_dir -c $path
 fi
 ```
 
-If session already exists we switch to it, if not we create it in detached mode, then switches to it.
+If running outside of `tmux` attach the new session, if not switch to it
 ``` tangle:~/bin/tmuxs
-if ! tmux has-session -t=$selected_name 2> /dev/null; then
-    tmux new-session -ds $selected_name -c $selected
+if [[ -z $TMUX ]]; then
+    tmux attach-session -d -t $selected_dir
+else
+    tmux switch-client -t $selected_dir
 fi
-
-tmux switch-client -t $selected_name
 ```
 
 ### My dev script
@@ -254,38 +256,32 @@ if [[ -z $path ]]; then
 fi
 ```
 
-Extract session name based on folder name.
+Extract window name based on folder name.
 ``` tangle:~/bin/dev
 selected_dir=$(basename "$path" | tr . _)
-tmux_running=$(pgrep tmux)
 ```
 
-Create window
+Create `dev` session if it does not exist
 ``` tangle:~/bin/dev
-create_window() {
-    if ! tmux select-window -t=$selected_dir 2> /dev/null; then
-        tmux new-window -t dev -n $selected_dir -c $path
-    fi
-}
+if ! tmux has-session -t dev 2> /dev/null; then
+    tmux new-session -d -x - -y - -s dev -n home -c ~/
+fi
 ```
 
-Starts a session if tmux is not running.
+Create window for selected directory if it does not exist
 ``` tangle:~/bin/dev
-if [[ -z $TMUX ]] || [[ -z $tmux_running ]]; then
-    tmux new-session -d -s dev -n home -c ~/
-    create_window
+if ! tmux select-window -t=$selected_dir 2> /dev/null; then
+    tmux new-window -t dev -n $selected_dir -c $path
+    tmux split-window -c $path -t 0 -l 20% -v
+fi
+```
+
+If running outside of `tmux` attach the new session, if not switch to it
+``` tangle:~/bin/dev
+if [[ -z $TMUX ]]; then
     tmux attach-session -d -t dev
-    exit 0
+else
+    tmux switch-client -t dev
 fi
-```
-
-If session already exists we switch to it, if not we create it in detached mode, then switches to it.
-``` tangle:~/bin/dev
-if ! tmux has-session -t=dev 2> /dev/null; then
-    tmux new-session -d -s dev -n home -c ~/
-fi
-
-tmux switch-client -t dev
-create_window
 ```
 

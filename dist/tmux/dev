@@ -9,21 +9,15 @@ if [[ -z $path ]]; then
     exit 0
 fi
 selected_dir=$(basename "$path" | tr . _)
-tmux_running=$(pgrep tmux)
-create_window() {
-    if ! tmux select-window -t=$selected_dir 2> /dev/null; then
-        tmux new-window -t dev -n $selected_dir -c $path
-    fi
-}
-if [[ -z $TMUX ]] || [[ -z $tmux_running ]]; then
-    tmux new-session -d -s dev -n home -c ~/
-    create_window
+if ! tmux has-session -t dev 2> /dev/null; then
+    tmux new-session -d -x - -y - -s dev -n home -c ~/
+fi
+if ! tmux select-window -t=$selected_dir 2> /dev/null; then
+    tmux new-window -t dev -n $selected_dir -c $path
+    tmux split-window -c $path -t 0 -l 20% -v
+fi
+if [[ -z $TMUX ]]; then
     tmux attach-session -d -t dev
-    exit 0
+else
+    tmux switch-client -t dev
 fi
-if ! tmux has-session -t=dev 2> /dev/null; then
-    tmux new-session -d -s dev -n home -c ~/
-fi
-
-tmux switch-client -t dev
-create_window
