@@ -235,6 +235,16 @@ vim.api.nvim_create_autocmd("VimLeave", {
 })
 ```
 
+Reload files when changed on disk
+```lua tangle:~/.config/nvim/lua/my/autocmd.lua
+vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "CursorHoldI", "FocusGained" }, {
+	desc = "Check if file changed on disk",
+	group = vim.api.nvim_create_augroup("augroup-file-disk-status", { clear = true }),
+	pattern = { "*" },
+	command = "if mode() != 'c' | checktime | endif",
+})
+```
+
 ## Lazy (`~/.config/nvim/lua/my/init-lazy.lua`)
 
 Init `lazy.nvim`
