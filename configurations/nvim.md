@@ -19,11 +19,6 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 ```
 
-Add binding for going to Netrw
-```lua tangle:~/.config/nvim/lua/my/mappings.lua
-vim.keymap.set("n", "<leader>wf", function() vim.cmd("Lex") end, { desc = "[W]orkspace [F]iles" })
-```
-
 Remove highlight from search
 ```lua tangle:~/.config/nvim/lua/my/mappings.lua
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
@@ -531,17 +526,17 @@ return {
 			end, { desc = "Jump to previous git [c]hange" })
 
 			-- visual mode
-			map("v", "<leader>hs", function()
+			map("v", "<leader>ha", function()
 				gitsigns.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
-			end, { desc = "git [s]tage selection" })
+			end, { desc = "git [a]dd selection" })
 			map("v", "<leader>hr", function()
 				gitsigns.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
 			end, { desc = "git [r]eset selection" })
 
 			-- normal mode
-			map("n", "<leader>hs", gitsigns.stage_hunk, { desc = "git [s]tage hunk" })
+			map("n", "<leader>ha", gitsigns.stage_hunk, { desc = "git [a]dd hunk" })
 			map("n", "<leader>hr", gitsigns.reset_hunk, { desc = "git [r]eset hunk" })
-			map("n", "<leader>hS", gitsigns.stage_buffer, { desc = "git [S]tage buffer" })
+			map("n", "<leader>hA", gitsigns.stage_buffer, { desc = "git [A]dd buffer" })
 			map("n", "<leader>hu", gitsigns.undo_stage_hunk, { desc = "git [u]ndo stage hunk" })
 			map("n", "<leader>hR", gitsigns.reset_buffer, { desc = "git [R]eset buffer" })
 			map("n", "<leader>hp", gitsigns.preview_hunk, { desc = "git [p]review hunk" })
@@ -813,20 +808,32 @@ return {
 	},
 	cmd = "Neotree",
 	keys = {
-		{ "\\", ":Neotree reveal<CR>", desc = "NeoTree reveal", silent = true },
+		{ "<leader>wt", ":Neotree reveal<CR>",     desc = "[W]orkspace [F]iles",   silent = true },
+		{ "<leader>wb", ":Neotree buffers<CR>",    desc = "[W]orkspace [B]uffers", silent = true },
+		{ "<leader>hs", ":Neotree git_status<CR>", desc = "git [s]tatus",          silent = true },
 	},
-	opts = {
-		filesystem = {
+	config = function()
+		require("neo-tree").setup({
 			window = {
+				position = "float",
 				mappings = {
-					["\\"] = "close_window",
+					["P"]     = { "toggle_preview", config = { use_float = true, use_image_nvim = true } },
+					["<C-u>"] = { "scroll_preview", config = { direction = 10 } },
+					["<C-d>"] = { "scroll_preview", config = { direction = -10 } },
+					["A"]     = "git_add_all",
+					["gu"]    = "git_unstage_file",
+					["ga"]    = "git_add_file",
+					["gr"]    = "git_revert_file",
+					["?"]     = "show_help",
 				},
 			},
-			filtered_items = {
-				visible = true,
+			filesystem = {
+				filtered_items = {
+					visible = true,
+				},
 			},
-		},
-	},
+		})
+	end
 }
 ```
 

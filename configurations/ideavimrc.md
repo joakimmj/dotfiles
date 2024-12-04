@@ -124,10 +124,10 @@ Plug 'easymotion/vim-easymotion'
 
 #### nerdtree
 
-Open NERDTree with `<leader>\` (use `q` to quit)
+Open NERDTree with `<leader>wf` (use `q` to quit)
 ``` tangle:~/.ideavimrc
 Plug 'preservim/nerdtree'
-map <leader>\ :NERDTreeToggle<CR>
+map <leader>wf :NERDTreeToggle<CR>
 ```
 
 #### which-key
@@ -139,6 +139,9 @@ set notimeout
 set timeoutlen=5000
 
 let g:WhichKey_ShowVimActions = "true"
+
+let g:WhichKeyDesc_workspace = "<leader>w [w]orkspace"
+let g:WhichKeyDesc_workspace_files = "<leader>wf [w]orkspace [f]iles"
 
 let g:WhichKeyDesc_idea = "<leader>i IDEA"
 let g:WhichKeyDesc_idea_config = "<leader>ic IDEA config"
@@ -165,7 +168,6 @@ let g:WhichKeyDesc_document_replace_word = "<leader>dr [d]ocument [r]eplace word
 let g:WhichKeyDesc_search = "<leader>s Search"
 let g:WhichKeyDesc_search_file = "<leader>sf search [f]ile"
 let g:WhichKeyDesc_search_grep = "<leader>sg search [g]rep"
-let g:WhichKeyDesc_search_version_control = "<leader>sv search [v]ersion control"
 let g:WhichKeyDesc_search_recent = "<leader>s. search recent files"
 
 let g:WhichKeyDesc_format = "<leader>f [f]ormat document"
@@ -174,6 +176,7 @@ let g:WhichKeyDesc_version_control = "<leader>h Version control [h]unk"
 let g:WhichKeyDesc_version_control_blame = "<leader>hb [b]lame"
 let g:WhichKeyDesc_version_control_diff = "<leader>hd [d]iff"
 let g:WhichKeyDesc_version_control_reset = "<leader>hr [r]eset"
+let g:WhichKeyDesc_version_control_status = "<leader>hs [s]tatus"
 let g:WhichKeyDesc_version_control_reset_buffer = "<leader>hR [R]eset document"
 let g:WhichKeyDesc_version_control_diff_preview = "<leader>hp [p]review diff under cursor"
 
@@ -255,7 +258,6 @@ Search ("Telescope" replacement)
 ``` tangle:~/.ideavimrc
 map <leader>sf <action>(SearchEverywhere)
 map <leader>sg <action>(FindInPath)
-map <leader>sv <action>(ActivateCommitToolWindow)
 map <leader>s. <action>(RecentFiles)
 ```
 
@@ -271,6 +273,7 @@ map <leader>hd <action>(ActivateCommitToolWindow)
 map <leader>hr <action>(Vcs.RollbackChangedLines)
 map <leader>hR ggVG<action>(Vcs.RollbackChangedLines)<ESC><C-t><C-t>zz
 map <leader>hp <action>(VcsShowCurrentChangeMarker)
+map <leader>hs <action>(ActivateCommitToolWindow)
 ```
 
 LSP
