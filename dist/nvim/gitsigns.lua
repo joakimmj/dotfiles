@@ -43,28 +43,22 @@ return {
 			end, { desc = "Jump to previous git [c]hange" })
 
 			-- visual mode
-			map("v", "<leader>ha", function()
+			map("v", "<leader>va", function()
 				gitsigns.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
 			end, { desc = "git [a]dd selection" })
-			map("v", "<leader>hr", function()
+			map("v", "<leader>vr", function()
 				gitsigns.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
 			end, { desc = "git [r]eset selection" })
 
 			-- normal mode
-			map("n", "<leader>ha", gitsigns.stage_hunk, { desc = "git [a]dd hunk" })
-			map("n", "<leader>hr", gitsigns.reset_hunk, { desc = "git [r]eset hunk" })
-			map("n", "<leader>hA", gitsigns.stage_buffer, { desc = "git [A]dd buffer" })
-			map("n", "<leader>hu", gitsigns.undo_stage_hunk, { desc = "git [u]ndo stage hunk" })
-			map("n", "<leader>hR", gitsigns.reset_buffer, { desc = "git [R]eset buffer" })
-			map("n", "<leader>hp", gitsigns.preview_hunk, { desc = "git [p]review hunk" })
-			map("n", "<leader>hb", gitsigns.blame_line, { desc = "git [b]lame line" })
-			map("n", "<leader>hd", gitsigns.diffthis, { desc = "git [d]iff against index" })
-			map("n", "<leader>hD", function()
-				gitsigns.diffthis("@")
-			end, { desc = "git [D]iff against last commit" })
-
-			-- Toggles
-			map("n", "<leader>tb", gitsigns.toggle_current_line_blame, { desc = "[T]oggle git show [b]lame line" })
+			map("n", "<leader>va", gitsigns.stage_hunk, { desc = "git [a]dd hunk" })
+			map("n", "<leader>vr", gitsigns.reset_hunk, { desc = "git [r]eset hunk" })
+			map("n", "<leader>vA", gitsigns.stage_buffer, { desc = "git [A]dd buffer" })
+			map("n", "<leader>vu", gitsigns.undo_stage_hunk, { desc = "git [u]ndo stage hunk" })
+			map("n", "<leader>vR", gitsigns.reset_buffer, { desc = "git [R]eset buffer" })
+			map("n", "<leader>vp", gitsigns.preview_hunk, { desc = "git [p]review hunk" })
+			map("n", "<leader>vb", gitsigns.blame_line, { desc = "git [b]lame line" })
+			map("n", "<leader>vtb", gitsigns.toggle_current_line_blame, { desc = "show [b]lame line" })
 		end,
 	},
 }

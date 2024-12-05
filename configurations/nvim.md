@@ -26,21 +26,21 @@ vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
 Move line up/down (visual mode)
 ```lua tangle:~/.config/nvim/lua/my/mappings.lua
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move line up" })
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move line down" })
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "move line up" })
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "move line down" })
 ```
 
 Center cursor on up/down
 ```lua tangle:~/.config/nvim/lua/my/mappings.lua
-vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Move cursor up" })
-vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Move cursor down" })
+vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "move cursor up" })
+vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "move cursor down" })
 ```
 
 Yank to/paste from system clipboard
 ```lua tangle:~/.config/nvim/lua/my/mappings.lua
-vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]], { desc = "[Y]ank to system clipboard" })
+vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]], { desc = "[y]ank to system clipboard" })
 vim.keymap.set("n", "<leader>Y", [["+Y]], { desc = "[Y]ank rest of line to system clipboard" })
-vim.keymap.set("n", "<leader>p", [["+p]], { desc = "[P]aste from system clipboard" })
+vim.keymap.set("n", "<leader>p", [["+p]], { desc = "[p]aste from system clipboard" })
 ```
 
 Replace all of word under cursor
@@ -49,25 +49,25 @@ vim.keymap.set(
 	"n",
 	"<leader>dr",
 	[[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
-	{ desc = "[D]ocument [R]eplace word" }
+	{ desc = "[r]eplace word" }
 )
 ```
 
 Diagnostic keymaps
 ```lua tangle:~/.config/nvim/lua/my/mappings.lua
-vim.keymap.set("n", "<leader>dd", vim.diagnostic.setloclist, { desc = "[D]ocument [D]iagnostic (location list)" })
-vim.keymap.set("n", "<leader>wd", vim.diagnostic.setqflist, { desc = "[W]orkspace [D]iagnostic (quickfix list)" })
+vim.keymap.set("n", "<leader>dd", vim.diagnostic.setloclist, { desc = "[d]iagnostic (location list)" })
+vim.keymap.set("n", "<leader>wd", vim.diagnostic.setqflist, { desc = "[d]iagnostic (quickfix list)" })
 ```
 
 Go between quickfix list entries
 ```lua tangle:~/.config/nvim/lua/my/mappings.lua
-vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz", { desc = "Go to next quickfix list entry" })
-vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz", { desc = "Go to previous quickfix list entry" })
+vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz", { desc = "go to next quickfix list entry" })
+vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz", { desc = "go to previous quickfix list entry" })
 ```
 
 Toggle folds
 ```lua tangle:~/.config/nvim/lua/my/mappings.lua
-vim.keymap.set("n", "<tab>", "za", { desc = "Toggle folds under cursor" })
+vim.keymap.set("n", "<tab>", "za", { desc = "toggle folds under cursor" })
 ```
 
 Disable arrow keys in normal mode
@@ -80,8 +80,8 @@ vim.keymap.set("n", "<down>", "<Nop>")
 
 Save/restore vim sessions
 ```lua tangle:~/.config/nvim/lua/my/mappings.lua
-vim.keymap.set("n", "<leader>SS", function() vim.cmd([[mksession! .session.vim]]) end, { desc = "[S]ession [S]ave" })
-vim.keymap.set("n", "<leader>SR", function() vim.cmd([[source .session.vim]]) end, { desc = "[S]ession [R]estore" })
+vim.keymap.set("n", "<leader>SS", function() vim.cmd([[mksession! .session.vim]]) end, { desc = "[S]ave" })
+vim.keymap.set("n", "<leader>SR", function() vim.cmd([[source .session.vim]]) end, { desc = "[R]estore" })
 ```
 
 ## Options (`~/.config/nvim/lua/my/options.lua`)
@@ -421,12 +421,12 @@ return {
 		cmd = { "ConformInfo" },
 		keys = {
 			{
-				"<leader>f",
+				"<leader>df",
 				function()
 					require("conform").format({ async = true, lsp_format = "fallback" })
 				end,
 				mode = "",
-				desc = "[F]ormat buffer",
+				desc = "[f]ormat",
 			},
 		},
 		opts = {
@@ -527,28 +527,22 @@ return {
 			end, { desc = "Jump to previous git [c]hange" })
 
 			-- visual mode
-			map("v", "<leader>ha", function()
+			map("v", "<leader>va", function()
 				gitsigns.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
 			end, { desc = "git [a]dd selection" })
-			map("v", "<leader>hr", function()
+			map("v", "<leader>vr", function()
 				gitsigns.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
 			end, { desc = "git [r]eset selection" })
 
 			-- normal mode
-			map("n", "<leader>ha", gitsigns.stage_hunk, { desc = "git [a]dd hunk" })
-			map("n", "<leader>hr", gitsigns.reset_hunk, { desc = "git [r]eset hunk" })
-			map("n", "<leader>hA", gitsigns.stage_buffer, { desc = "git [A]dd buffer" })
-			map("n", "<leader>hu", gitsigns.undo_stage_hunk, { desc = "git [u]ndo stage hunk" })
-			map("n", "<leader>hR", gitsigns.reset_buffer, { desc = "git [R]eset buffer" })
-			map("n", "<leader>hp", gitsigns.preview_hunk, { desc = "git [p]review hunk" })
-			map("n", "<leader>hb", gitsigns.blame_line, { desc = "git [b]lame line" })
-			map("n", "<leader>hd", gitsigns.diffthis, { desc = "git [d]iff against index" })
-			map("n", "<leader>hD", function()
-				gitsigns.diffthis("@")
-			end, { desc = "git [D]iff against last commit" })
-
-			-- Toggles
-			map("n", "<leader>tb", gitsigns.toggle_current_line_blame, { desc = "[T]oggle git show [b]lame line" })
+			map("n", "<leader>va", gitsigns.stage_hunk, { desc = "git [a]dd hunk" })
+			map("n", "<leader>vr", gitsigns.reset_hunk, { desc = "git [r]eset hunk" })
+			map("n", "<leader>vA", gitsigns.stage_buffer, { desc = "git [A]dd buffer" })
+			map("n", "<leader>vu", gitsigns.undo_stage_hunk, { desc = "git [u]ndo stage hunk" })
+			map("n", "<leader>vR", gitsigns.reset_buffer, { desc = "git [R]eset buffer" })
+			map("n", "<leader>vp", gitsigns.preview_hunk, { desc = "git [p]review hunk" })
+			map("n", "<leader>vb", gitsigns.blame_line, { desc = "git [b]lame line" })
+			map("n", "<leader>vtb", gitsigns.toggle_current_line_blame, { desc = "show [b]lame line" })
 		end,
 	},
 }
@@ -634,43 +628,43 @@ return {
 					-- Jump to the definition of the word under your cursor.
 					--  This is where a variable was first declared, or where a function is defined, etc.
 					--  To jump back, press <C-t>.
-					map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
+					map("gd", require("telescope.builtin").lsp_definitions, "[g]oto [d]efinition")
 
 					-- Find references for the word under your cursor.
-					map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
+					map("gr", require("telescope.builtin").lsp_references, "[g]oto [r]eferences")
 
 					-- Jump to the implementation of the word under your cursor.
 					--  Useful when your language has ways of declaring types without an actual implementation.
-					map("gI", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
+					map("gI", require("telescope.builtin").lsp_implementations, "[g]oto [I]mplementation")
 
 					-- Jump to the type of the word under your cursor.
 					--  Useful when you're not sure what type a variable is and you want to see
 					--  the definition of its *type*, not where it was *defined*.
-					map("<leader>gt", require("telescope.builtin").lsp_type_definitions, "[G]oto [T]ype Definition")
+					map("<leader>cgt", require("telescope.builtin").lsp_type_definitions, "[t]ype definition")
 
 					-- Fuzzy find all the symbols in your current document.
 					--  Symbols are things like variables, functions, types, etc.
-					map("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[D]ocument [S]ymbols")
+					map("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[s]ymbols")
 
 					-- Fuzzy find all the symbols in your current workspace.
 					--  Similar to document symbols, except searches over your entire project.
 					map(
 						"<leader>ws",
 						require("telescope.builtin").lsp_dynamic_workspace_symbols,
-						"[W]orkspace [S]ymbols"
+						"[s]ymbols"
 					)
 
 					-- Rename the variable under your cursor.
 					--  Most Language Servers support renaming across files, etc.
-					map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
+					map("<leader>wr", vim.lsp.buf.rename, "[r]ename")
 
 					-- Execute a code action, usually your cursor needs to be on top of an error
 					-- or a suggestion from your LSP for this to activate.
-					map("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction", { "n", "x" })
+					map("<leader>ca", vim.lsp.buf.code_action, "[a]ction", { "n", "x" })
 
 					-- WARN: This is not Goto Definition, this is Goto Declaration.
 					--  For example, in C this would take you to the header.
-					map("gD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
+					map("gD", vim.lsp.buf.declaration, "[g]oto [D]eclaration")
 
 					-- The following two autocommands are used to highlight references of the
 					-- word under your cursor when your cursor rests there for a little while.
@@ -707,9 +701,9 @@ return {
 					--
 					-- This may be unwanted, since they displace some of your code
 					if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
-						map("<leader>th", function()
+						map("<leader>cth", function()
 							vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
-						end, "[T]oggle Inlay [H]ints")
+						end, "inlay [h]ints")
 					end
 				end,
 			})
@@ -809,9 +803,9 @@ return {
 	},
 	cmd = "Neotree",
 	keys = {
-		{ "<leader>wt", ":Neotree reveal<CR>",     desc = "[W]orkspace [F]iles",   silent = true },
-		{ "<leader>wb", ":Neotree buffers<CR>",    desc = "[W]orkspace [B]uffers", silent = true },
-		{ "<leader>hs", ":Neotree git_status<CR>", desc = "git [s]tatus",          silent = true },
+		{ "<leader>wf", ":Neotree reveal<CR>",     desc = "[f]iles",      silent = true },
+		{ "<leader>wb", ":Neotree buffers<CR>",    desc = "[b]uffers",    silent = true },
+		{ "<leader>vs", ":Neotree git_status<CR>", desc = "git [s]tatus", silent = true },
 	},
 	config = function()
 		require("neo-tree").setup({
@@ -919,19 +913,27 @@ return {
 
 		-- See `:help telescope.builtin`
 		local builtin = require("telescope.builtin")
-		vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[S]earch [H]elp" })
-		vim.keymap.set("n", "<leader>sm", builtin.marks, { desc = "[S]earch [M]arks" })
-		vim.keymap.set("n", "<leader>sva", builtin.git_files, { desc = "[S]earch [V]ersion Control (git) [A]ll" })
-		vim.keymap.set("n", "<leader>svs", builtin.git_status, { desc = "[S]earch [V]ersion Control (git) [S]tatus" })
-		vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[S]earch [K]eymaps" })
-		vim.keymap.set("n", "<leader>sf", builtin.find_files, { desc = "[S]earch [F]iles" })
-		vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[S]earch [S]elect Telescope" })
-		vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "[S]earch current [W]ord" })
-		vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "[S]earch by [G]rep" })
-		vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "[S]earch [D]iagnostics" })
-		vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[S]earch [R]esume" })
-		vim.keymap.set("n", "<leader>s.", builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
-		vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] Find existing buffers" })
+		vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[h]elp" })
+		vim.keymap.set("n", "<leader>sm", builtin.marks, { desc = "[m]arks" })
+		vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[k]eymaps" })
+		vim.keymap.set("n", "<leader>sf", function()
+			builtin.find_files({ find_command = { "rg", "--hidden", "--files", "--ignore", "--glob", "!.git" } })
+		end, { desc = "[f]iles" })
+		vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[s]elect Telescope" })
+		vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "current [w]ord" })
+		vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "[g]rep" })
+		vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "[d]iagnostics" })
+		vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[r]esume" })
+		vim.keymap.set("n", "<leader>s.", builtin.oldfiles, { desc = 'recent files ("." for repeat)' })
+		vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] find existing buffers" })
+
+		-- Version control
+		vim.keymap.set("n", "<leader>vd", builtin.git_status, { desc = "git [d]iff" })
+
+		-- Workspace
+		vim.keymap.set("n", "<leader>ws", function()
+			builtin.find_files({ find_command = { "rg", "--hidden", "--files", "--no-ignore" } })
+		end, { desc = "[s]earch" })
 
 		-- Slightly advanced example of overriding default behavior and theme
 		vim.keymap.set("n", "<leader>/", function()
@@ -940,7 +942,7 @@ return {
 				winblend = 10,
 				previewer = false,
 			}))
-		end, { desc = "[/] Fuzzily search in current buffer" })
+		end, { desc = "[/] fuzzily search in current buffer" })
 
 		-- It's also possible to pass additional configuration options.
 		--  See `:help telescope.builtin.live_grep()` for information about particular keys
@@ -949,12 +951,15 @@ return {
 				grep_open_files = true,
 				prompt_title = "Live Grep in Open Files",
 			})
-		end, { desc = "[S]earch [/] in Open Files" })
+		end, { desc = "[/] open files" })
 
 		-- Shortcut for searching your Neovim configuration files
 		vim.keymap.set("n", "<leader>sn", function()
-			builtin.find_files({ cwd = vim.fn.stdpath("config") })
-		end, { desc = "[S]earch [N]eovim files" })
+			builtin.find_files({
+				cwd = vim.fn.stdpath("config"),
+				find_command = { "rg", "--hidden", "--files", "--no-ignore" },
+			})
+		end, { desc = "[n]eovim files" })
 	end,
 }
 ```
@@ -1078,13 +1083,15 @@ return {
 
 		-- Document existing key chains
 		spec = {
-			{ "<leader>c", group = "[C]ode", mode = { "n", "x" } },
-			{ "<leader>d", group = "[D]ocument" },
-			{ "<leader>r", group = "[R]ename" },
-			{ "<leader>s", group = "[S]earch" },
-			{ "<leader>w", group = "[W]orkspace" },
-			{ "<leader>t", group = "[T]oggle" },
-			{ "<leader>h", group = "Git [H]unk", mode = { "n", "v" } },
+			{ "<leader>c",  group = "[c]ode",            mode = { "n", "x" } },
+			{ "<leader>ct", group = "[t]oggles",         mode = { "n", "x" } },
+			{ "<leader>cg", group = "[g]oto",            mode = { "n", "x" } },
+			{ "<leader>d",  group = "[d]ocument" },
+			{ "<leader>s",  group = "[s]earch" },
+			{ "<leader>S",  group = "[S]ession" },
+			{ "<leader>w",  group = "[w]orkspace" },
+			{ "<leader>v",  group = "[v]ersion control", mode = { "n", "v" } },
+			{ "<leader>vt", group = "[t]oggles",         mode = { "n", "v" } },
 		},
 	},
 }
