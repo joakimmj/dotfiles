@@ -24,6 +24,8 @@ return {
 					["ga"]    = "git_add_file",
 					["gr"]    = "git_revert_file",
 					["?"]     = "show_help",
+					["h"]     = "close_node",
+					["l"]     = { "toggle_node", nowait = false },
 				},
 			},
 			filesystem = {
