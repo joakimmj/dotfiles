@@ -186,7 +186,7 @@ alias docker-clean-containers='docker rm $(docker ps -aqf status=exited)'
 ### Programs
 Add keybindings to downloaded programs.
 
-
+```bash tangle:~/.bash_aliases
 alias gl="git log --oneline --pretty=format:'%h | %<(70,trunc)%s | %cd | %an' --date=format:'%d.%m.%y %H:%M' | fzf --multi --preview 'git show {+1}' | awk '{print \$1}' | xargs git show"
 alias manual="man -k . | fzf --preview 'man {+1}' | awk '{print \$1}' | xargs man"
 alias kill-intellij="ps -ux | grep '[i]ntellij' | awk '{print \$2}' | xargs --verbose -r kill -9"
