@@ -60,3 +60,8 @@ jitest() {
     mvn -U clean verify -Pintegration-test
 }
 alias projects='cd ~/projects'
+
+alias nix-hm-build="home-manager switch --flake ~/.config/nixos/"
+alias nix-os-build="sudo nixos-rebuild switch --flake ~/.config/nixos/"
+alias nix-os-test="sudo nixos-rebuild test --flake ~/.config/nixos/"
+
