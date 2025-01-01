@@ -194,7 +194,7 @@ in {
          Return = "mode '${mode-default}'";
        };
        "${mode-system}" = {
-         "l" = "exec swaylock --image ~/.config/nix/programmer-desk-corner.PNG --scaling fill; mode '${mode-default}'";
+         "l" = "exec swaylock --image ~/.config/nixos/programmer-desk-corner.PNG --scaling fill; mode '${mode-default}'";
          "o" = "exec swaymsg exit; mode '${mode-default}'";
          "h" = "exec systemctl hibernate; mode '${mode-default}'";
          "s" = "exec systemctl suspend; mode '${mode-default}'";
@@ -297,23 +297,19 @@ in {
        # BIOS sends fn+F8 as super+p for matching display configuration in Windows, thus XF86Display not working anymore...
        "${modifier}+P" = "exec wdisplays";
 
-       # sway
+       # system
        "${modifier}+Shift+c" = "reload";
-
-       # programs
        "${modifier}+Shift+q" = "kill";
        "Alt+F4" = "kill";
 
-       # -- web browser
+       # programs
+       "${modifier}+t" = "exec kitty";
        "${modifier}+w" = "workspace ${wp1};exec firefox";
        "${modifier}+Shift+w" = "exec firefox";
        "${modifier}+Ctrl+w" = "exec firefox --private-window";
 
-       # -- terminal
-       "${modifier}+t" = "exec kitty";
-
-       # -- keymap help
-       "${modifier}+question" = "exec xterm -T \"HELP\" -bg black -fg white -ls -e 'cat ~/.config/nix/keybindings.txt | less'";
+       # help
+       "${modifier}+question" = "exec xterm -T \"HELP\" -bg black -fg white -ls -e 'cat ~/.config/nixos/keybindings.txt | less'";
      };
    };
   };

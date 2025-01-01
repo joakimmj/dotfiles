@@ -1,4 +1,4 @@
-{ config, pkgs, lib, ... }:
+{ pkgs, pkgs-unstable, lib, ... }:
 
 {
   imports = [
@@ -10,19 +10,28 @@
   home.packages = with pkgs; [
     spotify
     slack
+    ungoogled-chromium # added for WebHID API
+    #arc-browser
 
     # CLI tools
     fzf # fuzzy finder
-    neovim # Editor
+    pkgs-unstable.neovim # Editor
     lynx # Web browser
     yazi # File manager
     tmux # Terminal mutliplexer
+    unzip
+
+    grim
+    slurp
 
     # Dev
     nodejs_22 # npm
     temurin-bin-20 # java
     maven
     go
+    qmk
+    gcc
+    gnumake
   ];
 
   programs.htop = {
