@@ -19,3 +19,8 @@ alias manual="man -k . | fzf --preview 'man {+1}' | awk '{print \$1}' | xargs ma
 alias kill-intellij="ps -ux | grep '[i]ntellij' | awk '{print \$2}' | xargs --verbose -r kill -9"
 alias tldrfzf="tldr --list | sed 's/,/\\n/g' | fzf --preview 'tldr {+1}' | xargs tldr -t ocean"
 alias projects='cd ~/projects'
+
+alias nix-hm-build="home-manager switch --flake ~/.config/nixos/"
+alias nix-os-build="sudo nixos-rebuild switch --flake ~/.config/nixos/"
+alias nix-os-test="sudo nixos-rebuild test --flake ~/.config/nixos/"
+

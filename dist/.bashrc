@@ -4,7 +4,8 @@
 source ~/.git-completion.bash
 source ~/.git-prompt.sh
 export PATH="$PATH:~/bin/"
-export JDK_HOME='/usr/lib/jvm/java-8-openjdk-amd64/'
+export EDITOR="nvim"
+
 if [ -f /etc/bashrc ]; then
   . /etc/bashrc
 fi
@@ -39,3 +40,13 @@ bind -m vi-insert 'Control-l: clear-screen'
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
+
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
+
