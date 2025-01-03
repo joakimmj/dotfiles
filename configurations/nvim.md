@@ -890,6 +890,7 @@ return {
 			--     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
 			--   },
 			-- },
+			defaults = require('telescope.themes').get_ivy(),
 			pickers = {
 				buffers = {
 					mappings = {
