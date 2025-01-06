@@ -1,0 +1,9 @@
+[manager]
+show_hidden = true # toggle with '.'
+show_symlink = true
+ratio = [2, 2, 4]
+linemode = "size"
+
+[preview]
+wrap = "yes"
+tab_size = 2
