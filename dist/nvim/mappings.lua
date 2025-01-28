@@ -7,7 +7,8 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "move cursor up" })
 vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "move cursor down" })
 vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]], { desc = "[y]ank to system clipboard" })
 vim.keymap.set("n", "<leader>Y", [["+Y]], { desc = "[Y]ank rest of line to system clipboard" })
-vim.keymap.set("n", "<leader>p", [["+p]], { desc = "[p]aste from system clipboard" })
+vim.keymap.set({ "n", "v" }, "<leader>p", [["+p]], { desc = "[p]aste from system clipboard" })
+vim.keymap.set({"n", v"}, "<C-p>", "\"0p", { desc = "paste from yank register" })
 vim.keymap.set(
 	"n",
 	"<leader>dr",
