@@ -202,6 +202,12 @@ Add alias for opening `nvim` with last session
 alias nvimm='nvim -S .session.vim'
 ```
 
+Aliases for non-plugin based `nvim`
+```bash tangle:~/.bash_aliases
+alias vim='NVIM_APPNAME=nvim-lite nvim'
+alias vimm='NVIM_APPNAME=nvim-lite nvim -S .session.vim'
+```
+
 Add aliases for starting and testing maven projects
 ```bash tangle:~/.bash_aliases
 current-dir() {

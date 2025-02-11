@@ -29,6 +29,8 @@ alias kill-intellij="ps -ux | grep '[i]ntellij' | awk '{print \$2}' | xargs --ve
 alias tldrfzf="tldr --list | sed 's/,/\\n/g' | fzf --preview 'tldr {+1}' | xargs tldr -t ocean"
 alias nvimf="rg --hidden --files --ignore --glob '!.git' | fzf --preview 'cat {+1}' | xargs nvim"
 alias nvimm='nvim -S .session.vim'
+alias vim='NVIM_APPNAME=nvim-lite nvim'
+alias vimm='NVIM_APPNAME=nvim-lite nvim -S .session.vim'
 current-dir() {
     local current_dir
     current_dir=${PWD##*/}        # to assign to a variable

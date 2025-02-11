@@ -18,3 +18,13 @@ vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "CursorHoldI", "FocusGai
 	pattern = { "*" },
 	command = "if mode() != 'c' | checktime | endif",
 })
+vim.api.nvim_create_autocmd('FileType', {
+	desc = 'Lua specific options',
+	pattern = 'lua',
+	group = vim.api.nvim_create_augroup('augroup-lua-options', { clear = true }),
+	callback = function()
+		vim.keymap.set("n", "<leader>X", "<cmd>source %<CR>", { buffer = true, desc = "e[X]ecute lua file" })
+		vim.keymap.set("n", "<leader>x", ":.lua<CR>", { buffer = true, desc = "e[x]ecute lua line" })
+		vim.keymap.set("v", "<leader>x", ":lua<CR>", { buffer = true, desc = "e[x]ecute lua selection" })
+	end,
+})
