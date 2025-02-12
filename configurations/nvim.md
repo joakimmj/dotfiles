@@ -180,7 +180,7 @@ Sets how neovim will display certain whitespace characters in the editor.
 > `~/.config/nvim/lua/my/options.lua`, `~/.config/nvim-lite/lua/my/options.lua`
 ```lua tangle:~/.config/nvim/lua/my/options.lua,~/.config/nvim-lite/lua/my/options.lua
 vim.opt.list = true
-vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
+vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣", leadmultispace = "|   " }
 ```
 
 Preview substitutions live, as you type!
@@ -681,35 +681,6 @@ return {
 						vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
 					end
 
-					-- Jump to the definition of the word under your cursor.
-					--  This is where a variable was first declared, or where a function is defined, etc.
-					--  To jump back, press <C-t>.
-					map("gd", require("telescope.builtin").lsp_definitions, "[g]oto [d]efinition")
-
-					-- Find references for the word under your cursor.
-					map("gr", require("telescope.builtin").lsp_references, "[g]oto [r]eferences")
-
-					-- Jump to the implementation of the word under your cursor.
-					--  Useful when your language has ways of declaring types without an actual implementation.
-					map("gI", require("telescope.builtin").lsp_implementations, "[g]oto [I]mplementation")
-
-					-- Jump to the type of the word under your cursor.
-					--  Useful when you're not sure what type a variable is and you want to see
-					--  the definition of its *type*, not where it was *defined*.
-					map("<leader>cgt", require("telescope.builtin").lsp_type_definitions, "[t]ype definition")
-
-					-- Fuzzy find all the symbols in your current document.
-					--  Symbols are things like variables, functions, types, etc.
-					map("<leader>ds", require("telescope.builtin").lsp_document_symbols, "[s]ymbols")
-
-					-- Fuzzy find all the symbols in your current workspace.
-					--  Similar to document symbols, except searches over your entire project.
-					map(
-						"<leader>ws",
-						require("telescope.builtin").lsp_dynamic_workspace_symbols,
-						"[s]ymbols"
-					)
-
 					-- Rename the variable under your cursor.
 					--  Most Language Servers support renaming across files, etc.
 					map("<leader>wr", vim.lsp.buf.rename, "[r]ename")
@@ -847,181 +818,91 @@ return {
 }
 ```
 
-### neo-tree.nvim
+### snacks.nvim
 
-> `~/.config/nvim/lua/my/plugins/neo-tree.lua`
-```lua tangle:~/.config/nvim/lua/my/plugins/neo-tree.lua
+> `~/.config/nvim/lua/my/plugins/snacks.lua`
+```lua tangle:~/.config/nvim/lua/my/plugins/snacks.lua
 return {
-	"nvim-neo-tree/neo-tree.nvim",
-	version = "*",
-	dependencies = {
-		"nvim-lua/plenary.nvim",
-		"MunifTanjim/nui.nvim",
-	},
-	cmd = "Neotree",
-	keys = {
-		{ "<leader>wf", ":Neotree reveal<CR>",     desc = "[f]iles",      silent = true },
-		{ "<leader>wb", ":Neotree buffers<CR>",    desc = "[b]uffers",    silent = true },
-		{ "<leader>vs", ":Neotree git_status<CR>", desc = "git [s]tatus", silent = true },
-	},
-	config = function()
-		require("neo-tree").setup({
-			window = {
-				position = "float",
-				mappings = {
-					["P"]     = { "toggle_preview", config = { use_float = true, use_image_nvim = true } },
-					["<C-u>"] = { "scroll_preview", config = { direction = 10 } },
-					["<C-d>"] = { "scroll_preview", config = { direction = -10 } },
-					["A"]     = "git_add_all",
-					["gu"]    = "git_unstage_file",
-					["ga"]    = "git_add_file",
-					["gr"]    = "git_revert_file",
-					["?"]     = "show_help",
-					["h"]     = "close_node",
-					["l"]     = { "toggle_node", nowait = false },
-				},
-			},
-			filesystem = {
-				filtered_items = {
-					visible = true,
-				},
-			},
-		})
-	end
-}
-```
+    {
+        "folke/snacks.nvim",
+        lazy = false,
+        ---@type snacks.Config
+        opts = {
+            picker = {
+                ui_select = true,
+                layout = {
+                    --- Use the default layout or vertical if the window is too narrow
+                    preset = function()
+                        return vim.o.columns >= 120 and "ivy" or "ivy_split"
+                    end,
+                },
+                sources = {
+                    buffers = {
+                        layout = {
+                            preset = "ivy",
+                        },
+                    },
+                    explorer = {
+                        layout = {
+                            preset = "sidebar",
+                            preview = true,
 
-### telescope
+                            layout = {
+                                width = 0.5,
+                                min_width = 40,
+                            }
+                        },
+                        auto_close = true,
+                        focus = "input",
+                    },
+                },
+            },
+            explorer = {
+                replace_netrw = true, -- Replace netrw with the snacks explorer
+            },
+            gitbrowse = {},
+            indent = {},
+        },
+        keys = {
+            -- workspace
+            { "<leader>we",      function() Snacks.picker.explorer() end,                                                 desc = "[e]xplorer" },
+            { "<leader>wf",      function() Snacks.picker.files({ hidden = true, ignored = true }) end,                   desc = "[f]iles" },
+            { "<leader>wg",      function() Snacks.picker.grep() end,                                                     desc = "[g]rep" },
+            { "<leader>ws",      function() Snacks.picker.lsp_workspace_symbols() end,                                    desc = "[s]ymbols" },
 
-Fuzzy Finder (files, lsp, etc)
-> `~/.config/nvim/lua/my/plugins/telescope.lua`
-```lua tangle:~/.config/nvim/lua/my/plugins/telescope.lua
-return {
-	"nvim-telescope/telescope.nvim",
-	event = "VimEnter",
-	branch = "0.1.x",
-	dependencies = {
-		"nvim-lua/plenary.nvim",
-		{ -- If encountering errors, see telescope-fzf-native README for installation instructions
-			"nvim-telescope/telescope-fzf-native.nvim",
+            -- document
+            { "<leader>ds",      function() Snacks.picker.lsp_symbols() end,                                              desc = "[s]ymbols" },
 
-			-- `build` is used to run some command when the plugin is installed/updated.
-			-- This is only run then, not every time Neovim starts up.
-			build = "make",
+            -- search
+            { "<leader>sh",      function() Snacks.picker.help() end,                                                     desc = "[h]elp" },
+            { "<leader>sm",      function() Snacks.picker.marks() end,                                                    desc = "[m]arks" },
+            { "<leader>sk",      function() Snacks.picker.keymaps() end,                                                  desc = "[k]eymaps" },
+            { "<leader>sf",      function() Snacks.picker.smart({ hidden = true }) end,                                   desc = "[f]iles" },
+            { "<leader>ss",      function() Snacks.picker.pickers() end,                                                  desc = "[s]elect picker" },
+            { "<leader>sw",      function() Snacks.picker.grep_word() end,                                                desc = "current [w]ord" },
+            { "<leader>sd",      function() Snacks.picker.diagnostics() end,                                              desc = "[d]iagnostics" },
+            { "<leader>sr",      function() Snacks.picker.resume() end,                                                   desc = "[r]esume" },
+            { "<leader>s.",      function() Snacks.picker.recent() end,                                                   desc = "recent files ('.' for repeat)" },
+            { "<leader><space>", function() Snacks.picker.buffers() end,                                                  desc = "[ ] find existing buffers" },
+            { "<leader>/",       function() Snacks.picker.grep({ glob = vim.fn.expand("%:t"), need_search = false }) end, desc = "[/] fuzzily search in current buffer" },
+            { "<leader>s/",      function() Snacks.picker.grep_buffers() end,                                             desc = "[/] open files" },
+            { "<leader>sn",      function() Snacks.picker.files({ cwd = vim.fn.stdpath("config"), hidden = true }) end,   desc = "[n]eovim files" },
 
-			-- `cond` is a condition used to determine whether this plugin should be
-			-- installed and loaded.
-			cond = function()
-				return vim.fn.executable("make") == 1
-			end,
-		},
-		{ "nvim-telescope/telescope-ui-select.nvim" },
-	},
-	config = function()
-		-- Telescope is a fuzzy finder that comes with a lot of different things that
-		-- it can fuzzy find! It's more than just a "file finder", it can search
-		-- many different aspects of Neovim, your workspace, LSP, and more!
-		--
-		-- The easiest way to use Telescope, is to start by doing something like:
-		--  :Telescope help_tags
-		--
-		-- After running this command, a window will open up and you're able to
-		-- type in the prompt window. You'll see a list of `help_tags` options and
-		-- a corresponding preview of the help.
-		--
-		-- Two important keymaps to use while in Telescope are:
-		--  - Insert mode: <c-/>
-		--  - Normal mode: ?
-		--
-		-- This opens a window that shows you all of the keymaps for the current
-		-- Telescope picker. This is really useful to discover what Telescope can
-		-- do as well as how to actually do it!
+            -- version control
+            { "<leader>vd",      function() Snacks.picker.git_status() end,                                               desc = "git [d]iff" },
+            { "<leader>vo",      function() Snacks.gitbrowse() end,                                                       desc = "[o]pen repo destination" },
 
-		-- [[ Configure Telescope ]]
-		-- See `:help telescope` and `:help telescope.setup()`
-		require("telescope").setup({
-			-- You can put your default mappings / updates / etc. in here
-			--  All the info you're looking for is in `:help telescope.setup()`
-			--
-			-- defaults = {
-			--   mappings = {
-			--     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-			--   },
-			-- },
-			defaults = require('telescope.themes').get_ivy(),
-			pickers = {
-				buffers = {
-					mappings = {
-						i = {
-							['<C-b>'] = require('telescope.actions').delete_buffer,
-						},
-						n = {
-							['<C-b>'] = require('telescope.actions').delete_buffer,
-						},
-					},
-				},
-			},
-			extensions = {
-				["ui-select"] = {
-					require("telescope.themes").get_dropdown(),
-				},
-			},
-		})
+            -- LSP
+            { "gd",              function() Snacks.picker.lsp_definitions() end,                                          desc = "[g]oto [d]efinition" },
+            { "gr",              function() Snacks.picker.lsp_references() end,                                           desc = "[g]oto [r]eferences",                 nowait = true },
+            { "gI",              function() Snacks.picker.lsp_implementations() end,                                      desc = "[g]oto [I]mplementation" },
+            { "<leader>cgt",     function() Snacks.picker.lsp_type_definitions() end,                                     desc = "[t]ype definition" },
 
-		-- Enable Telescope extensions if they are installed
-		pcall(require("telescope").load_extension, "fzf")
-		pcall(require("telescope").load_extension, "ui-select")
-
-		-- See `:help telescope.builtin`
-		local builtin = require("telescope.builtin")
-		vim.keymap.set("n", "<leader>sh", builtin.help_tags, { desc = "[h]elp" })
-		vim.keymap.set("n", "<leader>sm", builtin.marks, { desc = "[m]arks" })
-		vim.keymap.set("n", "<leader>sk", builtin.keymaps, { desc = "[k]eymaps" })
-		vim.keymap.set("n", "<leader>sf", function()
-			builtin.find_files({ find_command = { "rg", "--hidden", "--files", "--ignore", "--glob", "!.git" } })
-		end, { desc = "[f]iles" })
-		vim.keymap.set("n", "<leader>ss", builtin.builtin, { desc = "[s]elect Telescope" })
-		vim.keymap.set("n", "<leader>sw", builtin.grep_string, { desc = "current [w]ord" })
-		vim.keymap.set("n", "<leader>sg", builtin.live_grep, { desc = "[g]rep" })
-		vim.keymap.set("n", "<leader>sd", builtin.diagnostics, { desc = "[d]iagnostics" })
-		vim.keymap.set("n", "<leader>sr", builtin.resume, { desc = "[r]esume" })
-		vim.keymap.set("n", "<leader>s.", builtin.oldfiles, { desc = 'recent files ("." for repeat)' })
-		vim.keymap.set("n", "<leader><leader>", builtin.buffers, { desc = "[ ] find existing buffers" })
-
-		-- Version control
-		vim.keymap.set("n", "<leader>vd", builtin.git_status, { desc = "git [d]iff" })
-
-		-- Workspace
-		vim.keymap.set("n", "<leader>ws", function()
-			builtin.find_files({ find_command = { "rg", "--hidden", "--files", "--no-ignore" } })
-		end, { desc = "[s]earch" })
-
-		-- Slightly advanced example of overriding default behavior and theme
-		vim.keymap.set("n", "<leader>/", function()
-			-- You can pass additional configuration to Telescope to change the theme, layout, etc.
-			builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
-				winblend = 10,
-				previewer = false,
-			}))
-		end, { desc = "[/] fuzzily search in current buffer" })
-
-		-- It's also possible to pass additional configuration options.
-		--  See `:help telescope.builtin.live_grep()` for information about particular keys
-		vim.keymap.set("n", "<leader>s/", function()
-			builtin.live_grep({
-				grep_open_files = true,
-				prompt_title = "Live Grep in Open Files",
-			})
-		end, { desc = "[/] open files" })
-
-		-- Shortcut for searching your Neovim configuration files
-		vim.keymap.set("n", "<leader>sn", function()
-			builtin.find_files({
-				cwd = vim.fn.stdpath("config"),
-				find_command = { "rg", "--hidden", "--files", "--no-ignore" },
-			})
-		end, { desc = "[n]eovim files" })
-	end,
+            -- scratch (tmp files)
+            { "<leader>tt",      function() Snacks.scratch() end,                                                         desc = "[t]oggle scratch" },
+            { "<leader>ts",      function() Snacks.scratch.select() end,                                                  desc = "[s]elect scratch" },
+        },
+    }
 }
 ```
 
@@ -1123,6 +1004,7 @@ return {
 			{ "<leader>d",  group = "[d]ocument" },
 			{ "<leader>s",  group = "[s]earch" },
 			{ "<leader>S",  group = "[S]ession" },
+			{ "<leader>t",  group = "[t]emporary (\"scratch\") files" },
 			{ "<leader>w",  group = "[w]orkspace" },
 			{ "<leader>v",  group = "[v]ersion control", mode = { "n", "v" } },
 			{ "<leader>vt", group = "[t]oggles",         mode = { "n", "v" } },
