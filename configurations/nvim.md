@@ -61,7 +61,7 @@ vim.keymap.set({ "n", "v" }, "<leader>p", [["+p]], { desc = "[p]aste from system
 Paste from yank register (`"0`)
 > `~/.config/nvim/lua/my/mappings.lua`, `~/.config/nvim-lite/lua/my/mappings.lua`
 ```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
-vim.keymap.set({"n", "v"}, "<C-p>", "\"0p", { desc = "paste from yank register" })
+vim.keymap.set({ "n", "v" }, "<C-p>", "\"0p", { desc = "paste from yank register" })
 ```
 
 Replace all of word under cursor
@@ -72,6 +72,17 @@ vim.keymap.set(
 	"<leader>dr",
 	[[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
 	{ desc = "[r]eplace word" }
+)
+```
+
+Replace selected text
+> `~/.config/nvim/lua/my/mappings.lua`, `~/.config/nvim-lite/lua/my/mappings.lua`
+```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
+vim.keymap.set(
+	"v",
+	"<leader>dr",
+	[["hy:%s/<C-r>h//gI<left><left><left>]],
+	{ desc = "[r]eplace selected text" }
 )
 ```
 

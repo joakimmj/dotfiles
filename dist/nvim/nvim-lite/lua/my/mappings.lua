@@ -8,12 +8,18 @@ vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "move cursor down" })
 vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]], { desc = "[y]ank to system clipboard" })
 vim.keymap.set("n", "<leader>Y", [["+Y]], { desc = "[Y]ank rest of line to system clipboard" })
 vim.keymap.set({ "n", "v" }, "<leader>p", [["+p]], { desc = "[p]aste from system clipboard" })
-vim.keymap.set({"n", "v"}, "<C-p>", "\"0p", { desc = "paste from yank register" })
+vim.keymap.set({ "n", "v" }, "<C-p>", "\"0p", { desc = "paste from yank register" })
 vim.keymap.set(
 	"n",
 	"<leader>dr",
 	[[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
 	{ desc = "[r]eplace word" }
+)
+vim.keymap.set(
+	"v",
+	"<leader>dr",
+	[["hy:%s/<C-r>h//gI<left><left><left>]],
+	{ desc = "[r]eplace selected text" }
 )
 vim.keymap.set("n", "<leader>dd", vim.diagnostic.setloclist, { desc = "[d]iagnostic (location list)" })
 vim.keymap.set("n", "<leader>wd", vim.diagnostic.setqflist, { desc = "[d]iagnostic (quickfix list)" })
