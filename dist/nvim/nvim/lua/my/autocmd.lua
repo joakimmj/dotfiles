@@ -28,3 +28,11 @@ vim.api.nvim_create_autocmd('FileType', {
 		vim.keymap.set("v", "<leader>x", ":lua<CR>", { buffer = true, desc = "e[x]ecute lua selection" })
 	end,
 })
+vim.api.nvim_create_autocmd('FileType', {
+	desc = 'Json specific options',
+	pattern = 'json',
+	group = vim.api.nvim_create_augroup('augroup-json-options', { clear = true }),
+	callback = function()
+		vim.keymap.set("n", "<leader>X", [[%!jq '.']], { buffer = true, desc = "e[X]ecute json formatting" })
+	end,
+})
