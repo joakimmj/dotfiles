@@ -302,6 +302,19 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 ```
 
+Add keymaps for formatting `JSON` (for `json` buffers only)
+> `~/.config/nvim/lua/my/autocmd.lua`, `~/.config/nvim-lite/lua/my/autocmd.lua`
+```lua tangle:~/.config/nvim/lua/my/autocmd.lua,~/.config/nvim-lite/lua/my/autocmd.lua
+vim.api.nvim_create_autocmd('FileType', {
+	desc = 'Json specific options',
+	pattern = 'json',
+	group = vim.api.nvim_create_augroup('augroup-json-options', { clear = true }),
+	callback = function()
+		vim.keymap.set("n", "<leader>X", [[%!jq '.']], { buffer = true, desc = "e[X]ecute json formatting" })
+	end,
+})
+```
+
 ## Lazy (plugins)
 
 Init `lazy.nvim`
