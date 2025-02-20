@@ -43,6 +43,12 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "move line up" })
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "move line down" })
 ```
 
+Toggle line wrap for current buffer
+> `~/.config/nvim/lua/my/mappings.lua`, `~/.config/nvim-lite/lua/my/mappings.lua`
+```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
+vim.keymap.set("n", "<leader>dw", "<cmd>set wrap!<CR>", { desc = "toggle [w]rap" })
+```
+
 Center cursor on up/down
 > `~/.config/nvim/lua/my/mappings.lua`, `~/.config/nvim-lite/lua/my/mappings.lua`
 ```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua

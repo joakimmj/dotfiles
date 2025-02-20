@@ -3,6 +3,7 @@ vim.g.maplocalleader = " "
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "move line up" })
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "move line down" })
+vim.keymap.set("n", "<leader>dw", "<cmd>set wrap!<CR>", { desc = "toggle [w]rap" })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "move cursor up" })
 vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "move cursor down" })
 vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]], { desc = "[y]ank to system clipboard" })
