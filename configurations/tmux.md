@@ -181,17 +181,17 @@ selectp -t 0
 > Source: [tmux-sessionizer](https://github.com/ThePrimeagen/.dotfiles/blob/master/bin/.local/scripts/tmux-sessionizer)
 
 Use `tmuxs <directory> (optional)` to start new session.
-``` tangle:~/bin/tmuxs
+```sh tangle:~/bin/tmuxs
 #!/usr/bin/env bash
 ```
 
 Directories to search (`~/dev` and `~/dev/private`)
-``` tangle:~/bin/tmuxs
+```sh tangle:~/bin/tmuxs
 dirs="~/dev ~/dev/private"
 ```
 
 If no directory is given we use fuzzy search (`fzf`) the directories defined above.
-``` tangle:~/bin/tmuxs
+```sh tangle:~/bin/tmuxs
 if [[ $# -eq 1 ]]; then
     path=$1
 else
@@ -200,26 +200,26 @@ fi
 ```
 
 If nothing gets selected, we exit the script
-``` tangle:~/bin/tmuxs
+```sh tangle:~/bin/tmuxs
 if [[ -z $path ]]; then
     exit 0
 fi
 ```
 
 Extract session name based on directory name.
-``` tangle:~/bin/tmuxs
+```sh tangle:~/bin/tmuxs
 selected_dir=$(basename "$path" | tr . _)
 ```
 
 Create session if it does not exist
-``` tangle:~/bin/tmuxs
+```sh tangle:~/bin/tmuxs
 if ! tmux has-session -t $selected_dir 2> /dev/null; then
     tmux new-session -d -x - -y - -s $selected_dir -c $path
 fi
 ```
 
 If running outside of `tmux` attach the new session, if not switch to it
-``` tangle:~/bin/tmuxs
+```sh tangle:~/bin/tmuxs
 if [[ -z $TMUX ]]; then
     tmux attach-session -d -t $selected_dir
 else
@@ -227,21 +227,69 @@ else
 fi
 ```
 
+### Save/restore session
+
+Save/restore all windows and sessions.
+
+```sh tangle:~/bin/tmux-session
+#!/usr/bin/env bash
+
+set -e
+
+restore_session() {
+  tmux start-server
+
+  while IFS=$' ' read session_name window_name dir; do
+    echo "$session_name $window_name $dir"
+    if [[ -d "$dir" ]]; then
+      if ! tmux has-session -t "$session_name" 2>/dev/null; then
+        tmux new-session -d -x - -y - -s "$session_name" -n "$window_name" -c "$dir"
+      fi
+      if ! tmux has-session -t "$session_name:$window_name" 2>/dev/null; then
+        tmux new-window -d -t "$sessione_name" -n "$window_name" -c "$dir"
+      fi
+    fi
+  done < ~/.tmux-session
+
+  if [[ -z $TMUX ]]; then
+    tmux attach
+  fi
+}
+
+case "$1" in
+save)
+  echo "-- Saving:"
+  tmux list-windows -a -F "#S #W #{pane_current_path}" > ~/.tmux-session
+  cat ~/.tmux-session
+  exit 0
+  ;;
+restore)
+  echo "-- Restoring"
+  restore_session
+  exit 0
+  ;;
+*)
+  echo "Valid commands: save, restore"
+  exit 1
+  ;;
+esac
+```
+
 ### My dev script
 > Strongly influenced by [tmux-sessionizer](https://github.com/ThePrimeagen/.dotfiles/blob/master/bin/.local/scripts/tmux-sessionizer)
 
 Use `dev <directory> (optional)` to start new session.
-``` tangle:~/bin/dev
+```sh tangle:~/bin/dev
 #!/usr/bin/env bash
 ```
 
 Directories to search (`~/dev` and `~/dev/private`)
-``` tangle:~/bin/dev
+```sh tangle:~/bin/dev
 dirs="~/dev ~/dev/private"
 ```
 
 If no directory is given we use fuzzy search (`fzf`) the directories defined above.
-``` tangle:~/bin/dev
+```sh tangle:~/bin/dev
 if [[ $# -eq 1 ]]; then
     path=$1
 else
@@ -250,34 +298,36 @@ fi
 ```
 
 If nothing gets selected, we exit the script
-``` tangle:~/bin/dev
+```sh tangle:~/bin/dev
 if [[ -z $path ]]; then
     exit 0
 fi
 ```
 
 Extract window name based on folder name.
-``` tangle:~/bin/dev
+```sh tangle:~/bin/dev
 selected_dir=$(basename "$path" | tr . _)
 ```
 
-Create `dev` session if it does not exist
-``` tangle:~/bin/dev
+Create `dev` session with default `home` window if it does not exist
+```sh tangle:~/bin/dev
 if ! tmux has-session -t dev 2> /dev/null; then
     tmux new-session -d -x - -y - -s dev -n home -c ~/
+fi
+if ! tmux has-session -t dev:home 2> /dev/null; then
+    tmux new-window -d -t dev -n home -c ~/
 fi
 ```
 
 Create window for selected directory if it does not exist
-``` tangle:~/bin/dev
-if ! tmux select-window -t=$selected_dir 2> /dev/null; then
+```sh tangle:~/bin/dev
+if ! tmux has-session -t dev:$selected_dir 2> /dev/null; then
     tmux new-window -t dev -n $selected_dir -c $path
-    tmux split-window -c $path -t 0 -l 20% -v
 fi
 ```
 
 If running outside of `tmux` attach the new session, if not switch to it
-``` tangle:~/bin/dev
+```sh tangle:~/bin/dev
 if [[ -z $TMUX ]]; then
     tmux attach-session -d -t dev
 else
