@@ -237,11 +237,17 @@ Save/restore all windows and sessions.
 
 set -e
 
+if [ -n "$2" ]; then
+  session_file=$2
+else
+  session_file=~/.tmux-session
+fi
+
 restore_session() {
   tmux start-server
 
-  while IFS=$' ' read session_name window_name dir; do
-    echo "$session_name $window_name $dir"
+  while IFS=$',' read session_name window_name dir; do
+    echo "$session_name,$window_name,$dir"
     if [[ -d "$dir" ]]; then
       if ! tmux has-session -t "$session_name" 2>/dev/null; then
         tmux new-session -d -x - -y - -s "$session_name" -n "$window_name" -c "$dir"
@@ -250,7 +256,7 @@ restore_session() {
         tmux new-window -d -t "$sessione_name" -n "$window_name" -c "$dir"
       fi
     fi
-  done < ~/.tmux-session
+  done < "$session_file"
 
   if [[ -z $TMUX ]]; then
     tmux attach
@@ -260,8 +266,8 @@ restore_session() {
 case "$1" in
 save)
   echo "-- Saving:"
-  tmux list-windows -a -F "#S #W #{pane_current_path}" > ~/.tmux-session
-  cat ~/.tmux-session
+  tmux list-windows -a -F "#S,#W,#{pane_current_path}" > "$session_file"
+  cat "$session_file"
   exit 0
   ;;
 restore)
