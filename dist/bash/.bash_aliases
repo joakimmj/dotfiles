@@ -39,14 +39,25 @@ current-dir() {
 }
 
 jstart() {
+    clear
+    echo "mvn package -Dmaven.test.skip"
+    mvn package -Dmaven.test.skip
+    local current_dir=$(current-dir)
+    echo "java -jar -Dspring.profiles.active=local -Djavax.net.ssl.trustStore=/home/zero_ir/store/stb-test-cacerts-with-cwp.keystore target/${current_dir}.jar"
+    java -jar -Dspring.profiles.active=local -Djavax.net.ssl.trustStore=/home/zero_ir/store/stb-test-cacerts-with-cwp.keystore target/${current_dir}.jar
+}
+
+jcleanstart() {
+    clear
     echo "mvn -U clean package -Dmaven.test.skip"
     mvn -U clean package -Dmaven.test.skip
     local current_dir=$(current-dir)
-    echo "java -jar -Dspring.profiles.active=local target/${current_dir}.jar"
-    java -jar -Dspring.profiles.active=local target/${current_dir}.jar
+    echo "java -jar -Dspring.profiles.active=local -Djavax.net.ssl.trustStore=/home/zero_ir/store/stb-test-cacerts-with-cwp.keystore target/${current_dir}.jar"
+    java -jar -Dspring.profiles.active=local -Djavax.net.ssl.trustStore=/home/zero_ir/store/stb-test-cacerts-with-cwp.keystore target/${current_dir}.jar
 }
 
 jtest() {
+    clear
     local args
     if [ "$#" -eq 1 ]; then
         args="-Dtest=$1"
@@ -58,6 +69,7 @@ jtest() {
 }
 
 jitest() {
+    clear
     echo "mvn -U clean verify -Pintegration-test"
     mvn -U clean verify -Pintegration-test
 }
