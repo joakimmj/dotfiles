@@ -58,21 +58,9 @@ set incsearch
 
 Other sane defaults
 ``` tangle:~/.ideavimrc
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
-set expandtab
-
-set smartindent
-
-set wrap
-
 set scrolloff=8
-set signcolumn=yes
 set colorcolumn=80
-
 set list
-set listchars=tab:» ,trail:.,nbsp:␣
 set cursorline
 set breakindent
 ```
@@ -126,7 +114,7 @@ Plug 'easymotion/vim-easymotion'
 Open NERDTree with `<leader>wf` (use `q` to quit)
 ``` tangle:~/.ideavimrc
 Plug 'preservim/nerdtree'
-map <leader>wf :NERDTreeToggle<CR>
+map <leader>we :NERDTreeToggle<CR>
 ```
 
 #### which-key
@@ -140,7 +128,9 @@ set timeoutlen=5000
 let g:WhichKey_ShowVimActions = "true"
 
 let g:WhichKeyDesc_workspace = "<leader>w [w]orkspace"
+let g:WhichKeyDesc_workspace_explorer = "<leader>we [w]orkspace [e]xplorer"
 let g:WhichKeyDesc_workspace_files = "<leader>wf [w]orkspace [f]iles"
+let g:WhichKeyDesc_workspace_grep = "<leader>wg [w]orkspace [g]rep"
 
 let g:WhichKeyDesc_idea = "<leader>i IDEA"
 let g:WhichKeyDesc_idea_config = "<leader>ic IDEA config"
@@ -168,8 +158,8 @@ let g:WhichKeyDesc_document_format = "<leader>df [f]ormat document"
 
 let g:WhichKeyDesc_search = "<leader>s [s]earch"
 let g:WhichKeyDesc_search_file = "<leader>sf [f]ile"
-let g:WhichKeyDesc_search_grep = "<leader>sg [g]rep"
 let g:WhichKeyDesc_search_recent = "<leader>s. recent files"
+let g:WhichKeyDesc_search_buffers = "<leader><space> open files"
 
 let g:WhichKeyDesc_version_control = "<leader>v [v]ersion control"
 let g:WhichKeyDesc_version_control_blame = "<leader>vb [b]lame"
@@ -213,14 +203,22 @@ nmap <ESC> :nohlsearch<CR>
 
 Move line up/down
 ``` tangle:~/.ideavimrc
-vmap K :m '<-2<CR>gv=gv
-vmap J :m '>+1<CR>gv=gv
+nmap <A-k> :m .-2<CR>==
+nmap <A-j> :m .+1<CR>==
+vmap <A-k> :m '<-2<CR>gv=gv
+vmap <A-j> :m '>+1<CR>gv=gv
 ```
 
 Center cursor on up/down
 ``` tangle:~/.ideavimrc
 nmap <C-u> <C-u>zz
 nmap <C-d> <C-d>zz
+```
+
+Center cursor on next/previous search result
+``` tangle:~/.ideavimrc
+nmap N Nzzzv
+nmap n nzzzv
 ```
 
 Jump between methods
@@ -235,12 +233,24 @@ vmap < <gv
 vmap > >gv
 ```
 
+Toggle line wrap for current buffer
+``` tangle:~/.ideavimrc
+nmap <leader>dw :set wrap!<CR>
+```
+
 Yank to/paste from system clipboard
 ``` tangle:~/.ideavimrc
 nmap <leader>y "+y
 vmap <leader>y "+y
 nmap <leader>Y "+Y
 nmap <leader>p "+p
+vmap <leader>p "+p
+```
+
+Paste from yank register (`"0`)
+``` tangle:~/.ideavimrc
+nmap <C-p> \"0p
+vmap <C-p> \"0p
 ```
 
 Replace word under cursor (in document)
@@ -256,8 +266,10 @@ nmap <tab> za
 Search ("Telescope" replacement)
 ``` tangle:~/.ideavimrc
 map <leader>sf <action>(SearchEverywhere)
-map <leader>sg <action>(FindInPath)
+map <leader>wf <action>(GotoFile)
+map <leader>wg <action>(FindInPath)
 map <leader>s. <action>(RecentFiles)
+map <leader><space> <action>(RecentFiles)
 ```
 
 Format code
