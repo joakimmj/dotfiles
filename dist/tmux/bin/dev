@@ -19,7 +19,7 @@ if ! tmux has-session -t dev:$selected_dir 2> /dev/null; then
     tmux new-window -t dev -n $selected_dir -c $path
 fi
 if [[ -z $TMUX ]]; then
-    tmux attach-session -d -t dev
+    tmux attach-session -d -t dev:$selected_dir
 else
-    tmux switch-client -t dev
+    tmux switch-client -t dev:$selected_dir
 fi
