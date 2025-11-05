@@ -19,6 +19,13 @@
     unstage      = reset HEAD --                             # Unstage changes
     unstage-last = reset HEAD~                               # Unstage changes from last commit (used to undo/split commit)
     update       = remote update origin --prune              # Update remote info
+    stash-untracked = "!f() {       \
+        git stash -q;               \
+        git stash -uq;              \
+        git stash pop stash@{1} -q; \
+        git add -A;                 \
+        git status -sb;             \
+    }; f"
     a           = add                                       # Add changes
     aa          = add -A                                    # Add all changes
     ap          = add -p                                    # Add changes in patches

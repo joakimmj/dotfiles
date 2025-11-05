@@ -82,6 +82,12 @@ vim.keymap.set("n", "<up>", "<Nop>")
 vim.keymap.set("n", "<down>", "<Nop>")
 ```
 
+Save/restore vim sessions
+```lua tangle:~/.config/nvim/lua/my/mappings.lua
+vim.keymap.set("n", "<leader>SS", function() vim.cmd([[mksession! .session.vim]]) end, { desc = "[S]ession [S]ave" })
+vim.keymap.set("n", "<leader>SR", function() vim.cmd([[source .session.vim]]) end, { desc = "[S]ession [R]estore" })
+```
+
 ## Options
 Enable line number
 ```lua tangle:~/.config/nvim/lua/my/options.lua
@@ -105,7 +111,7 @@ Sane defaults
 ```lua tangle:~/.config/nvim/lua/my/options.lua
 vim.opt.smartindent = true
 
-vim.opt.wrap = true
+vim.opt.wrap = false
 
 vim.opt.swapfile = false
 vim.opt.backup = false
@@ -213,6 +219,17 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	group = vim.api.nvim_create_augroup("augroup-highlight-yank", { clear = true }),
 	callback = function()
 		vim.highlight.on_yank()
+	end,
+})
+```
+
+Automatically save session when closing nvim
+```lua tangle:~/.config/nvim/lua/my/autocmd.lua
+vim.api.nvim_create_autocmd("VimLeave", {
+	desc = "Save session on exit",
+	group = vim.api.nvim_create_augroup("augroup-session-manage", { clear = true }),
+	callback = function()
+		vim.cmd([[silent! mksession! .session.vim]])
 	end,
 })
 ```

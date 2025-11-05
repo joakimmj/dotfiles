@@ -1,24 +1,26 @@
-# Git config
+# Git
 
-## User
+## Git config
+
+### User
 ``` tangle:~/.gitconfig
 [user]
     email = joakim+github@myrvoll.dev
     name = joakimmj
 ```
 
-## Editor
+### Editor
 ``` tangle:~/.gitconfig
 [core]
     editor = vim
 ```
 
-## Aliases
+### Aliases
 ``` tangle:~/.gitconfig
 [alias]
 ```
 
-### Commands
+#### Commands
 
 Some sane commands
 ``` tangle:~/.gitconfig
@@ -39,7 +41,18 @@ Some sane commands
     update       = remote update origin --prune              # Update remote info
 ```
 
-### Shortcuts
+Alias for stashing only untracked files
+``` tangle:~/.gitconfig
+    stash-untracked = "!f() {       \
+        git stash -q;               \
+        git stash -uq;              \
+        git stash pop stash@{1} -q; \
+        git add -A;                 \
+        git status -sb;             \
+    }; f"
+```
+
+#### Shortcuts
 
 Even shorter aliases for often used commands
 ``` tangle:~/.gitconfig
@@ -72,7 +85,7 @@ Even shorter aliases for often used commands
     u           = remote update origin --prune              # Update remote info
 ```
 
-# Other sane defaults
+### Other sane defaults
 
 ``` tangle:~/.gitconfig
 [rerere]
@@ -82,3 +95,11 @@ Even shorter aliases for often used commands
 [branch]
     sort = -committerdate
 ```
+
+## Ignore
+Set files to ignore by default.
+
+``` tangle:~/.config/git/ignore
+.session.vim
+```
+

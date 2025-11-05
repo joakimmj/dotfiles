@@ -187,6 +187,11 @@ alias kill-intellij="ps -ux | grep '[i]ntellij' | awk '{print \$2}' | xargs --ve
 alias tldrfzf="tldr --list | sed 's/,/\\n/g' | fzf --preview 'tldr {+1}' | xargs tldr -t ocean"
 ```
 
+Add alias for opening `nvim` with last session
+```bash tangle:~/.bash_aliases
+alias nvimm='nvim -S .session.vim'
+```
+
 ### Shortcuts
 Add shortcuts for directories, ssh clients, etc.
 
