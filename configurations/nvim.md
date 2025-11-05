@@ -1,6 +1,6 @@
 # Nvim
 
-## Init
+## Init (`~/.config/nvim/init.lua`)
 
 Import my configurations
 ```lua tangle:~/.config/nvim/init.lua
@@ -11,7 +11,7 @@ require("my.autocmd")
 require("my.init-lazy")
 ```
 
-## Keymaps
+## Keymaps (`~/.config/nvim/lua/my/mappings.lua`)
 
 Change `<leader>` to `Space`
 ```lua tangle:~/.config/nvim/lua/my/mappings.lua
@@ -88,7 +88,8 @@ vim.keymap.set("n", "<leader>SS", function() vim.cmd([[mksession! .session.vim]]
 vim.keymap.set("n", "<leader>SR", function() vim.cmd([[source .session.vim]]) end, { desc = "[S]ession [R]estore" })
 ```
 
-## Options
+## Options (`~/.config/nvim/lua/my/options.lua`)
+
 Enable line number
 ```lua tangle:~/.config/nvim/lua/my/options.lua
 vim.opt.number = true
@@ -201,7 +202,7 @@ vim.o.statusline = "%#StatusGeneral#"
 	.. " [%n] %l/%L (%p%%), %c "
 ```
 
-## Netrw
+## Netrw (`~/.config/nvim/lua/my/netrw.lua`)
 
 ```lua tangle:~/.config/nvim/lua/my/netrw.lua
 vim.g.netrw_bufsettings = "noma nomod nu nobl nowrap ro"
@@ -210,7 +211,7 @@ vim.g.netrw_banner = 0
 vim.g.netrw_winsize = 25
 ```
 
-## Autocmd
+## Autocmd (`~/.config/nvim/lua/my/autocmd.lua`)
 
 Highlight when yanking (copying) text
 ```lua tangle:~/.config/nvim/lua/my/autocmd.lua
@@ -234,7 +235,7 @@ vim.api.nvim_create_autocmd("VimLeave", {
 })
 ```
 
-## Lazy
+## Lazy (`~/.config/nvim/lua/my/init-lazy.lua`)
 
 Init `lazy.nvim`
 ```lua tangle:~/.config/nvim/lua/my/init-lazy.lua
@@ -256,6 +257,8 @@ require("lazy").setup({
 	change_detection = { notify = false },
 })
 ```
+
+### general (`~/.config/nvim/lua/my/plugins/general.lua`)
 
 General plugins
 ```lua tangle:~/.config/nvim/lua/my/plugins/general.lua
@@ -280,7 +283,7 @@ Highlight todo, notes, etc in comments
 }
 ```
 
-### autocompletion
+### autocompletion (`~/.config/nvim/lua/my/plugins/autocomplete.lua`)
 
 ```lua tangle:~/.config/nvim/lua/my/plugins/autocomplete.lua
 return {
@@ -402,7 +405,7 @@ return {
 }
 ```
 
-### formatting
+### formatting (`~/.config/nvim/lua/my/plugins/formatting.lua`)
 
 ```lua tangle:~/.config/nvim/lua/my/plugins/formatting.lua
 return {
@@ -469,7 +472,7 @@ return {
 }
 ```
 
-### gitsigns.nvim
+### gitsigns.nvim (`~/.config/nvim/lua/my/plugins/gitsigns.lua`)
 
 Adds git related signs to the gutter, as well as utilities for managing changes
 ```lua tangle:~/.config/nvim/lua/my/plugins/gitsigns.lua
@@ -545,7 +548,8 @@ return {
 }
 ```
 
-### LSP
+### LSP (`~/.config/nvim/lua/my/plugins/lsp.lua`)
+
 ```lua tangle:~/.config/nvim/lua/my/plugins/lsp.lua
 return {
 	{ "nvim-java/nvim-java" },
@@ -787,7 +791,7 @@ return {
 }
 ```
 
-### neo-tree.nvim
+### neo-tree.nvim (`~/.config/nvim/lua/my/plugins/neo-tree.lua`)
 
 ```lua tangle:~/.config/nvim/lua/my/plugins/neo-tree.lua
 return {
@@ -813,7 +817,7 @@ return {
 }
 ```
 
-### telescope
+### telescope (`~/.config/nvim/lua/my/plugins/telescope.lua`)
 
 Fuzzy Finder (files, lsp, etc)
 ```lua tangle:~/.config/nvim/lua/my/plugins/telescope.lua
@@ -922,7 +926,8 @@ return {
 }
 ```
 
-### theme
+### theme (`~/.config/nvim/lua/my/plugins/theme.lua`)
+
 > If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
 
 ```lua tangle:~/.config/nvim/lua/my/plugins/theme.lua
@@ -950,7 +955,7 @@ return {
 }
 ```
 
-### treesitter
+### treesitter (`~/.config/nvim/lua/my/plugins/treesitter.lua`)
 
 Highlight, edit, and navigate code
 ```lua tangle:~/.config/nvim/lua/my/plugins/treesitter.lua
@@ -997,7 +1002,7 @@ return {
 }
 ```
 
-### which-key
+### which-key (`~/.config/nvim/lua/my/plugins/which-key.lua`)
 
 Useful plugin to show you pending keybinds.
 ```lua tangle:~/.config/nvim/lua/my/plugins/which-key.lua
