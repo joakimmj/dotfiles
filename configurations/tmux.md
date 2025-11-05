@@ -68,7 +68,7 @@ bind-key -T prefix x kill-pane
 
 Show keybindings in popup (default: `list-keys -N`).
 ``` tangle:~/.tmux.conf
-bind-key -T prefix ? display-popup -E "tmux list-keys -N | less"
+bind-key -T prefix ? display-popup -E "(echo 'My keys'; tmux list-keys -N -T my-keys -P 'C-q '; printf '\nLayouts\n'; tmux list-keys -N -T my-layouts -P 'C-w '; printf '\nBuilt in\n'; tmux list-keys -N) | less"
 ```
 
 #### My bindings
@@ -76,14 +76,14 @@ bind-key -T prefix ? display-popup -E "tmux list-keys -N | less"
 Prefixed with `C-q`
 ``` tangle:~/.tmux.conf
 bind-key -T root C-q switch-client -T my-keys
-bind-key -T my-keys r source-file ~/.tmux.conf \; display-message "~/.tmux.conf reloaded"
-bind-key -T my-keys e send-keys "nvim ~/.tmux.conf" Enter
-bind-key -T my-keys Space last-window
-bind-key -T my-keys t display-popup -E
-bind-key -T my-keys f display-popup -E "tmuxs"
-bind-key -T my-keys c display-popup -E "cht-sh"
-bind-key -T my-keys l display-popup -E "cht-lang"
-bind-key -T my-keys u display-popup -E "cht-util"
+bind-key -T my-keys -N "Reload config" r source-file ~/.tmux.conf \; display-message "~/.tmux.conf reloaded"
+bind-key -T my-keys -N "Edit config" e send-keys "nvim ~/.tmux.conf" Enter
+bind-key -T my-keys -N "Jump to last window" Space last-window
+bind-key -T my-keys -N "Popup terminal" t display-popup -E
+bind-key -T my-keys -N "Popup search and create" f display-popup -E "tmuxs"
+bind-key -T my-keys -N "Cheatsheet" c display-popup -E "cht-sh"
+bind-key -T my-keys -N "Cheatsheet (programming languages)" l display-popup -E "cht-lang"
+bind-key -T my-keys -N "Cheatsheet (utils)" u display-popup -E "cht-util"
 ```
 
 #### Preconfigured sessions
@@ -91,7 +91,7 @@ bind-key -T my-keys u display-popup -E "cht-util"
 Prefixed with `C-w`
 ``` tangle:~/.tmux.conf
 bind-key -T root C-w switch-client -T my-layouts
-bind-key -T my-layouts d source-file ~/.tmux/dev-layout
+bind-key -T my-layouts -N "Development layout" d source-file ~/.tmux/dev-layout
 ```
 
 ## Layouts
