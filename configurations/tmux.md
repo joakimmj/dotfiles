@@ -101,6 +101,13 @@ set-option -g status-interval 10
 
 #### Change defaults
 
+Keep current path when creating new windows/panes
+``` tangle:~/.tmux.conf
+bind-key -T prefix -N "Split window vertically" '"' split-window -v -c '#{pane_current_path}'
+bind-key -T prefix -N "Split window horizontally" '%' split-window -h -c '#{pane_current_path}'
+bind-key -T prefix -N "Create new window" c new-window -c '#{pane_current_path}'
+```
+
 Remove confirmation before killing window (default: `confirm-before -p "kill-window #W? (y/n)" kill-window`).
 ``` tangle:~/.tmux.conf
 #bind-key -T prefix -N "Kill the current window" & kill-window
@@ -134,7 +141,8 @@ bind-key -T my-keys -N "Reload config" r source-file ~/.tmux.conf \; display-mes
 bind-key -T my-keys -N "Edit config" e send-keys "nvim ~/.tmux.conf" Enter
 bind-key -T my-keys -N "Jump to last window" Space last-window
 bind-key -T my-keys -N "Popup terminal" t display-popup -E
-bind-key -T my-keys -N "Popup search and create" f display-popup -E "tmuxs"
+bind-key -T my-keys -N "Popup search and create session" s display-popup -E "tmuxs"
+bind-key -T my-keys -N "Popup search and create window" w display-popup -E "dev"
 bind-key -T my-keys -N "Jump to directory" j send-keys "cd $(find -L ~/dev ~/projects ~/.config -mindepth 1 -maxdepth 1 -type d | fzf)" Enter
 ```
 
@@ -216,3 +224,68 @@ fi
 
 tmux switch-client -t $selected_name
 ```
+
+### My dev script
+> Strongly influenced by [tmux-sessionizer](https://github.com/ThePrimeagen/.dotfiles/blob/master/bin/.local/scripts/tmux-sessionizer)
+
+Use `dev <directory> (optional)` to start new session.
+``` tangle:~/bin/dev
+#!/usr/bin/env bash
+```
+
+Directories to search (`~/dev` and `~/dev/private`)
+``` tangle:~/bin/dev
+dirs="~/dev ~/dev/private"
+```
+
+If no directory is given we use fuzzy search (`fzf`) the directories defined above.
+``` tangle:~/bin/dev
+if [[ $# -eq 1 ]]; then
+    path=$1
+else
+    path=$(eval "find -L $dirs -mindepth 1 -maxdepth 1 -type d | fzf")
+fi
+```
+
+If nothing gets selected, we exit the script
+``` tangle:~/bin/dev
+if [[ -z $path ]]; then
+    exit 0
+fi
+```
+
+Extract session name based on folder name.
+``` tangle:~/bin/dev
+selected_dir=$(basename "$path" | tr . _)
+tmux_running=$(pgrep tmux)
+```
+
+Create window
+``` tangle:~/bin/dev
+create_window() {
+    if ! tmux select-window -t=$selected_dir 2> /dev/null; then
+        tmux new-window -t dev -n $selected_dir -c $path
+    fi
+}
+```
+
+Starts a session if tmux is not running.
+``` tangle:~/bin/dev
+if [[ -z $TMUX ]] || [[ -z $tmux_running ]]; then
+    tmux new-session -d -s dev -n home -c ~/
+    create_window
+    tmux attach-session -d -t dev
+    exit 0
+fi
+```
+
+If session already exists we switch to it, if not we create it in detached mode, then switches to it.
+``` tangle:~/bin/dev
+if ! tmux has-session -t=dev 2> /dev/null; then
+    tmux new-session -d -s dev -n home -c ~/
+fi
+
+tmux switch-client -t dev
+create_window
+```
+
