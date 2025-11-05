@@ -336,9 +336,9 @@ fi
 If running outside of `tmux` attach the new session, if not switch to it
 ```sh tangle:~/bin/dev
 if [[ -z $TMUX ]]; then
-    tmux attach-session -d -t dev
+    tmux attach-session -d -t dev:$selected_dir
 else
-    tmux switch-client -t dev
+    tmux switch-client -t dev:$selected_dir
 fi
 ```
 
