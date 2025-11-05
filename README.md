@@ -19,7 +19,7 @@ tangled with the CLI tool [md-tangle][1].
 
 ## Source
 
-The tangled source can be found [here](src).
+The tangled source can be found [here](dist).
 
 
 [1]: https://github.com/joakimmj/md-tangle
