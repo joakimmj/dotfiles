@@ -3,27 +3,195 @@
 ## Git config
 
 ### User
-``` tangle:~/.gitconfig
+``` tangle:~/.config/git/config
 [user]
     email = joakim+github@myrvoll.dev
     name = joakimmj
 ```
 
-### Editor
-``` tangle:~/.gitconfig
+### Core settings
+``` tangle:~/.config/git/config
 [core]
+```
+
+Set default editor
+``` tangle:~/.config/git/config
     editor = vim
 ```
 
+Keep newlines as in input
+``` tangle:~/.config/git/config
+    autocrlf = input
+```
+
+### Rerere settings
+
+Activate recording of resolved conflicts, so that identical conflict hunks can be resolved automatically, should they be encountered again.
+``` tangle:~/.config/git/config
+[rerere]
+    enabled = true
+```
+
+### Column settings
+
+Specify whether supported commands should output in columns. 
+``` tangle:~/.config/git/config
+[column]
+    ui = auto
+```
+
+### Branch settings
+
+Order branches based on commit dates
+``` tangle:~/.config/git/config
+[branch]
+    sort = -committerdate
+```
+
+### Advice settings
+
+Disable advices for empty add
+``` tangle:~/.config/git/config
+[advice]
+    addEmptyPathspec = false
+```
+
+### Init settings
+
+Set default branch name to `main`
+``` tangle:~/.config/git/config
+[init]
+    defaultBranch = main
+```
+
+### Status settings
+
+``` tangle:~/.config/git/config
+[status]
+```
+
+Show branch
+``` tangle:~/.config/git/config
+    branch = true
+```
+
+Use short style (less text)
+``` tangle:~/.config/git/config
+    short = true
+```
+
+Show stash
+``` tangle:~/.config/git/config
+    showStash = true
+```
+
+Show individual untracked files
+``` tangle:~/.config/git/config
+    showUntrackedFiles = all
+```
+
+### Blame settings
+``` tangle:~/.config/git/config
+[blame]
+```
+
+Show relative date
+``` tangle:~/.config/git/config
+    date = relative
+```
+
+Highlight the most recent changes
+``` tangle:~/.config/git/config
+    coloring = highlightRecent
+```
+
+Show email instead of author name
+``` tangle:~/.config/git/config
+    showEmail = true
+```
+
+### Diff settings
+``` tangle:~/.config/git/config
+[diff]
+```
+
+Less context in diffs
+``` tangle:~/.config/git/config
+    context = 3
+```
+
+Detect copies as renames in diffs
+``` tangle:~/.config/git/config
+    renames = copies
+```
+
+Merge near hunks in diffs
+``` tangle:~/.config/git/config
+    interHunkContext = 10
+```
+
+### Log/show/whatchanged settings
+
+The default pretty format for log/show/whatchanged command.
+``` tangle:~/.config/git/config
+[format]
+    pretty = %C(bold blue)%ae%C(reset) %C(green)%cr (%cs)%C(reset) %C(red)%d%C(reset) %n %C(yellow)%h%C(reset) %s
+```
+
+### Commit settings
+
+``` tangle:~/.config/git/config
+[commit]
+    template = ~/.config/git/template
+```
+
+### Push settings
+
+Default set upstream when no upstream tracking exists for the current branch
+``` tangle:~/.config/git/config
+[push]
+    autoSetupRemote = true
+```
+
+### Rebase settings
+
+``` tangle:~/.config/git/config
+[rebase]
+```
+
+`--autosquash` by default
+``` tangle:~/.config/git/config
+    autoSquash = true
+```
+
+Stash dirty worktree on rebase (pops stash afterwards)
+``` tangle:~/.config/git/config
+    autoStash = true
+```
+
+### Shortcuts
+
+Add shortcut for github (e.g. `git clone gh:joakimmj/dotfiles`)
+``` tangle:~/.config/git/config
+[url "git@github.com:"]
+    insteadOf = "gh:"
+```
+
+Add shortcut for cloning my own repos (e.g. `git clone me:dotfiles`)
+``` tangle:~/.config/git/config
+[url "git@github.com:joakimmj/"]
+    insteadOf = "me:"
+```
+
 ### Aliases
-``` tangle:~/.gitconfig
+``` tangle:~/.config/git/config
 [alias]
 ```
 
 #### Commands
 
 Some sane commands
-``` tangle:~/.gitconfig
+``` tangle:~/.config/git/config
     alias        = config --get-regexp alias                 # List all aliases
     blame-       = blame --color-line --color-by-age         # Blame
     blame-c      = blame -w -C -C -C --color-line --color-by-age # Blame (ignore whitespace and code moves) 
@@ -33,7 +201,6 @@ Some sane commands
     discard-all  = checkout .                                # Discard all changes
     last         = log -1 HEAD                               # Show last commit
     last-3       = log -3 HEAD                               # Show last three commits
-    log-blame    = log --oneline --graph --decorate --pretty=format:'%C(yellow)%h%C(reset) %C(bold blue)%an%C(reset) %C(green)%cr%C(reset) %C(red)%d%C(reset) %s'
     push-f       = push --force-with-lease                   # Force push if your commit is latest
     reset-patch  = restore -p -s HEAD                        # Reset changes (patch version)
     staged       = diff --staged                             # Show staged changes
@@ -43,7 +210,7 @@ Some sane commands
 ```
 
 Alias for stashing only untracked files
-``` tangle:~/.gitconfig
+``` tangle:~/.config/git/config
     stash-untracked = "!f() {       \
         git stash -q;               \
         git stash -uq;              \
@@ -56,7 +223,7 @@ Alias for stashing only untracked files
 #### Shortcuts
 
 Even shorter aliases for often used commands
-``` tangle:~/.gitconfig
+``` tangle:~/.config/git/config
     a           = add                                       # Add changes
     aa          = add -A                                    # Add all changes
     ap          = add -p                                    # Add changes in patches
@@ -73,8 +240,8 @@ Even shorter aliases for often used commands
     dw          = diff --word-diff                          # Show unstaged changes (by word)
     ds          = diff --staged                             # Show staged changes
     dsw         = diff --staged --word-diff                 # Show staged changes (by word)
-    l           = log --oneline --graph --decorate          # Changelog
-    ll          = log --oneline --graph --decorate --all    # Changelog (all changes)
+    l           = log --graph                               # Changelog
+    ll          = log --graph --all                         # Changelog (all changes)
     ms          = maintenance start                         # Cron job that cleans repo (makes git faster)
     p           = pull                                      # Pull your changes to remote
     s           = status -sb                                # Show status (minified)
@@ -86,21 +253,31 @@ Even shorter aliases for often used commands
     u           = remote update origin --prune              # Update remote info
 ```
 
-### Other sane defaults
-
-``` tangle:~/.gitconfig
-[rerere]
-    enabled = true
-[column]
-    ui = auto
-[branch]
-    sort = -committerdate
-```
-
 ## Ignore
 Set files to ignore by default.
 
 ``` tangle:~/.config/git/ignore
 .session.vim
+.tmp.*
+.factorypath
+```
+
+## Template
+
+Commit template
+``` tangle:~/.config/git/template
+
+# Semantic commit messages
+#   <type>(<scope>): <subject>
+#   <summary in present tense>
+#
+# Types:
+# - `feat`: new feature for the user, not a new feature for build script
+# - `fix`: bug fix for the user, not a fix to a build script
+# - `docs`: changes to the documentation
+# - `style`: formatting, missing semi colons, etc; no production code change
+# - `refactor`: refactoring production code, eg. renaming a variable
+# - `test`: adding missing tests, refactoring tests; no production code change
+# - `chore`: updating grunt tasks etc; no production code change
 ```
 
