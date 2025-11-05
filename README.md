@@ -33,7 +33,7 @@ python3 -m pip install md-tangle
 ```
 > Next time you only need to run `source .venv/bin/activate`
 
-Now you can tangle the file want by e.g.:
+Now you can [tangle][1] the file want by e.g.:
 ```bash
 md-tangle configurations/bin.md
 ```
