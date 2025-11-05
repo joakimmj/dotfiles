@@ -50,7 +50,18 @@ return {
 			--     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
 			--   },
 			-- },
-			-- pickers = {}
+			pickers = {
+				buffers = {
+					mappings = {
+						i = {
+							['<C-b>'] = require('telescope.actions').delete_buffer,
+						},
+						n = {
+							['<C-b>'] = require('telescope.actions').delete_buffer,
+						},
+					},
+				},
+			},
 			extensions = {
 				["ui-select"] = {
 					require("telescope.themes").get_dropdown(),
