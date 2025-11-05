@@ -40,7 +40,12 @@ Yank to/paste from system clipboard
 ```lua tangle:~/.config/nvim/lua/my/mappings.lua
 vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]], { desc = "[y]ank to system clipboard" })
 vim.keymap.set("n", "<leader>Y", [["+Y]], { desc = "[Y]ank rest of line to system clipboard" })
-vim.keymap.set("n", "<leader>p", [["+p]], { desc = "[p]aste from system clipboard" })
+vim.keymap.set({ "n", "v" }, "<leader>p", [["+p]], { desc = "[p]aste from system clipboard" })
+```
+
+Paste from yank register (`"0`)
+```lua tangle:~/.config/nvim/lua/my/mappings.lua
+vim.keymap.set({"n", v"}, "<C-p>", "\"0p", { desc = "paste from yank register" })
 ```
 
 Replace all of word under cursor
