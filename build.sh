@@ -11,3 +11,5 @@ md-tangle configurations/nvim.md -f -d dist/nvim/
 md-tangle configurations/tmux.md -f -d dist/tmux/
 md-tangle configurations/wezterm.md -f -d dist/
 md-tangle configurations/xmodmap.md -f -d dist/
+md-tangle configurations/yazi.md -f -d dist/yazi/
+

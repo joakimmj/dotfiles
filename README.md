@@ -21,6 +21,7 @@ tangled with the CLI tool [md-tangle][1].
 * [tmux](configurations/tmux.md)
 * [WexTerm](configurations/wezterm.md)
 * [Xmodmap](configurations/xmodmap.md)
+* [Yazi](configurations/yazi.md)
 
 ### Tangle
 
