@@ -36,11 +36,26 @@ Remove highlight from search
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 ```
 
-Move line up/down (visual mode)
+Move line up/down
 > `~/.config/nvim/lua/my/mappings.lua`, `~/.config/nvim-lite/lua/my/mappings.lua`
 ```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
-vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "move line up" })
-vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "move line down" })
+vim.keymap.set("n", "<A-k>", ":m .-2<CR>==", { desc = "move line up" })
+vim.keymap.set("n", "<A-j>", ":m .+1<CR>==", { desc = "move line down" })
+vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv", { desc = "move selection up" })
+vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv", { desc = "move selection down" })
+```
+
+Better indenting in visual mode
+> `~/.config/nvim/lua/my/mappings.lua`, `~/.config/nvim-lite/lua/my/mappings.lua`
+```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
+vim.keymap.set("v", "<", "<gv", { desc = "Indent left and reselect" })
+vim.keymap.set("v", ">", ">gv", { desc = "Indent right and reselect" })
+```
+
+Better J behavior
+> `~/.config/nvim/lua/my/mappings.lua`, `~/.config/nvim-lite/lua/my/mappings.lua`
+```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
+vim.keymap.set("n", "J", "mzJ`z", { desc = "Join lines and keep cursor position" })
 ```
 
 Center cursor on up/down
@@ -48,6 +63,13 @@ Center cursor on up/down
 ```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "move cursor up" })
 vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "move cursor down" })
+```
+
+Center cursor on next/previous search result
+> `~/.config/nvim/lua/my/mappings.lua`, `~/.config/nvim-lite/lua/my/mappings.lua`
+```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
+vim.keymap.set("n", "n", "nzzzv", { desc = "next search result (centered)" })
+vim.keymap.set("n", "N", "Nzzzv", { desc = "previous search result (centered)" })
 ```
 
 Yank to/paste from system clipboard
