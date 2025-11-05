@@ -66,6 +66,11 @@ Remove confirmation before killing pane (default: `confirm-before -p "kill-pane 
 bind-key -T prefix x kill-pane
 ```
 
+Show keybindings in popup (default: `list-keys -N`).
+``` tangle:~/.tmux.conf
+bind-key -T prefix ? display-popup -E "tmux list-keys -N | less"
+```
+
 #### My bindings
 
 Prefixed with `C-q`
