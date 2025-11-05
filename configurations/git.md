@@ -35,6 +35,7 @@ Some sane commands
     last-3       = log -3 HEAD                               # Show last three commits
     log-blame    = log --oneline --graph --decorate --pretty=format:'%C(yellow)%h%C(reset) %C(bold blue)%an%C(reset) %C(green)%cr%C(reset) %C(red)%d%C(reset) %s'
     push-f       = push --force-with-lease                   # Force push if your commit is latest
+    reset-patch  = restore -p -s HEAD                        # Reset changes (patch version)
     staged       = diff --staged                             # Show staged changes
     unstage      = reset HEAD --                             # Unstage changes
     unstage-last = reset HEAD~                               # Unstage changes from last commit (used to undo/split commit)
