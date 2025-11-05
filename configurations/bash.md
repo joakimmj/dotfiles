@@ -150,6 +150,7 @@ alias lr='ls -AFlR --color=auto'
 alias bcalc='bc -l -q'
 alias bashrc='nano ~/.bashrc'
 alias which='type -all'
+alias cats="fzf --preview 'fzf-preview {}'"
 ```
 
 Set aliases for git
@@ -193,7 +194,7 @@ alias docker-clean-containers='docker rm $(docker ps -aqf status=exited)'
 Add keybindings to downloaded programs.
 
 ```bash tangle:~/.bash_aliases
-alias gl="git log --oneline --pretty=format:'%h | %<(70,trunc)%s | %cd | %an' --date=format:'%d.%m.%y %H:%M' | fzf --multi --preview 'git show {+1}' | awk '{print \$1}' | xargs git show"
+alias gl="git log --oneline --pretty=format:'%h | %<(70,trunc)%s | %cd | %an' --date=format:'%d.%m.%y %H:%M' | fzf --multi --preview 'git show {+1} | fzf-preview' | awk '{print \$1}' | xargs git show"
 alias manual="man -k . | fzf --preview 'man {+1}' | awk '{print \$1}' | xargs man"
 alias kill-intellij="ps -ux | grep '[i]ntellij' | awk '{print \$2}' | xargs --verbose -r kill -9"
 alias tldrfzf="tldr --list | awk '{print \$1}' | fzf --preview 'tldr {+1}' | xargs tldr"
@@ -201,7 +202,7 @@ alias kill-process="ps -ux --no-headers | fzf --multi | awk '{print \$2}' | xarg
 ```
 Add alias for seraching files to open witj `nvim`
 ```bash tangle:~/.bash_aliases
-alias nvimf="rg --hidden --files --ignore --glob '!.git' | fzf --preview 'cat {+1}' | xargs nvim"
+alias nvimf="rg --hidden --files --ignore --glob '!.git' | fzf --preview 'fzf-preview {}' | xargs nvim"
 ```
 
 Add alias for opening `nvim` with last session

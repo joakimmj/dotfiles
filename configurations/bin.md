@@ -58,3 +58,16 @@ try {
     console.warn(`Invalid JWT token [token='${token}']`);
 }
 ```
+
+## `fzf` previewer
+
+```bash tangle:~/bin/fzf-preview
+#!/usr/bin/env bash
+
+if type bat >/dev/null; then
+    bat "$@"
+else
+    cat "$@"
+fi
+```
+
