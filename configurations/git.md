@@ -202,6 +202,7 @@ Some sane commands
     last         = log -1 HEAD                               # Show last commit
     last-3       = log -3 HEAD                               # Show last three commits
     push-f       = push --force-with-lease                   # Force push if your commit is latest
+    remote-diff  = diff @{upstream}                          # Show diff between local and remote
     reset-patch  = restore -p -s HEAD                        # Reset changes (patch version)
     staged       = diff --staged                             # Show staged changes
     unstage      = reset HEAD --                             # Unstage changes
@@ -244,6 +245,7 @@ Even shorter aliases for often used commands
     ll          = log --graph --all                         # Changelog (all changes)
     ms          = maintenance start                         # Cron job that cleans repo (makes git faster)
     p           = pull                                      # Pull your changes to remote
+    rd          = diff @{upstream}                          # Show diff between local and remote
     s           = status -sb                                # Show status (minified)
     ss          = status --show-stash                       # Show status
     st          = stash                                     # Stash changes
