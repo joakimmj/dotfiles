@@ -26,4 +26,34 @@ alias manual="man -k . | fzf --preview 'man {+1}' | awk '{print \$1}' | xargs ma
 alias kill-intellij="ps -ux | grep '[i]ntellij' | awk '{print \$2}' | xargs --verbose -r kill -9"
 alias tldrfzf="tldr --list | sed 's/,/\\n/g' | fzf --preview 'tldr {+1}' | xargs tldr -t ocean"
 alias nvimm='nvim -S .session.vim'
+current-dir() {
+    local current_dir
+    current_dir=${PWD##*/}        # to assign to a variable
+    current_dir=${current_dir:-/} # to correct for the case where PWD is / (root)
+    echo "${current_dir}"
+}
+
+jstart() {
+    echo "mvn -U clean package -Dmaven.test.skip"
+    mvn -U clean package -Dmaven.test.skip
+    local current_dir=$(current-dir)
+    echo "java -jar -Dspring.profiles.active=local target/${current_dir}.jar"
+    java -jar -Dspring.profiles.active=local target/${current_dir}.jar
+}
+
+jtest() {
+    local args
+    if [ "$#" -eq 1 ]; then
+        args="-Dtest=$1"
+    elif [ "$#" -eq 2 ]; then
+        args="-Dtest=$1#$2"
+    fi
+    echo "mvn -U clean test ${args}"
+    mvn -U clean test ${args}
+}
+
+jitest() {
+    echo "mvn -U clean verify -Pintegration-test"
+    mvn -U clean verify -Pintegration-test
+}
 alias projects='cd ~/projects'

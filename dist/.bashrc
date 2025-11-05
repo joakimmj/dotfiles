@@ -31,7 +31,7 @@ fi
 green="\[\033[01;32m\]"
 reset="\[\033[00m\]"
 
-PS1="${tags:+$green(${tags[*]})$reset }[\A\$(__git_ps1) \u:\W]\$ "
+PS1="${tags:+$green(${tags[*]})$reset }[\A$green\$(__git_ps1)$reset \u:\W]\$ "
 set -o vi
 bind -m vi-command 'Control-l: clear-screen'
 bind -m vi-insert 'Control-l: clear-screen'
