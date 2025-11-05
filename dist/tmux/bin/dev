@@ -12,9 +12,11 @@ selected_dir=$(basename "$path" | tr . _)
 if ! tmux has-session -t dev 2> /dev/null; then
     tmux new-session -d -x - -y - -s dev -n home -c ~/
 fi
-if ! tmux select-window -t=$selected_dir 2> /dev/null; then
+if ! tmux has-session -t dev:home 2> /dev/null; then
+    tmux new-window -d -t dev -n home -c ~/
+fi
+if ! tmux has-session -t dev:$selected_dir 2> /dev/null; then
     tmux new-window -t dev -n $selected_dir -c $path
-    tmux split-window -c $path -t 0 -l 20% -v
 fi
 if [[ -z $TMUX ]]; then
     tmux attach-session -d -t dev

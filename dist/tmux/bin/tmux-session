@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+set -e
+
+restore_session() {
+  tmux start-server
+
+  while IFS=$' ' read session_name window_name dir; do
+    echo "$session_name $window_name $dir"
+    if [[ -d "$dir" ]]; then
+      if ! tmux has-session -t "$session_name" 2>/dev/null; then
+        tmux new-session -d -x - -y - -s "$session_name" -n "$window_name" -c "$dir"
+      fi
+      if ! tmux has-session -t "$session_name:$window_name" 2>/dev/null; then
+        tmux new-window -d -t "$sessione_name" -n "$window_name" -c "$dir"
+      fi
+    fi
+  done < ~/.tmux-session
+
+  if [[ -z $TMUX ]]; then
+    tmux attach
+  fi
+}
+
+case "$1" in
+save)
+  echo "-- Saving:"
+  tmux list-windows -a -F "#S #W #{pane_current_path}" > ~/.tmux-session
+  cat ~/.tmux-session
+  exit 0
+  ;;
+restore)
+  echo "-- Restoring"
+  restore_session
+  exit 0
+  ;;
+*)
+  echo "Valid commands: save, restore"
+  exit 1
+  ;;
+esac
