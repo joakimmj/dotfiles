@@ -17,6 +17,7 @@ tangled with the CLI tool [md-tangle][1].
 * [ideavimrc](configurations/ideavimrc.md)
 * [git](configurations/git.md)
 * [nano](configurations/nano.md)
+* [nvim](configurations/nvim.md)
 * [tmux](configurations/tmux.md)
 * [Xmodmap](configurations/xmodmap.md)
 
