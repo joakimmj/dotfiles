@@ -4,6 +4,7 @@
 source ~/.git-completion.bash
 source ~/.git-prompt.sh
 export PATH="$PATH:~/bin/:~/.local/bin/"
+export FZF_DEFAULT_OPTS='--bind ctrl-u:preview-half-page-up,ctrl-d:preview-half-page-down'
 if [ -f /etc/bashrc ]; then
   . /etc/bashrc
 fi

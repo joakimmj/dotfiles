@@ -22,6 +22,11 @@ Add `~/bin/` to `$PATH`, and set `JDK_HOME`.
 export PATH="$PATH:~/bin/:~/.local/bin/"
 ```
 
+Bind `<ctrl-u>`/`<ctrl-d>` to up/down in preview of `fzf`.
+```bash tangle:~/.bashrc
+export FZF_DEFAULT_OPTS='--bind ctrl-u:preview-half-page-up,ctrl-d:preview-half-page-down'
+```
+
 ## Source global definitions
 ```bash tangle:~/.bashrc
 if [ -f /etc/bashrc ]; then
