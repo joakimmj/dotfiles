@@ -1,21 +1,19 @@
 #!/usr/bin/env bash
-
+dirs="~/dev ~/dev/private"
 if [[ $# -eq 1 ]]; then
-    selected=$1
+    path=$1
 else
-    selected=$(find -L ~/dev ~/dev/private -mindepth 1 -maxdepth 1 -type d | fzf)
+    path=$(eval "find -L $dirs -mindepth 1 -maxdepth 1 -type d | fzf")
 fi
-if [[ -z $selected ]]; then
+if [[ -z $path ]]; then
     exit 0
 fi
-selected_name=$(basename "$selected" | tr . _)
-tmux_running=$(pgrep tmux)
-if [[ -z $TMUX ]] || [[ -z $tmux_running ]]; then
-    tmux new-session -As $selected_name -c $selected
-    exit 0
+selected_dir=$(basename "$path" | tr . _)
+if ! tmux has-session -t $selected_dir 2> /dev/null; then
+    tmux new-session -d -x - -y - -s $selected_dir -c $path
 fi
-if ! tmux has-session -t=$selected_name 2> /dev/null; then
-    tmux new-session -ds $selected_name -c $selected
+if [[ -z $TMUX ]]; then
+    tmux attach-session -d -t $selected_dir
+else
+    tmux switch-client -t $selected_dir
 fi
-
-tmux switch-client -t $selected_name
