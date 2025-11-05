@@ -161,6 +161,7 @@ let g:WhichKeyDesc_next_method = "]m next method"
 
 let g:WhichKeyDesc_yank_system = "<leader>y yank to system clipboard"
 let g:WhichKeyDesc_yank_line_system = "<leader>Y yank line to system clipboard"
+let g:WhichKeyDesc_paste_system = "<leader>p paste from system clipboard"
 
 let g:WhichKeyDesc_document = "<leader>d Document"
 let g:WhichKeyDesc_document_replace_word = "<leader>dr [d]ocument [r]eplace word"
@@ -237,11 +238,12 @@ vmap < <gv
 vmap > >gv
 ```
 
-Yank to system clipboard
+Yank to/paste from system clipboard
 ``` tangle:~/.ideavimrc
 nmap <leader>y "+y
 vmap <leader>y "+y
 nmap <leader>Y "+Y
+nmap <leader>p "+p
 ```
 
 Replace word under cursor (in document)
@@ -306,6 +308,8 @@ Adding a tiny cheatsheet on the bottom of the config.
 " <C-w> s        -> split window horizontal
 " <C-w> c        -> close current window
 " <C-w> o        -> close other window
+" <C-q>          -> visual block mode
+" <Shift-v>      -> visual line mode
 " gt             -> next tab
 " gT             -> previous tab
 " *              -> next occurrence of word under cursor
