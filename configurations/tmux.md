@@ -144,6 +144,7 @@ bind-key -T my-keys -N "Popup terminal" t display-popup -E
 bind-key -T my-keys -N "Popup search and create session" s display-popup -E "tmuxs"
 bind-key -T my-keys -N "Popup search and create window" w display-popup -E "dev"
 bind-key -T my-keys -N "Jump to directory" j send-keys "cd $(find -L ~/dev ~/projects ~/.config -mindepth 1 -maxdepth 1 -type d | fzf)" Enter
+bind-key -T my-keys -N "Search up" / copy-mode \; send-key "?"
 ```
 
 ##### Cheatsheet
