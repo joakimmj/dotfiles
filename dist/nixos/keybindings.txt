@@ -1,0 +1,48 @@
+===[ KEYBINDIGS  ]==============================================================
+
+#--[ ($super+a) APPLICATION  ]-------------------------------------------------#
+
+Terminal - t
+Web-browser - w (current workspace: Shift+w)
+Web-browser Incognito - $ctrl+w
+Editor - $super+e (current workspace: Shift+e)
+--IDE - $super+i
+--Graphic - $super+g (current workspace: Shift+$super+g)
+--Spotify - $super+s (current workspace: Shift+$super+s)
+--File-browser - $super+f
+Dmenu - Space
+
+#--[ SYSTEM  ]-----------------------------------------------------------------#
+
+Volume - $super+v
+System menu - $super+x
+List windows - $super+Tab
+Printscreen - $print
+Monitor manager - $super+$f8
+Task Manager - Ctrl+Alt+Delete
+Reload the configuration file - $super+Shift+c
+Restart i3 inplace - $super+Shift+r
+
+#--[ Desktop orientation  ]----------------------------------------------------#
+
+Change focus - $super+[arrows]
+Kill focused window - $super+q, $alt+F4
+Fullscreen mode - $super+F11
+Switch to workspace - $super+[0-9]
+Switch to next workspace - $super+$ctrl+Right
+Switch to prev workspace - $super+$ctrl+Left
+
+#--[ Modes  ]-----------------------------------------------------------------#
+
+Exit mode - Escape, Return
+Enter mode
+    System - $super + x
+    Resize - $super + r
+    Layout - $super + l
+    Orientation - $super + o
+    Move - $super + m
+    IDE's - $super + i
+
+================================================================================
+q = quit
+
