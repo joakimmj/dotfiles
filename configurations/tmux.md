@@ -25,6 +25,11 @@ Attach to next session if one session is closed
 set -g detach-on-destroy off
 ```
 
+Use `vi` mode
+``` tangle:~/.tmux.conf
+set -g mode-keys vi
+```
+
 ### Status line
 
 Add underscore to active window
