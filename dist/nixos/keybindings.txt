@@ -1,6 +1,17 @@
 ===[ KEYBINDIGS  ]==============================================================
 
-#--[ ($super+a) APPLICATION  ]-------------------------------------------------#
+# programs
+<modifier>+t         : Terminal                     (workspace: current)
+<modifier>+w         : Web browser                  (workspace: '1:www')
+<modifier>+<shift>+w : Web browser                  (workspace: current)
+<modifier>+<ctrl>+w  : Private web browser          (workspace: current)
+
+# system
+<modifier>+<shift>+c : Reload Sway
+<modifier>+<shift>+q : Kill focused window
+<alt>+<F4>           : Kill focused window
+
+#--[ (<modifier>+a) APPLICATION  ]---------------------------------------------#
 
 Terminal - t
 Web-browser - w (current workspace: Shift+w)
@@ -32,7 +43,7 @@ Switch to workspace - $super+[0-9]
 Switch to next workspace - $super+$ctrl+Right
 Switch to prev workspace - $super+$ctrl+Left
 
-#--[ Modes  ]-----------------------------------------------------------------#
+#--[ Modes  ]------------------------------------------------------------------#
 
 Exit mode - Escape, Return
 Enter mode
