@@ -157,6 +157,7 @@ Set aliases for git
 alias gs='git status -sb'
 alias gd='git diff'
 alias gds='git diff --staged'
+alias git-prune-local-branches="git branch -vv | grep 'gone]' | awk '{print $1}' | xargs git branch -D"
 ```
 
 Create directory with parent directories and verbose output

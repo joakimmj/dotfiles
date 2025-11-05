@@ -11,6 +11,7 @@ alias which='type -all'
 alias gs='git status -sb'
 alias gd='git diff'
 alias gds='git diff --staged'
+alias git-prune-local-branches="git branch -vv | grep 'gone]' | awk '{print $1}' | xargs git branch -D"
 alias mkdir='mkdir -pv'
 alias s-env='printenv | fzf'
 alias s-path="echo $PATH | sed 's/:/\\n/g' | fzf"
