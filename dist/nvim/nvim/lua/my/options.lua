@@ -37,15 +37,3 @@ vim.opt.incsearch = true
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 vim.opt.foldlevelstart = 99
-vim.cmd "highlight StatusGeneral guibg=#374641 guifg=#A6E3A1"
-vim.cmd "highlight StatusFlags guibg=#A6E3A1 guifg=#2E3434"
-vim.cmd "highlight StatusBlank guibg=none guifg=#A6E3A1"
-
-vim.o.statusline = "%#StatusGeneral#"
-	.. " %F "
-	.. "%#StatusFlags#"
-	.. " [%{strlen(&fenc)?&fenc:&enc}] [%{&ff}] %y [%{&spelllang}] [0x%04B] %m "
-	.. "%#StatusBlank#"
-	.. "%="
-	.. "%#StatusGeneral#"
-	.. " [%n] %l/%L (%p%%), %c "

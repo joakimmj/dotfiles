@@ -1,55 +1,72 @@
 # Nvim
 
-## Init (`~/.config/nvim/init.lua`)
+## Init
 
 Import my configurations
+> `~/.config/nvim/init.lua`
 ```lua tangle:~/.config/nvim/init.lua
 require("my.mappings")
 require("my.options")
-require("my.netrw")
 require("my.autocmd")
 require("my.init-lazy")
 ```
 
-## Keymaps (`~/.config/nvim/lua/my/mappings.lua`)
+Configuration for my non-plugin setup
+> `~/.config/nvim-lite/init.lua`
+```lua tangle:~/.config/nvim-lite/init.lua
+require("my.theme")
+require("my.mappings")
+require("my.options")
+require("my.netrw")
+require("my.autocmd")
+```
+
+## Keymaps
 
 Change `<leader>` to `Space`
-```lua tangle:~/.config/nvim/lua/my/mappings.lua
+> `~/.config/nvim/lua/my/mappings.lua`, `~/.config/nvim-lite/lua/my/mappings.lua`
+```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 ```
 
 Remove highlight from search
-```lua tangle:~/.config/nvim/lua/my/mappings.lua
+> `~/.config/nvim/lua/my/mappings.lua`, `~/.config/nvim-lite/lua/my/mappings.lua`
+```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 ```
 
 Move line up/down (visual mode)
-```lua tangle:~/.config/nvim/lua/my/mappings.lua
+> `~/.config/nvim/lua/my/mappings.lua`, `~/.config/nvim-lite/lua/my/mappings.lua`
+```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "move line up" })
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "move line down" })
 ```
 
 Center cursor on up/down
-```lua tangle:~/.config/nvim/lua/my/mappings.lua
+> `~/.config/nvim/lua/my/mappings.lua`, `~/.config/nvim-lite/lua/my/mappings.lua`
+```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "move cursor up" })
 vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "move cursor down" })
 ```
 
 Yank to/paste from system clipboard
-```lua tangle:~/.config/nvim/lua/my/mappings.lua
+> `~/.config/nvim/lua/my/mappings.lua`, `~/.config/nvim-lite/lua/my/mappings.lua`
+```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
 vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]], { desc = "[y]ank to system clipboard" })
 vim.keymap.set("n", "<leader>Y", [["+Y]], { desc = "[Y]ank rest of line to system clipboard" })
 vim.keymap.set({ "n", "v" }, "<leader>p", [["+p]], { desc = "[p]aste from system clipboard" })
 ```
 
 Paste from yank register (`"0`)
-```lua tangle:~/.config/nvim/lua/my/mappings.lua
-vim.keymap.set({"n", v"}, "<C-p>", "\"0p", { desc = "paste from yank register" })
+> `~/.config/nvim/lua/my/mappings.lua`, `~/.config/nvim-lite/lua/my/mappings.lua`
+```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
+vim.keymap.set({"n", "v"}, "<C-p>", "\"0p", { desc = "paste from yank register" })
 ```
 
 Replace all of word under cursor
-```lua tangle:~/.config/nvim/lua/my/mappings.lua
+> `~/.config/nvim/lua/my/mappings.lua`, `~/.config/nvim-lite/lua/my/mappings.lua`
+```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
 vim.keymap.set(
 	"n",
 	"<leader>dr",
@@ -59,24 +76,28 @@ vim.keymap.set(
 ```
 
 Diagnostic keymaps
-```lua tangle:~/.config/nvim/lua/my/mappings.lua
+> `~/.config/nvim/lua/my/mappings.lua`, `~/.config/nvim-lite/lua/my/mappings.lua`
+```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
 vim.keymap.set("n", "<leader>dd", vim.diagnostic.setloclist, { desc = "[d]iagnostic (location list)" })
 vim.keymap.set("n", "<leader>wd", vim.diagnostic.setqflist, { desc = "[d]iagnostic (quickfix list)" })
 ```
 
 Go between quickfix list entries
-```lua tangle:~/.config/nvim/lua/my/mappings.lua
+> `~/.config/nvim/lua/my/mappings.lua`, `~/.config/nvim-lite/lua/my/mappings.lua`
+```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
 vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz", { desc = "go to next quickfix list entry" })
 vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz", { desc = "go to previous quickfix list entry" })
 ```
 
 Toggle folds
-```lua tangle:~/.config/nvim/lua/my/mappings.lua
+> `~/.config/nvim/lua/my/mappings.lua`, `~/.config/nvim-lite/lua/my/mappings.lua`
+```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
 vim.keymap.set("n", "<tab>", "za", { desc = "toggle folds under cursor" })
 ```
 
 Disable arrow keys in normal mode
-```lua tangle:~/.config/nvim/lua/my/mappings.lua
+> `~/.config/nvim/lua/my/mappings.lua`, `~/.config/nvim-lite/lua/my/mappings.lua`
+```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
 vim.keymap.set("n", "<left>", "<Nop>")
 vim.keymap.set("n", "<right>", "<Nop>")
 vim.keymap.set("n", "<up>", "<Nop>")
@@ -84,25 +105,29 @@ vim.keymap.set("n", "<down>", "<Nop>")
 ```
 
 Save/restore vim sessions
-```lua tangle:~/.config/nvim/lua/my/mappings.lua
+> `~/.config/nvim/lua/my/mappings.lua`, `~/.config/nvim-lite/lua/my/mappings.lua`
+```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
 vim.keymap.set("n", "<leader>SS", function() vim.cmd([[mksession! .session.vim]]) end, { desc = "[S]ave" })
 vim.keymap.set("n", "<leader>SR", function() vim.cmd([[source .session.vim]]) end, { desc = "[R]estore" })
 ```
 
-## Options (`~/.config/nvim/lua/my/options.lua`)
+## Options
 
 Enable line number
-```lua tangle:~/.config/nvim/lua/my/options.lua
+> `~/.config/nvim/lua/my/options.lua`, `~/.config/nvim-lite/lua/my/options.lua`
+```lua tangle:~/.config/nvim/lua/my/options.lua,~/.config/nvim-lite/lua/my/options.lua
 vim.opt.number = true
 ```
 
 Enable relative line numbers
-```lua tangle:~/.config/nvim/lua/my/options.lua
+> `~/.config/nvim/lua/my/options.lua`, `~/.config/nvim-lite/lua/my/options.lua`
+```lua tangle:~/.config/nvim/lua/my/options.lua,~/.config/nvim-lite/lua/my/options.lua
 vim.opt.relativenumber = true
 ```
 
 Change tab spacing to four spaces
-```lua tangle:~/.config/nvim/lua/my/options.lua
+> `~/.config/nvim/lua/my/options.lua`, `~/.config/nvim-lite/lua/my/options.lua`
+```lua tangle:~/.config/nvim/lua/my/options.lua,~/.config/nvim-lite/lua/my/options.lua
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
@@ -110,7 +135,8 @@ vim.opt.expandtab = true
 ```
 
 Sane defaults
-```lua tangle:~/.config/nvim/lua/my/options.lua
+> `~/.config/nvim/lua/my/options.lua`, `~/.config/nvim-lite/lua/my/options.lua`
+```lua tangle:~/.config/nvim/lua/my/options.lua,~/.config/nvim-lite/lua/my/options.lua
 vim.opt.smartindent = true
 
 vim.opt.wrap = false
@@ -131,45 +157,53 @@ vim.opt.isfname:append("@-@")
 ```
 
 Decrease update time
-```lua tangle:~/.config/nvim/lua/my/options.lua
+> `~/.config/nvim/lua/my/options.lua`, `~/.config/nvim-lite/lua/my/options.lua`
+```lua tangle:~/.config/nvim/lua/my/options.lua,~/.config/nvim-lite/lua/my/options.lua
 vim.opt.updatetime = 50
 ```
 
 Decrease mapped sequence wait time (displays which-key popup sooner)
-```lua tangle:~/.config/nvim/lua/my/options.lua
+> `~/.config/nvim/lua/my/options.lua`, `~/.config/nvim-lite/lua/my/options.lua`
+```lua tangle:~/.config/nvim/lua/my/options.lua,~/.config/nvim-lite/lua/my/options.lua
 vim.opt.timeoutlen = 300
 ```
 
 Configure how new splits should be opened
-```lua tangle:~/.config/nvim/lua/my/options.lua
+> `~/.config/nvim/lua/my/options.lua`, `~/.config/nvim-lite/lua/my/options.lua`
+```lua tangle:~/.config/nvim/lua/my/options.lua,~/.config/nvim-lite/lua/my/options.lua
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 ```
 
 Sets how neovim will display certain whitespace characters in the editor.
 (See `:help 'list'` and `:help 'listchars'`)
-```lua tangle:~/.config/nvim/lua/my/options.lua
+> `~/.config/nvim/lua/my/options.lua`, `~/.config/nvim-lite/lua/my/options.lua`
+```lua tangle:~/.config/nvim/lua/my/options.lua,~/.config/nvim-lite/lua/my/options.lua
 vim.opt.list = true
 vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 ```
 
 Preview substitutions live, as you type!
-```lua tangle:~/.config/nvim/lua/my/options.lua
+> `~/.config/nvim/lua/my/options.lua`, `~/.config/nvim-lite/lua/my/options.lua`
+```lua tangle:~/.config/nvim/lua/my/options.lua,~/.config/nvim-lite/lua/my/options.lua
 vim.opt.inccommand = "split"
 ```
 
 Show which line your cursor is on
-```lua tangle:~/.config/nvim/lua/my/options.lua
+> `~/.config/nvim/lua/my/options.lua`, `~/.config/nvim-lite/lua/my/options.lua`
+```lua tangle:~/.config/nvim/lua/my/options.lua,~/.config/nvim-lite/lua/my/options.lua
 vim.opt.cursorline = true
 ```
 
 Breakindent
-```lua tangle:~/.config/nvim/lua/my/options.lua
+> `~/.config/nvim/lua/my/options.lua`, `~/.config/nvim-lite/lua/my/options.lua`
+```lua tangle:~/.config/nvim/lua/my/options.lua,~/.config/nvim-lite/lua/my/options.lua
 vim.opt.breakindent = true
 ```
 
 Case-insensitive searching UNLESS \C or one or more capital letters in the search term
-```lua tangle:~/.config/nvim/lua/my/options.lua
+> `~/.config/nvim/lua/my/options.lua`, `~/.config/nvim-lite/lua/my/options.lua`
+```lua tangle:~/.config/nvim/lua/my/options.lua,~/.config/nvim-lite/lua/my/options.lua
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.hlsearch = true
@@ -177,45 +211,39 @@ vim.opt.incsearch = true
 ```
 
 Automatic folding based on treesitter
+> `~/.config/nvim/lua/my/options.lua`
 ```lua tangle:~/.config/nvim/lua/my/options.lua
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 ```
 
+Folding based on indent
+> `~/.config/nvim-lite/lua/my/options.lua`
+```lua tangle:~/.config/nvim-lite/lua/my/options.lua
+vim.opt.foldmethod = "indent"
+```
+
 Disable default folding when opening file
-```lua tangle:~/.config/nvim/lua/my/options.lua
+> `~/.config/nvim/lua/my/options.lua`, `~/.config/nvim-lite/lua/my/options.lua`
+```lua tangle:~/.config/nvim/lua/my/options.lua,~/.config/nvim-lite/lua/my/options.lua
 vim.opt.foldlevelstart = 99
 ```
 
-Configure statusline
-```lua tangle:~/.config/nvim/lua/my/options.lua
-vim.cmd "highlight StatusGeneral guibg=#374641 guifg=#A6E3A1"
-vim.cmd "highlight StatusFlags guibg=#A6E3A1 guifg=#2E3434"
-vim.cmd "highlight StatusBlank guibg=none guifg=#A6E3A1"
+## Netrw
 
-vim.o.statusline = "%#StatusGeneral#"
-	.. " %F "
-	.. "%#StatusFlags#"
-	.. " [%{strlen(&fenc)?&fenc:&enc}] [%{&ff}] %y [%{&spelllang}] [0x%04B] %m "
-	.. "%#StatusBlank#"
-	.. "%="
-	.. "%#StatusGeneral#"
-	.. " [%n] %l/%L (%p%%), %c "
-```
-
-## Netrw (`~/.config/nvim/lua/my/netrw.lua`)
-
-```lua tangle:~/.config/nvim/lua/my/netrw.lua
+> `~/.config/nvim-lite/lua/my/netrw.lua`
+```lua tangle:~/.config/nvim-lite/lua/my/netrw.lua
 vim.g.netrw_bufsettings = "noma nomod nu nobl nowrap ro"
 vim.g.netrw_browse_split = 0
 vim.g.netrw_banner = 0
 vim.g.netrw_winsize = 25
 ```
 
-## Autocmd (`~/.config/nvim/lua/my/autocmd.lua`)
+## Autocmd
 
 Highlight when yanking (copying) text
-```lua tangle:~/.config/nvim/lua/my/autocmd.lua
+> `~/.config/nvim/lua/my/autocmd.lua`, `~/.config/nvim-lite/lua/my/autocmd.lua`
+```lua tangle:~/.config/nvim/lua/my/autocmd.lua,~/.config/nvim-lite/lua/my/autocmd.lua
 vim.api.nvim_create_autocmd("TextYankPost", {
 	desc = "Highlight when yanking (copying) text",
 	group = vim.api.nvim_create_augroup("augroup-highlight-yank", { clear = true }),
@@ -226,7 +254,8 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 ```
 
 Automatically save session when closing nvim
-```lua tangle:~/.config/nvim/lua/my/autocmd.lua
+> `~/.config/nvim/lua/my/autocmd.lua`, `~/.config/nvim-lite/lua/my/autocmd.lua`
+```lua tangle:~/.config/nvim/lua/my/autocmd.lua,~/.config/nvim-lite/lua/my/autocmd.lua
 vim.api.nvim_create_autocmd("VimLeave", {
 	desc = "Save session on exit",
 	group = vim.api.nvim_create_augroup("augroup-session-manage", { clear = true }),
@@ -237,7 +266,8 @@ vim.api.nvim_create_autocmd("VimLeave", {
 ```
 
 Reload files when changed on disk
-```lua tangle:~/.config/nvim/lua/my/autocmd.lua
+> `~/.config/nvim/lua/my/autocmd.lua`, `~/.config/nvim-lite/lua/my/autocmd.lua`
+```lua tangle:~/.config/nvim/lua/my/autocmd.lua,~/.config/nvim-lite/lua/my/autocmd.lua
 vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "CursorHoldI", "FocusGained" }, {
 	desc = "Check if file changed on disk",
 	group = vim.api.nvim_create_augroup("augroup-file-disk-status", { clear = true }),
@@ -246,9 +276,25 @@ vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "CursorHoldI", "FocusGai
 })
 ```
 
-## Lazy (`~/.config/nvim/lua/my/init-lazy.lua`)
+Add keymaps for executing `Lua` code (for `Lua` buffers only)
+> `~/.config/nvim/lua/my/autocmd.lua`, `~/.config/nvim-lite/lua/my/autocmd.lua`
+```lua tangle:~/.config/nvim/lua/my/autocmd.lua,~/.config/nvim-lite/lua/my/autocmd.lua
+vim.api.nvim_create_autocmd('FileType', {
+	desc = 'Lua specific options',
+	pattern = 'lua',
+	group = vim.api.nvim_create_augroup('augroup-lua-options', { clear = true }),
+	callback = function()
+		vim.keymap.set("n", "<leader>X", "<cmd>source %<CR>", { buffer = true, desc = "e[X]ecute lua file" })
+		vim.keymap.set("n", "<leader>x", ":.lua<CR>", { buffer = true, desc = "e[x]ecute lua line" })
+		vim.keymap.set("v", "<leader>x", ":lua<CR>", { buffer = true, desc = "e[x]ecute lua selection" })
+	end,
+})
+```
+
+## Lazy (plugins)
 
 Init `lazy.nvim`
+> `~/.config/nvim/lua/my/init-lazy.lua`
 ```lua tangle:~/.config/nvim/lua/my/init-lazy.lua
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -269,9 +315,10 @@ require("lazy").setup({
 })
 ```
 
-### general (`~/.config/nvim/lua/my/plugins/general.lua`)
+### general
 
 General plugins
+> `~/.config/nvim/lua/my/plugins/general.lua`
 ```lua tangle:~/.config/nvim/lua/my/plugins/general.lua
 return {
 ```
@@ -294,8 +341,9 @@ Highlight todo, notes, etc in comments
 }
 ```
 
-### autocompletion (`~/.config/nvim/lua/my/plugins/autocomplete.lua`)
+### autocompletion
 
+> `~/.config/nvim/lua/my/plugins/autocomplete.lua`
 ```lua tangle:~/.config/nvim/lua/my/plugins/autocomplete.lua
 return {
 	{
@@ -416,8 +464,9 @@ return {
 }
 ```
 
-### formatting (`~/.config/nvim/lua/my/plugins/formatting.lua`)
+### formatting
 
+> `~/.config/nvim/lua/my/plugins/formatting.lua`
 ```lua tangle:~/.config/nvim/lua/my/plugins/formatting.lua
 return {
 	{
@@ -483,9 +532,10 @@ return {
 }
 ```
 
-### gitsigns.nvim (`~/.config/nvim/lua/my/plugins/gitsigns.lua`)
+### gitsigns.nvim
 
 Adds git related signs to the gutter, as well as utilities for managing changes
+> `~/.config/nvim/lua/my/plugins/gitsigns.lua`
 ```lua tangle:~/.config/nvim/lua/my/plugins/gitsigns.lua
 return {
 	"lewis6991/gitsigns.nvim",
@@ -553,8 +603,9 @@ return {
 }
 ```
 
-### LSP (`~/.config/nvim/lua/my/plugins/lsp.lua`)
+### LSP
 
+> `~/.config/nvim/lua/my/plugins/lsp.lua`
 ```lua tangle:~/.config/nvim/lua/my/plugins/lsp.lua
 return {
 	{ "nvim-java/nvim-java" },
@@ -796,8 +847,9 @@ return {
 }
 ```
 
-### neo-tree.nvim (`~/.config/nvim/lua/my/plugins/neo-tree.lua`)
+### neo-tree.nvim
 
+> `~/.config/nvim/lua/my/plugins/neo-tree.lua`
 ```lua tangle:~/.config/nvim/lua/my/plugins/neo-tree.lua
 return {
 	"nvim-neo-tree/neo-tree.nvim",
@@ -839,9 +891,10 @@ return {
 }
 ```
 
-### telescope (`~/.config/nvim/lua/my/plugins/telescope.lua`)
+### telescope
 
 Fuzzy Finder (files, lsp, etc)
+> `~/.config/nvim/lua/my/plugins/telescope.lua`
 ```lua tangle:~/.config/nvim/lua/my/plugins/telescope.lua
 return {
 	"nvim-telescope/telescope.nvim",
@@ -972,38 +1025,10 @@ return {
 }
 ```
 
-### theme (`~/.config/nvim/lua/my/plugins/theme.lua`)
-
-> If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-
-```lua tangle:~/.config/nvim/lua/my/plugins/theme.lua
-return {
-	"folke/tokyonight.nvim",
-	priority = 1000, -- Make sure to load this before all the other start plugins.
-	init = function()
-		require("tokyonight").setup({
-			on_colors = function(colors)
-				colors.bg = "#2E3434"
-				colors.comment = "#577466"
-				colors.fg_gutter = "#577466"
-				colors.bg_statusline = "#A6E3A1"
-				colors.fg_sidebar = "#577466"
-				colors.bg_sidebar = "#2E3434"
-			end,
-		})
-		-- Set colorscheme
-		vim.cmd.colorscheme("tokyonight-night")
-
-		-- Configure highlights
-		vim.cmd.hi("Comment gui=none")
-		vim.cmd.hi("ColorColumn guibg=#374641")
-	end,
-}
-```
-
-### treesitter (`~/.config/nvim/lua/my/plugins/treesitter.lua`)
+### treesitter
 
 Highlight, edit, and navigate code
+> `~/.config/nvim/lua/my/plugins/treesitter.lua`
 ```lua tangle:~/.config/nvim/lua/my/plugins/treesitter.lua
 return {
 	{
@@ -1048,9 +1073,10 @@ return {
 }
 ```
 
-### which-key (`~/.config/nvim/lua/my/plugins/which-key.lua`)
+### which-key
 
 Useful plugin to show you pending keybinds.
+> `~/.config/nvim/lua/my/plugins/which-key.lua`
 ```lua tangle:~/.config/nvim/lua/my/plugins/which-key.lua
 return {
 	"folke/which-key.nvim",
@@ -1103,5 +1129,253 @@ return {
 		},
 	},
 }
+```
+
+## Theme
+
+If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
+
+> `~/.config/nvim/lua/my/plugins/theme.lua`
+```lua tangle:~/.config/nvim/lua/my/plugins/theme.lua
+return {
+	"folke/tokyonight.nvim",
+	priority = 1000, -- Make sure to load this before all the other start plugins.
+	init = function()
+		require("tokyonight").setup({
+			on_colors = function(colors)
+				colors.bg = "#2E3434"
+				colors.comment = "#577466"
+				colors.fg_gutter = "#577466"
+				colors.bg_statusline = "#374641"
+				colors.fg_sidebar = "#374641"
+				colors.bg_sidebar = "#2E3434"
+			end,
+		})
+		-- Set colorscheme
+		vim.cmd.colorscheme("tokyonight-night")
+
+		-- Configure highlights
+		vim.cmd.hi("ColorColumn guibg=#374641")
+
+		-- Configure statusline
+		vim.cmd.hi("StatusLine guibg=#A6E3A1 guifg=#374641")
+		vim.cmd.hi("StatusFlags guibg=#374641 guifg=#A6E3A1")
+		vim.o.statusline = " %F [%{strlen(&fenc)?&fenc:&enc}] [%{&ff}] %y [%{&spelllang}] [0x%04B] "
+			.. "%="
+			.. " [%n] %l/%L (%p%%), %c "
+			.. "%#StatusFlags#%{&mod?' [+] ':''}%*"
+	end,
+}
+```
+
+For the non-plugin version I use a theme strongly influenced by [tokyonight.nvim](https://github.com/folke/tokyonight.nvim).
+
+> `~/.config/nvim-lite/lua/my/theme.lua`
+```lua tangle:~/.config/nvim-lite/lua/my/theme.lua
+local colors = {
+    bg = "#2E3434",
+    bg_color_column = "#374641",
+    bg_dark = "#16161e",
+    bg_float = "#16161e",
+    bg_highlight = "#292e42",
+    bg_popup = "#16161e",
+    bg_search = "#3d59a1",
+    bg_sidebar = "#2E3434",
+    bg_statusline = "#374641",
+    bg_statusline_active = "#A6E3A1",
+    bg_visual = "#283457",
+    black = "#15161e",
+    blue = "#7aa2f7",
+    blue1 = "#2ac3de",
+    blue5 = "#89ddff",
+    blue7 = "#394b70",
+    border = "#15161e",
+    border_highlight = "#27a1b9",
+    comment = "#577466",
+    cyan = "#7dcfff",
+    dark3 = "#545c7e",
+    dark5 = "#737aa2",
+    diff = {
+        add = "#20303b",
+        change = "#1f2231",
+        delete = "#37222c",
+        text = "#394b70",
+    },
+    error = "#db4b4b",
+    fg = "#c0caf5",
+    fg_dark = "#a9b1d6",
+    fg_float = "#c0caf5",
+    fg_gutter = "#577466",
+    fg_sidebar = "#374641",
+    git = {
+        add = "#449dab",
+        change = "#6183bb",
+        delete = "#914c54",
+    },
+    green = "#9ece6a",
+    green1 = "#73daca",
+    hint = "#1abc9c",
+    info = "#0db9d7",
+    magenta = "#bb9af7",
+    magenta2 = "#ff007c",
+    orange = "#ff9e64",
+    red = "#f7768e",
+    terminal_black = "#414868",
+    warning = "#e0af68",
+    yellow = "#e0af68",
+}
+
+local function getHighlightGroup(c)
+    return {
+        Foo                         = { bg = c.magenta2, fg = c.fg },
+        Comment                     = { fg = c.comment, italic = true }, -- any comment
+        ColorColumn                 = { bg = c.bg_color_column },                    -- used for the columns set with 'colorcolumn'
+        Conceal                     = { fg = c.dark5 },                              -- placeholder characters substituted for concealed text (see 'conceallevel')
+        Cursor                      = { fg = c.bg, bg = c.fg },                      -- character under the cursor
+        lCursor                     = { fg = c.bg, bg = c.fg },                      -- the character under the cursor when |language-mapping| is used (see 'guicursor')
+        CursorIM                    = { fg = c.bg, bg = c.fg },                      -- like Cursor, but used when in IME mode |CursorIM|
+        CursorColumn                = { bg = c.bg_highlight },                       -- Screen-column at the cursor, when 'cursorcolumn' is set.
+        CursorLine                  = { bg = c.bg_highlight },                       -- Screen-line at the cursor, when 'cursorline' is set.  Low-priority if foreground (ctermfg OR guifg) is not set.
+        Directory                   = { fg = c.blue },                               -- directory names (and other special names in listings)
+        DiffAdd                     = { bg = c.diff.add },                           -- diff mode: Added line |diff.txt|
+        DiffChange                  = { bg = c.diff.change },                        -- diff mode: Changed line |diff.txt|
+        DiffDelete                  = { bg = c.diff.delete },                        -- diff mode: Deleted line |diff.txt|
+        DiffText                    = { bg = c.diff.text },                          -- diff mode: Changed text within a changed line |diff.txt|
+        EndOfBuffer                 = { fg = c.bg },                                 -- filler lines (~) after the end of the buffer.  By default, this is highlighted like |hl-NonText|.
+        ErrorMsg                    = { fg = c.error },                              -- error messages on the command line
+        VertSplit                   = { fg = c.border },                             -- the column separating vertically split windows
+        WinSeparator                = { fg = c.border, bold = true },                -- the column separating vertically split windows
+        Folded                      = { fg = c.blue, bg = c.fg_gutter },             -- line used for closed folds
+        FoldColumn                  = { bg = c.bg, fg = c.comment },                 -- 'foldcolumn'
+        SignColumn                  = { bg = c.bg, fg = c.fg_gutter },               -- column where |signs| are displayed
+        SignColumnSB                = { bg = c.bg_sidebar, fg = c.fg_gutter },       -- column where |signs| are displayed
+        Substitute                  = { bg = c.red, fg = c.black },                  -- |:substitute| replacement text highlighting
+        LineNr                      = { fg = c.fg_gutter },                          -- Line number for ":number" and ":#" commands, and when 'number' or 'relativenumber' option is set.
+        CursorLineNr                = { fg = c.orange, bold = true },                -- Like LineNr when 'cursorline' or 'relativenumber' is set for the cursor line.
+        LineNrAbove                 = { fg = c.fg_gutter },
+        LineNrBelow                 = { fg = c.fg_gutter },
+        MatchParen                  = { fg = c.orange, bold = true },           -- The character under the cursor or just before it, if it is a paired bracket, and its match. |pi_paren.txt|
+        ModeMsg                     = { fg = c.fg_dark, bold = true },          -- 'showmode' message (e.g., "-- INSERT -- ")
+        MsgArea                     = { fg = c.fg_dark },                       -- Area for messages and cmdline
+        MoreMsg                     = { fg = c.blue },                          -- |more-prompt|
+        NonText                     = { fg = c.dark3 },                         -- '@' at the end of the window, characters from 'showbreak' and other characters that do not really exist in the text (e.g., ">" displayed when a double-wide character doesn't fit at the end of the line). See also |hl-EndOfBuffer|.
+        Normal                      = { fg = c.fg, bg = c.bg },                 -- normal text
+        NormalNC                    = { fg = c.fg, bg = c.bg },
+        NormalSB                    = { fg = c.fg_sidebar, bg = c.bg_sidebar }, -- normal text in sidebar
+        NormalFloat                 = { fg = c.fg_float, bg = c.bg_float },     -- Normal text in floating windows.
+        FloatBorder                 = { fg = c.border_highlight, bg = c.bg_float },
+        FloatTitle                  = { fg = c.border_highlight, bg = c.bg_float },
+        Pmenu                       = { bg = c.bg_popup, fg = c.fg },                     -- Popup menu: normal item.
+        PmenuMatch                  = { bg = c.bg_popup, fg = c.blue1 },                  -- Popup menu: Matched text in normal item.
+        PmenuSel                    = { bg = c.fg_gutter },
+        PmenuMatchSel               = { bg = c.fg_gutter, fg = c.blue1 },                 -- Popup menu: Matched text in selected item.
+        PmenuSbar                   = { bg = c.bg_popup },                                -- Popup menu: scrollbar.
+        PmenuThumb                  = { bg = c.fg_gutter },                               -- Popup menu: Thumb of the scrollbar.
+        Question                    = { fg = c.blue },                                    -- |hit-enter| prompt and yes/no questions
+        QuickFixLine                = { bg = c.bg_visual, bold = true },                  -- Current |quickfix| item in the quickfix window. Combined with |hl-CursorLine| when the cursor is there.
+        Search                      = { bg = c.bg_search, fg = c.fg },                    -- Last search pattern highlighting (see 'hlsearch').  Also used for similar items that need to stand out.
+        IncSearch                   = { bg = c.orange, fg = c.black },                    -- 'incsearch' highlighting; also used for the text replaced with ":s///c"
+        CurSearch                   = "IncSearch",
+        SpecialKey                  = { fg = c.dark3 },                                   -- Unprintable characters: text displayed differently from what it really is.  But not 'listchars' whitespace. |hl-Whitespace|
+        SpellBad                    = { sp = c.error, undercurl = true },                 -- Word that is not recognized by the spellchecker. |spell| Combined with the highlighting used otherwise.
+        SpellCap                    = { sp = c.warning, undercurl = true },               -- Word that should start with a capital. |spell| Combined with the highlighting used otherwise.
+        SpellLocal                  = { sp = c.info, undercurl = true },                  -- Word that is recognized by the spellchecker as one that is used in another region. |spell| Combined with the highlighting used otherwise.
+        SpellRare                   = { sp = c.hint, undercurl = true },                  -- Word that is recognized by the spellchecker as one that is hardly ever used.  |spell| Combined with the highlighting used otherwise.
+        StatusLine                  = { fg = c.fg_sidebar, bg = c.bg_statusline_active }, -- status line of current window
+        StatusLineNC                = { fg = c.fg_gutter, bg = c.bg_statusline },         -- status lines of not-current windows Note: if this is equal to "StatusLine" Vim will use "^^^" in the status line of the current window.
+        TabLine                     = { bg = c.bg_statusline, fg = c.fg_gutter },         -- tab pages line, not active tab page label
+        TabLineFill                 = { bg = c.black },                                   -- tab pages line, where there are no labels
+        TabLineSel                  = { fg = c.black, bg = c.blue },                      -- tab pages line, active tab page label
+        Title                       = { fg = c.blue, bold = true },                       -- titles for output from ":set all", ":autocmd" etc.
+        Visual                      = { bg = c.bg_visual },                               -- Visual mode selection
+        VisualNOS                   = { bg = c.bg_visual },                               -- Visual mode selection when vim is "Not Owning the Selection".
+        WarningMsg                  = { fg = c.warning },                                 -- warning messages
+        Whitespace                  = { fg = c.fg_gutter },                               -- "nbsp", "space", "tab" and "trail" in 'listchars'
+        WildMenu                    = { bg = c.bg_visual },                               -- current match in 'wildmenu' completion
+        WinBar                      = "StatusLine",                                       -- window bar
+        WinBarNC                    = "StatusLineNC",                                     -- window bar in inactive windows
+        Bold                        = { bold = true, fg = c.fg },                         -- (preferred) any bold text
+        Character                   = { fg = c.green },                                   --  a character constant: 'c', '\n'
+        Constant                    = { fg = c.orange },                                  -- (preferred) any constant
+        Debug                       = { fg = c.orange },                                  --    debugging statements
+        Delimiter                   = "Special",                                          --  character that needs attention
+        Error                       = { fg = c.error },                                   -- (preferred) any erroneous construct
+        Function                    = { fg = c.blue },                                    -- function name (also: methods for classes)
+        Identifier                  = { fg = c.magenta },                                 -- (preferred) any variable name
+        Italic                      = { italic = true, fg = c.fg },                       -- (preferred) any italic text
+        Keyword                     = { fg = c.cyan, italic = true },                     --  any other keyword
+        Operator                    = { fg = c.blue5 },                                   -- "sizeof", "+", "*", etc.
+        PreProc                     = { fg = c.cyan },                                    -- (preferred) generic Preprocessor
+        Special                     = { fg = c.blue1 },                                   -- (preferred) any special symbol
+        Statement                   = { fg = c.magenta },                                 -- (preferred) any statement
+        String                      = { fg = c.green },                                   --   a string constant: "this is a string"
+        Todo                        = { bg = c.yellow, fg = c.bg },                       -- (preferred) anything that needs extra attention; mostly the keywords TODO FIXME and XXX
+        Type                        = { fg = c.blue1 },                                   -- (preferred) int, long, char, etc.
+        Underlined                  = { underline = true },                               -- (preferred) text that stands out, HTML links
+        debugBreakpoint             = { bg = c.info, fg = c.info },                       -- used for breakpoint colors in terminal-debug
+        debugPC                     = { bg = c.bg_sidebar },                              -- used for highlighting the current line in terminal-debug
+        dosIniLabel                 = "@property",
+        helpCommand                 = { bg = c.terminal_black, fg = c.blue },
+        htmlH1                      = { fg = c.magenta, bold = true },
+        htmlH2                      = { fg = c.blue, bold = true },
+        qfFileName                  = { fg = c.blue },
+        qfLineNr                    = { fg = c.dark5 },
+
+        -- These groups are for the native LSP client. Some other LSP clients may
+        -- use these groups, or use their own.
+        LspReferenceText            = { bg = c.fg_gutter }, -- used for highlighting "text" references
+        LspReferenceRead            = { bg = c.fg_gutter }, -- used for highlighting "read" references
+        LspReferenceWrite           = { bg = c.fg_gutter }, -- used for highlighting "write" references
+        LspSignatureActiveParameter = { bg = c.bg_visual, bold = true },
+        LspCodeLens                 = { fg = c.comment },
+        LspInlayHint                = { bg = c.blue7, fg = c.dark3 },
+        LspInfoBorder               = { fg = c.border_highlight, bg = c.bg_float },
+
+        -- diagnostics
+        DiagnosticError             = { fg = c.error },                     -- Used as the base highlight group. Other Diagnostic highlights link to this by default
+        DiagnosticWarn              = { fg = c.warning },                   -- Used as the base highlight group. Other Diagnostic highlights link to this by default
+        DiagnosticInfo              = { fg = c.info },                      -- Used as the base highlight group. Other Diagnostic highlights link to this by default
+        DiagnosticHint              = { fg = c.hint },                      -- Used as the base highlight group. Other Diagnostic highlights link to this by default
+        DiagnosticUnnecessary       = { fg = c.terminal_black },            -- Used as the base highlight group. Other Diagnostic highlights link to this by default
+        DiagnosticVirtualTextError  = { bg = c.error, fg = c.error },       -- Used for "Error" diagnostic virtual text
+        DiagnosticVirtualTextWarn   = { bg = c.warning, fg = c.warning },   -- Used for "Warning" diagnostic virtual text
+        DiagnosticVirtualTextInfo   = { bg = c.info, fg = c.info },         -- Used for "Information" diagnostic virtual text
+        DiagnosticVirtualTextHint   = { bg = c.hint, fg = c.hint },         -- Used for "Hint" diagnostic virtual text
+        DiagnosticUnderlineError    = { undercurl = true, sp = c.error },   -- Used to underline "Error" diagnostics
+        DiagnosticUnderlineWarn     = { undercurl = true, sp = c.warning }, -- Used to underline "Warning" diagnostics
+        DiagnosticUnderlineInfo     = { undercurl = true, sp = c.info },    -- Used to underline "Information" diagnostics
+        DiagnosticUnderlineHint     = { undercurl = true, sp = c.hint },    -- Used to underline "Hint" diagnostics
+
+        -- Health
+        healthError                 = { fg = c.error },
+        healthSuccess               = { fg = c.green1 },
+        healthWarning               = { fg = c.warning },
+
+        -- diff (not needed anymore?)
+        diffAdded                   = { bg = c.diff.add, fg = c.git.add },
+        diffRemoved                 = { bg = c.diff.delete, fg = c.git.delete },
+        diffChanged                 = { bg = c.diff.change, fg = c.git.change },
+        diffOldFile                 = { fg = c.blue1, bg = c.diff.delete },
+        diffNewFile                 = { fg = c.blue1, bg = c.diff.add },
+        diffFile                    = { fg = c.blue },
+        diffLine                    = { fg = c.comment },
+        diffIndexLine               = { fg = c.magenta },
+        helpExample                 = { fg = c.comment },
+    }
+end
+
+local groups = getHighlightGroup(colors)
+
+for group, hl in pairs(groups) do
+    hl = type(hl) == "string" and { link = hl } or hl
+    vim.api.nvim_set_hl(0, group, hl)
+end
+
+vim.cmd.hi("StatusFlags guibg=#374641 guifg=#A6E3A1")
+vim.o.statusline = " %F [%{strlen(&fenc)?&fenc:&enc}] [%{&ff}] %y [%{&spelllang}] [0x%04B] "
+    .. "%="
+    .. " [%n] %l/%L (%p%%), %c "
+    .. "%#StatusFlags#%{&mod?' [+] ':''}%*"
+
 ```
 
