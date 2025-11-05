@@ -7,9 +7,9 @@ return {
 	},
 	cmd = "Neotree",
 	keys = {
-		{ "<leader>wt", ":Neotree reveal<CR>",     desc = "[W]orkspace [F]iles",   silent = true },
-		{ "<leader>wb", ":Neotree buffers<CR>",    desc = "[W]orkspace [B]uffers", silent = true },
-		{ "<leader>hs", ":Neotree git_status<CR>", desc = "git [s]tatus",          silent = true },
+		{ "<leader>wf", ":Neotree reveal<CR>",     desc = "[f]iles",      silent = true },
+		{ "<leader>wb", ":Neotree buffers<CR>",    desc = "[b]uffers",    silent = true },
+		{ "<leader>vs", ":Neotree git_status<CR>", desc = "git [s]tatus", silent = true },
 	},
 	config = function()
 		require("neo-tree").setup({
