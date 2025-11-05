@@ -8,6 +8,7 @@ tangled with the CLI tool [md-tangle][1].
 * [bash](configurations/bash.md)
     * [.git-completion](assets/.git-completion.bash)
     * [.git-prompt](assets/.git-prompt.sh)
+* [bat](configurations/bat.md)
 * [bin](configurations/bin.md)
 * [claude](configurations/claude.md)
 * [conkeror](configurations/conkeror.md)
