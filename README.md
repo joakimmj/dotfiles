@@ -10,6 +10,7 @@ tangled with the CLI tool [md-tangle][1].
     * [git worktrees](configurations/bash_worktrees.md)
     * [.git-completion](configurations/assets/.git-completion.bash)
     * [.git-prompt](configurations/assets/.git-prompt.sh)
+* [bat](configurations/bat_config.md)
 * [bin](configurations/bin_config.md)
 * [claude](configurations/claude_config.md)
     * [handover skill](configurations/claude_handover.md)

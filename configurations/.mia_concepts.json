@@ -7,6 +7,10 @@
     "display_name": "Bash",
     "type": "tool"
   },
+  "bat": {
+    "display_name": "bat",
+    "type": "tool"
+  },
   "bin": {
     "display_name": "bin",
     "type": "tool"
