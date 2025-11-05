@@ -48,14 +48,20 @@ vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv", { desc = "move selection down" 
 Better indenting in visual mode
 > `~/.config/nvim/lua/my/mappings.lua`, `~/.config/nvim-lite/lua/my/mappings.lua`
 ```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
-vim.keymap.set("v", "<", "<gv", { desc = "Indent left and reselect" })
-vim.keymap.set("v", ">", ">gv", { desc = "Indent right and reselect" })
+vim.keymap.set("v", "<", "<gv", { desc = "indent left and reselect" })
+vim.keymap.set("v", ">", ">gv", { desc = "indent right and reselect" })
 ```
 
 Better J behavior
 > `~/.config/nvim/lua/my/mappings.lua`, `~/.config/nvim-lite/lua/my/mappings.lua`
 ```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
-vim.keymap.set("n", "J", "mzJ`z", { desc = "Join lines and keep cursor position" })
+vim.keymap.set("n", "J", "mzJ`z", { desc = "join lines and keep cursor position" })
+```
+
+Toggle line wrap for current buffer
+> `~/.config/nvim/lua/my/mappings.lua`, `~/.config/nvim-lite/lua/my/mappings.lua`
+```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
+vim.keymap.set("n", "<leader>dw", "<cmd>set wrap!<CR>", { desc = "toggle [w]rap" })
 ```
 
 Center cursor on up/down
@@ -83,7 +89,7 @@ vim.keymap.set({ "n", "v" }, "<leader>p", [["+p]], { desc = "[p]aste from system
 Paste from yank register (`"0`)
 > `~/.config/nvim/lua/my/mappings.lua`, `~/.config/nvim-lite/lua/my/mappings.lua`
 ```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
-vim.keymap.set({"n", "v"}, "<C-p>", "\"0p", { desc = "paste from yank register" })
+vim.keymap.set({ "n", "v" }, "<C-p>", "\"0p", { desc = "paste from yank register" })
 ```
 
 Replace all of word under cursor
@@ -94,6 +100,17 @@ vim.keymap.set(
 	"<leader>dr",
 	[[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
 	{ desc = "[r]eplace word" }
+)
+```
+
+Replace selected text
+> `~/.config/nvim/lua/my/mappings.lua`, `~/.config/nvim-lite/lua/my/mappings.lua`
+```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
+vim.keymap.set(
+	"v",
+	"<leader>dr",
+	[["hy:%s/<C-r>h//gI<left><left><left>]],
+	{ desc = "[r]eplace selected text" }
 )
 ```
 
@@ -131,6 +148,12 @@ Save/restore vim sessions
 ```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
 vim.keymap.set("n", "<leader>SS", function() vim.cmd([[mksession! .session.vim]]) end, { desc = "[S]ave" })
 vim.keymap.set("n", "<leader>SR", function() vim.cmd([[source .session.vim]]) end, { desc = "[R]estore" })
+```
+
+Open file explorer
+> `~/.config/nvim-lite/lua/my/mappings.lua`
+```lua tangle:~/.config/nvim-lite/lua/my/mappings.lua
+vim.keymap.set("n", "<leader>we", ":Lex<CR>", { desc = "[e]xplorer" })
 ```
 
 ## Options
@@ -309,6 +332,19 @@ vim.api.nvim_create_autocmd('FileType', {
 		vim.keymap.set("n", "<leader>X", "<cmd>source %<CR>", { buffer = true, desc = "e[X]ecute lua file" })
 		vim.keymap.set("n", "<leader>x", ":.lua<CR>", { buffer = true, desc = "e[x]ecute lua line" })
 		vim.keymap.set("v", "<leader>x", ":lua<CR>", { buffer = true, desc = "e[x]ecute lua selection" })
+	end,
+})
+```
+
+Add keymaps for formatting `JSON` (for `json` buffers only)
+> `~/.config/nvim/lua/my/autocmd.lua`, `~/.config/nvim-lite/lua/my/autocmd.lua`
+```lua tangle:~/.config/nvim/lua/my/autocmd.lua,~/.config/nvim-lite/lua/my/autocmd.lua
+vim.api.nvim_create_autocmd('FileType', {
+	desc = 'Json specific options',
+	pattern = 'json',
+	group = vim.api.nvim_create_augroup('augroup-json-options', { clear = true }),
+	callback = function()
+		vim.keymap.set("n", "<leader>X", [[%!jq '.']], { buffer = true, desc = "e[X]ecute json formatting" })
 	end,
 })
 ```
@@ -715,6 +751,9 @@ return {
 					--  For example, in C this would take you to the header.
 					map("gD", vim.lsp.buf.declaration, "[g]oto [D]eclaration")
 
+					map("<leader>cd", function()
+						vim.diagnostic.open_float({ scope = 'line' })
+					end, "show [d]iagnostic")
 					-- The following two autocommands are used to highlight references of the
 					-- word under your cursor when your cursor rests there for a little while.
 					--    See `:help CursorHold` for information about when this is executed
@@ -858,24 +897,18 @@ return {
                         return vim.o.columns >= 120 and "ivy" or "ivy_split"
                     end,
                 },
+                focus = "input",
                 sources = {
-                    buffers = {
-                        layout = {
-                            preset = "ivy",
-                        },
-                    },
                     explorer = {
                         layout = {
                             preset = "sidebar",
                             preview = true,
 
                             layout = {
-                                width = 0.5,
-                                min_width = 40,
+                                width = 80,
                             }
                         },
-                        auto_close = true,
-                        focus = "input",
+                        focus = "list",
                     },
                 },
             },

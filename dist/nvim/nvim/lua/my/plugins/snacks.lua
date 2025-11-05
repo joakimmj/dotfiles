@@ -12,24 +12,18 @@ return {
                         return vim.o.columns >= 120 and "ivy" or "ivy_split"
                     end,
                 },
+                focus = "input",
                 sources = {
-                    buffers = {
-                        layout = {
-                            preset = "ivy",
-                        },
-                    },
                     explorer = {
                         layout = {
                             preset = "sidebar",
                             preview = true,
 
                             layout = {
-                                width = 0.5,
-                                min_width = 40,
+                                width = 80,
                             }
                         },
-                        auto_close = true,
-                        focus = "input",
+                        focus = "list",
                     },
                 },
             },
