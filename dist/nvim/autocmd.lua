@@ -12,3 +12,9 @@ vim.api.nvim_create_autocmd("VimLeave", {
 		vim.cmd([[silent! mksession! .session.vim]])
 	end,
 })
+vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "CursorHoldI", "FocusGained" }, {
+	desc = "Check if file changed on disk",
+	group = vim.api.nvim_create_augroup("augroup-file-disk-status", { clear = true }),
+	pattern = { "*" },
+	command = "if mode() != 'c' | checktime | endif",
+})
