@@ -43,6 +43,7 @@ return {
 			{ "<leader>d",  group = "[d]ocument" },
 			{ "<leader>s",  group = "[s]earch" },
 			{ "<leader>S",  group = "[S]ession" },
+			{ "<leader>t",  group = "[t]emporary (\"scratch\") files" },
 			{ "<leader>w",  group = "[w]orkspace" },
 			{ "<leader>v",  group = "[v]ersion control", mode = { "n", "v" } },
 			{ "<leader>vt", group = "[t]oggles",         mode = { "n", "v" } },
