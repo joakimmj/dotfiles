@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+if type bat >/dev/null; then
+    bat "$@"
+else
+    cat "$@"
+fi

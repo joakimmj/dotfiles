@@ -1,5 +1,6 @@
 rm -rf dist
 md-tangle configurations/bash.md -f -d dist/bash/
+md-tangle configurations/bat.md -f -d dist/bat/
 md-tangle configurations/bin.md -f -d dist/bin/
 md-tangle configurations/conkeror.md -f -d dist/conkeror/
 md-tangle configurations/conky.md -f -d dist/conky/
