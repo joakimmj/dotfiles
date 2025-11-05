@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+echo "---[ C-c to quit, ':help' for help ]-------------------------------------------"
+while true
+do
+  read -p "curl https://cht.sh/" query
+  curl -s cht.sh/"$query" | less -R
+done
