@@ -54,6 +54,18 @@ set -g status-right "%d.%m.%y, %H:%M"
 
 ### Key tables
 
+#### Change defaults
+
+Remove confirmation before killing window (default: `confirm-before -p "kill-window #W? (y/n)" kill-window`).
+``` tangle:~/.tmux.conf
+bind-key -T prefix & kill-window
+```
+
+Remove confirmation before killing pane (default: `confirm-before -p "kill-pane #P? (y/n)" kill-pane`).
+``` tangle:~/.tmux.conf
+bind-key -T prefix x kill-pane
+```
+
 #### My bindings
 
 Prefixed with `C-q`
