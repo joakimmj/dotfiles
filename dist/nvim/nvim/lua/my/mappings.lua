@@ -33,7 +33,6 @@ vim.keymap.set("n", "<leader>dd", vim.diagnostic.setloclist, { desc = "[d]iagnos
 vim.keymap.set("n", "<leader>wd", vim.diagnostic.setqflist, { desc = "[d]iagnostic (quickfix list)" })
 vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz", { desc = "go to next quickfix list entry" })
 vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz", { desc = "go to previous quickfix list entry" })
-vim.keymap.set("n", "<tab>", "za", { desc = "toggle folds under cursor" })
 vim.keymap.set("n", "<left>", "<Nop>")
 vim.keymap.set("n", "<right>", "<Nop>")
 vim.keymap.set("n", "<up>", "<Nop>")

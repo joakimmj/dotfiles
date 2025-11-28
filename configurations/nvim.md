@@ -128,12 +128,6 @@ vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz", { desc = "go to next quickfix l
 vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz", { desc = "go to previous quickfix list entry" })
 ```
 
-Toggle folds
-> `~/.config/nvim/lua/my/mappings.lua`, `~/.config/nvim-lite/lua/my/mappings.lua`
-```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
-vim.keymap.set("n", "<tab>", "za", { desc = "toggle folds under cursor" })
-```
-
 Disable arrow keys in normal mode
 > `~/.config/nvim/lua/my/mappings.lua`, `~/.config/nvim-lite/lua/my/mappings.lua`
 ```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
