@@ -124,8 +124,8 @@ vim.keymap.set("n", "<leader>wd", vim.diagnostic.setqflist, { desc = "[d]iagnost
 Go between quickfix list entries
 > `~/.config/nvim/lua/my/mappings.lua`, `~/.config/nvim-lite/lua/my/mappings.lua`
 ```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
-vim.keymap.set("n", "<C-k>", "<cmd>cnext<CR>zz", { desc = "go to next quickfix list entry" })
-vim.keymap.set("n", "<C-j>", "<cmd>cprev<CR>zz", { desc = "go to previous quickfix list entry" })
+vim.keymap.set("n", "<C-j>", "<cmd>cnext<CR>zz", { desc = "go to next quickfix list entry" })
+vim.keymap.set("n", "<C-k>", "<cmd>cprev<CR>zz", { desc = "go to previous quickfix list entry" })
 ```
 
 Disable arrow keys in normal mode
