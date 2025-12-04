@@ -228,18 +228,26 @@ jstart() {
     clear
     echo "mvn package -Dmaven.test.skip"
     mvn package -Dmaven.test.skip
+    local profiles="local"
+    if [ "$#" -eq 1 ]; then
+        profiles+=",$1"
+    fi
     local current_dir=$(current-dir)
-    echo "java -jar -Dspring.profiles.active=local -Djavax.net.ssl.trustStore=/home/zero_ir/store/stb-test-cacerts-with-cwp.keystore target/${current_dir}.jar"
-    java -jar -Dspring.profiles.active=local -Djavax.net.ssl.trustStore=/home/zero_ir/store/stb-test-cacerts-with-cwp.keystore target/${current_dir}.jar
+    echo "java -jar -Dspring.profiles.active=${profiles} -Djavax.net.ssl.trustStore=/home/zero_ir/store/stb-test-cacerts-with-cwp.keystore target/${current_dir}.jar"
+    java -jar -Dspring.profiles.active=${profiles} -Djavax.net.ssl.trustStore=/home/zero_ir/store/stb-test-cacerts-with-cwp.keystore target/${current_dir}.jar
 }
 
 jcleanstart() {
     clear
     echo "mvn -U clean package -Dmaven.test.skip"
     mvn -U clean package -Dmaven.test.skip
+    local profiles="local"
+    if [ "$#" -eq 1 ]; then
+        profiles+=",$1"
+    fi
     local current_dir=$(current-dir)
-    echo "java -jar -Dspring.profiles.active=local -Djavax.net.ssl.trustStore=/home/zero_ir/store/stb-test-cacerts-with-cwp.keystore target/${current_dir}.jar"
-    java -jar -Dspring.profiles.active=local -Djavax.net.ssl.trustStore=/home/zero_ir/store/stb-test-cacerts-with-cwp.keystore target/${current_dir}.jar
+    echo "java -jar -Dspring.profiles.active=${profiles} -Djavax.net.ssl.trustStore=/home/zero_ir/store/stb-test-cacerts-with-cwp.keystore target/${current_dir}.jar"
+    java -jar -Dspring.profiles.active=${profiles} -Djavax.net.ssl.trustStore=/home/zero_ir/store/stb-test-cacerts-with-cwp.keystore target/${current_dir}.jar
 }
 
 jtest() {
