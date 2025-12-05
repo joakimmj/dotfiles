@@ -121,11 +121,18 @@ vim.keymap.set("n", "<leader>dd", vim.diagnostic.setloclist, { desc = "[d]iagnos
 vim.keymap.set("n", "<leader>wd", vim.diagnostic.setqflist, { desc = "[d]iagnostic (quickfix list)" })
 ```
 
-Go between quickfix list entries
+Quickfix list keymaps
 > `~/.config/nvim/lua/my/mappings.lua`, `~/.config/nvim-lite/lua/my/mappings.lua`
 ```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
-vim.keymap.set("n", "<C-j>", "<cmd>cnext<CR>zz", { desc = "go to next quickfix list entry" })
-vim.keymap.set("n", "<C-k>", "<cmd>cprev<CR>zz", { desc = "go to previous quickfix list entry" })
+vim.keymap.set("n", "<C-j>", "<cmd>try | cnext | catch | cfirst | catch | endtry<CR>zz", { desc = "go to next quickfix list entry" })
+vim.keymap.set("n", "<C-k>", "<cmd>try | cprevious | catch | clast | catch | endtry<CR>zz", { desc = "go to previous quickfix list entry" })
+vim.keymap.set("n", "<C-h>", "<cmd>colder<CR>", { desc = "go to previous quickfix list" })
+vim.keymap.set("n", "<C-l>", "<cmd>cnewer<CR>", { desc = "go to next quickfix list" })
+vim.keymap.set('n', '<leader>q', function()
+    local qf_winid = vim.fn.getqflist({ winid = 0 }).winid
+    local action = qf_winid > 0 and 'cclose' or 'copen'
+    vim.cmd('botright '..action)
+end, { noremap = true, silent = true, desc = "[q]uickfix list toggle" })
 ```
 
 Disable arrow keys in normal mode
