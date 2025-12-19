@@ -1,5 +1,27 @@
 # Nvim
 
+Add Lua settings to configuration folder.
+> `~/.config/nvim/.luarc.json`
+```json tangle:~/.config/nvim/.luarc.json
+{
+    "runtime": {
+        "version": "LuaJIT"
+    },
+    "diagnostics": {
+        "globals": [
+            "vim",
+            "require"
+        ]
+    },
+    "workspace": {
+        "library":  ["$VIMRUNTIME/lua"]
+    },
+    "telemetry": {
+        "enable": false
+    }
+}
+```
+
 ## Init
 
 Import my configurations
@@ -829,16 +851,14 @@ return {
 				kotlin_language_server = {},
 				jdtls = {},
 				lua_ls = {
-					-- cmd = {...},
-					-- filetypes = { ...},
-					-- capabilities = {},
 					settings = {
 						Lua = {
+							telemetry = {
+								enable = false,
+							},
 							completion = {
 								callSnippet = "Replace",
 							},
-							-- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-							-- diagnostics = { disable = { 'missing-fields' } },
 						},
 					},
 				},
