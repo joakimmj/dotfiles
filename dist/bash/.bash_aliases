@@ -83,4 +83,3 @@ jitest() {
     echo "mvn -U clean verify -Pintegration-test"
     mvn -U clean verify -Pintegration-test
 }
-alias projects='cd ~/projects'

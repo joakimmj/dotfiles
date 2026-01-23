@@ -67,9 +67,26 @@ shopt -s histappend
 
 Show git status in prompt.
 
+Show changes
+> - unstaged (`*`)
+> - staged (`+`)
 ```bash tangle:~/.bashrc
 GIT_PS1_SHOWDIRTYSTATE=true
+```
+
+Show untracked files
+> - untracked files (`%`)
+```bash tangle:~/.bashrc
 GIT_PS1_SHOWUNTRACKEDFILES=true
+```
+
+Show upstream status
+> - local branch behind (`<`)
+> - local branch ahead (`>`)
+> - diverged (`<>`)
+> - same as upstream (`=`)
+```bash tangle:~/.bashrc
+GIT_PS1_SHOWUPSTREAM=auto
 ```
 
 Add tags if:
@@ -92,12 +109,12 @@ if [ -n "$SSH_CLIENT" ]; then
 fi
 ```
 
-Colors:
-* `\[\e[0;34m\]` = BLUE
-* `\[\e[0;32m\]` = GREEN
-* `\[\e[0;33m\]` = YELLOW
-* `\[\e[1;30m\]` = GREY
-* `\[\e[0m\]`    = DEFAULT_COLOR
+Using colors from the Redox theme (24-but RGB)
+```bash tangle:~/.bashrc
+redox_teal="\[\e[38;2;126;193;174m\]" # #7EC1AE
+redox_rust="\[\e[38;2;205;139;100m\]" # #CD8B64
+redox_reset="\[\e[0m\]"
+```
 
 Prompt commands:
 * `\d` : the date in "Weekday Month Date" format (e.g., "Tue May 26")
@@ -116,10 +133,7 @@ Prompt commands:
 * `\$` : if the effective UID is 0, a #, otherwise a $
 
 ```bash tangle:~/.bashrc
-green="\[\033[01;32m\]"
-reset="\[\033[00m\]"
-
-PS1="${tags:+$green(${tags[*]})$reset }[\A$green\$(__git_ps1)$reset \u:\W]\$ "
+PS1="$redox_rust╭─${tags:+${tags[*]}-}[$redox_teal\A$redox_rust]-[$redox_teal\j$redox_rust]-[$redox_teal\u:\W\$(__git_ps1)$redox_rust]\n╰──\$ $redox_reset"
 ```
 
 Set `vi` mode
@@ -267,11 +281,4 @@ jitest() {
     echo "mvn -U clean verify -Pintegration-test"
     mvn -U clean verify -Pintegration-test
 }
-```
-
-### Shortcuts
-Add shortcuts for directories, ssh clients, etc.
-
-```bash tangle:~/.bash_aliases
-alias projects='cd ~/projects'
 ```

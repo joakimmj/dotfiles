@@ -17,6 +17,7 @@ HISTCONTROL=ignoreboth:erasedups
 shopt -s histappend
 GIT_PS1_SHOWDIRTYSTATE=true
 GIT_PS1_SHOWUNTRACKEDFILES=true
+GIT_PS1_SHOWUPSTREAM=auto
 unset tags;
 tags=()
 
@@ -29,10 +30,10 @@ fi
 if [ -n "$SSH_CLIENT" ]; then
   tags+=("ssh")
 fi
-green="\[\033[01;32m\]"
-reset="\[\033[00m\]"
-
-PS1="${tags:+$green(${tags[*]})$reset }[\A$green\$(__git_ps1)$reset \u:\W]\$ "
+redox_teal="\[\e[38;2;126;193;174m\]" # #7EC1AE
+redox_rust="\[\e[38;2;205;139;100m\]" # #CD8B64
+redox_reset="\[\e[0m\]"
+PS1="$redox_rust╭─${tags:+${tags[*]}-}[$redox_teal\A$redox_rust]-[$redox_teal\j$redox_rust]-[$redox_teal\u:\W\$(__git_ps1)$redox_rust]\n╰──\$ $redox_reset"
 set -o vi
 bind -m vi-command 'Control-l: clear-screen'
 bind -m vi-insert 'Control-l: clear-screen'
