@@ -5,95 +5,120 @@
 ### Options
 
 Enable mouse usage
-``` tangle:~/.tmux.conf
+``` tangle:~/.config/tmux/tmux.conf
 set -g mouse on
 ```
 
 Zero-out escape time delay
-``` tangle:~/.tmux.conf
+``` tangle:~/.config/tmux/tmux.conf
 set -g escape-time 0
 ```
 
 Increase history size (from 2,000)
-``` tangle:~/.tmux.conf
+``` tangle:~/.config/tmux/tmux.conf
 set -g history-limit 1000000
 ```
 
 Use system clipboard
-``` tangle:~/.tmux.conf
+``` tangle:~/.config/tmux/tmux.conf
 set -g set-clipboard on
 ```
 
 Change the default $TERM to tmux-256color
-``` tangle:~/.tmux.conf
-set-option -g default-terminal 'screen-254color'
-set-option -g terminal-overrides ',xterm-256color:RGB'
+``` tangle:~/.config/tmux/tmux.conf
+set -g default-terminal "tmux-256color"
+set -as terminal-overrides ',xterm-256color:Tc'
 set -g default-terminal "${TERM}"
 ```
 
 No bells
-``` tangle:~/.tmux.conf
+``` tangle:~/.config/tmux/tmux.conf
 set -g bell-action none
 ```
 
 Attach to next session if one session is closed
-``` tangle:~/.tmux.conf
+``` tangle:~/.config/tmux/tmux.conf
 set -g detach-on-destroy off
 ```
 
 Use `vi` mode
-``` tangle:~/.tmux.conf
+``` tangle:~/.config/tmux/tmux.conf
 set -g mode-keys vi
+set -g status-keys vi
 ```
 
 ### Status line
 
 Move status line to top
-``` tangle:~/.tmux.conf
+``` tangle:~/.config/tmux/tmux.conf
 set -g status-position top
 ```
 
 Style status line
-``` tangle:~/.tmux.conf
-set -g window-status-current-style bg="#2E3434",fg="#A6E3A1"
-set -g status-bg "#A6E3A1"
-set -g status-fg "#2E3434"
-set -g window-status-style "underscore"
+``` tangle:~/.config/tmux/tmux.conf
+set -g status on
+set -g status-style "bg=#2E3434,fg=#6B7A78"
+```
+
+Window titles
+``` tangle:~/.config/tmux/tmux.conf
+setw -g window-status-style "fg=#8FA7A3,bg=#2E3434"
+setw -g window-status-format " #I:#W "
+setw -g window-status-current-style "fg=#2E3434,bg=#E3A36F"
+setw -g window-status-current-format " #I:#W "
 ```
 
 Add git branch to left status (default length: 10)
-``` tangle:~/.tmux.conf
-set -g status-left "[#S] #(cd #{pane_current_path}; git rev-parse --abbrev-ref HEAD)"
+``` tangle:~/.config/tmux/tmux.conf
+set -g status-left "#[fg=#7EC1AE][#S] #(cd #{pane_current_path}; git rev-parse --abbrev-ref HEAD)#[default]"
 set -g status-left-length 80
 ```
 
 Align windows to center
-``` tangle:~/.tmux.conf
+``` tangle:~/.config/tmux/tmux.conf
 set -g status-justify centre
 ```
 
 Start window index on 1
-``` tangle:~/.tmux.conf
+``` tangle:~/.config/tmux/tmux.conf
 set -g base-index 1
 ```
 
 Re-number all windows when any window is closed
-``` tangle:~/.tmux.conf
+``` tangle:~/.config/tmux/tmux.conf
 set -g renumber-windows on
 ```
 
 Change default pane info and format time for right status
-``` tangle:~/.tmux.conf
-set -g status-right "[#{=21:pane_index}:#{=21:pane_current_command}] %d.%m.%y, %H:%M"
+``` tangle:~/.config/tmux/tmux.conf
+set -g status-right "#[fg=#8FC7B7][#{=21:pane_index}:#{=21:pane_current_command}] #[fg=#AFC3BE]%Y-%m-%d %H:%M "
 ```
 
 Adjust right status length (default 40)
-``` tangle:~/.tmux.conf
+``` tangle:~/.config/tmux/tmux.conf
 set -g status-right-length 40
 ```
 
+Styling for command prompt
+``` tangle:~/.config/tmux/tmux.conf
+set -g message-style "bg=#3A4141,fg=#DCE8E5"
+set -g message-command-style "bg=#3A4141,fg=#FFD7A0"
+setw -g mode-style "fg=#E3A36F,bg=#3F4A4A"
+```
+
+Styling panes
+``` tangle:~/.config/tmux/tmux.conf
+set -g pane-border-style "fg=#3A4141"
+set -g pane-active-border-style "fg=#7EC1AE"
+```
+
+Style copy mode
+``` tangle:~/.config/tmux/tmux.conf
+setw -g mode-style "fg=#2E3434,bg=#C97A3D"
+```
+
 Set update interval (default: 15 sec)
-``` tangle:~/.tmux.conf
+``` tangle:~/.config/tmux/tmux.conf
 set-option -g status-interval 10
 ```
 
@@ -102,29 +127,29 @@ set-option -g status-interval 10
 #### Change defaults
 
 Keep current path when creating new windows/panes
-``` tangle:~/.tmux.conf
+``` tangle:~/.config/tmux/tmux.conf
 bind-key -T prefix -N "Split window vertically" '"' split-window -v -c '#{pane_current_path}'
 bind-key -T prefix -N "Split window horizontally" '%' split-window -h -c '#{pane_current_path}'
 bind-key -T prefix -N "Create new window" c new-window -c '#{pane_current_path}'
 ```
 
 Remove confirmation before killing window (default: `confirm-before -p "kill-window #W? (y/n)" kill-window`).
-``` tangle:~/.tmux.conf
+``` tangle:~/.config/tmux/tmux.conf
 #bind-key -T prefix -N "Kill the current window" & kill-window
 ```
 
 Remove confirmation before killing pane (default: `confirm-before -p "kill-pane #P? (y/n)" kill-pane`).
-``` tangle:~/.tmux.conf
+``` tangle:~/.config/tmux/tmux.conf
 #bind-key -T prefix -N "Kill the current pane" x kill-pane
 ```
 
 Show keybindings in popup (default: `list-keys -N`).
-``` tangle:~/.tmux.conf
-bind-key -T prefix -N "List all key bindings" ? display-popup -E "(echo 'My keys'; tmux list-keys -N -T my-keys -P 'C-a '; printf '\nCheatsheets\n'; tmux list-keys -N -T cheatsheets -P 'C-a c '; printf '\nLayouts\n'; tmux list-keys -N -T my-layouts -P 'C-a l '; printf '\nBuilt in\n'; tmux list-keys -N) | less"
+``` tangle:~/.config/tmux/tmux.conf
+bind-key -T prefix -N "List all key bindings" ? display-popup -T "[ Key Bindings ]" -S "fg=#E3A36F" -E "(echo 'My keys'; tmux list-keys -N -T my-keys -P 'C-a '; printf '\nCheatsheets\n'; tmux list-keys -N -T cheatsheets -P 'C-a c '; printf '\nLayouts\n'; tmux list-keys -N -T my-layouts -P 'C-a l '; printf '\nBuilt in\n'; tmux list-keys -N) | less"
 ```
 
 Vim-like pane switching. The only default this changes is for selecting previously current window (`C-b l`).
-``` tangle:~/.tmux.conf
+``` tangle:~/.config/tmux/tmux.conf
 bind-key -T prefix -r -N "Select the previously current window" ^ last-window
 bind-key -T prefix -r -N "Select the pane above the active pane" k select-pane -U
 bind-key -T prefix -r -N "Select the pane below the active pane" j select-pane -D
@@ -135,50 +160,49 @@ bind-key -T prefix -r -N "Select the pane to the left of the active pane" l sele
 #### My bindings
 
 Prefixed with `C-a`
-``` tangle:~/.tmux.conf
+``` tangle:~/.config/tmux/tmux.conf
 bind-key -T root C-a switch-client -T my-keys
-bind-key -T my-keys -N "Reload config" r source-file ~/.tmux.conf \; display-message "~/.tmux.conf reloaded"
-bind-key -T my-keys -N "Edit config" e send-keys "nvim ~/.tmux.conf" Enter
+bind-key -T my-keys -N "Reload config" r source-file ~/.config/tmux/tmux.conf \; display-message "~/.config/tmux/tmux.conf reloaded"
+bind-key -T my-keys -N "Edit config" e send-keys "nvim ~/.config/tmux/tmux.conf" Enter
 bind-key -T my-keys -N "Jump to last window" Space last-window
-bind-key -T my-keys -N "Popup terminal" t display-popup -E
-bind-key -T my-keys -N "Popup search and create session" s display-popup -E "tmuxs"
-bind-key -T my-keys -N "Popup search and create window" w display-popup -E "dev"
+bind-key -T my-keys -N "Popup terminal" t display-popup -w 80% -h 80% -T "[ TERMINAL ]" -S "fg=#E3A36F" -E
+bind-key -T my-keys -N "Popup search and create session" s display-popup -T "[ CREATE/OPEN SESSION ]" -S "fg=#E3A36F" -E "tmuxs"
+bind-key -T my-keys -N "Popup search and create window" w display-popup -T "[ CREATE/OPEN WINDOW ]" -S "fg=#E3A36F" -E "dev"
 bind-key -T my-keys -N "Jump to directory" j send-keys "cd $(find -L ~/dev ~/projects ~/.config -mindepth 1 -maxdepth 1 -type d | fzf)" Enter
 bind-key -T my-keys -N "Search up" / copy-mode \; send-key "?"
 ```
 
 Popup scratchpad.
-``` tangle:~/.tmux.conf
+``` tangle:~/.config/tmux/tmux.conf
 bind-key -T my-keys -N "Popup scratchpad" p if-shell -F '#{==:#{session_name},scratchpad}' {
     detach-client
 } {
-    display-popup -w 80% -h 80% -E "tmux new-session -A -s scratchpad -n home -c ~/"
+    display-popup -w 80% -h 80% -T "[ SCRATCHPAD ]" -S "fg=#E3A36F" -E "tmux new-session -A -s scratchpad -n home -c ~/"
 }
 ```
 
 ##### Cheatsheet
 
 Prefixed with `C-a c`
-``` tangle:~/.tmux.conf
-bind-key -T my-keys c switch-client -T cheatsheets
-bind-key -T cheatsheets -N "Cheatsheet" c display-popup -E "cht-sh"
-bind-key -T cheatsheets -N "Cheatsheet (programming languages)" l display-popup -E "cht-lang"
-bind-key -T cheatsheets -N "Cheatsheet (utils)" u display-popup -E "cht-util"
-bind-key -T cheatsheets -N "Cheatsheet for vim motions" v display-popup -E "less ~/.tmux/vim-motions.md"
+``` tangle:~/.config/tmux/tmux.conf
+bind-key -T cheatsheets -N "Cheatsheet" c display-popup -T "[ CHEATSHEETS ]" -S "fg=#E3A36F" -E "cht-sh"
+bind-key -T cheatsheets -N "Cheatsheet (programming languages)" l display-popup -T "[ CHEATSHEETS ]" -S "fg=#E3A36F" -E "cht-lang"
+bind-key -T cheatsheets -N "Cheatsheet (utils)" u display-popup -T "[ CHEATSHEETS ]" -S "fg=#E3A36F" -E "cht-util"
+bind-key -T cheatsheets -N "Cheatsheet for vim motions" v display-popup -T "[ CHEATSHEETS ]" -S "fg=#E3A36F" -E "less ~/.config/tmux/docs/vim-motions.md"
 ```
 
 ##### Preconfigured layouts
 
 Prefixed with `C-a l`
-``` tangle:~/.tmux.conf
+``` tangle:~/.config/tmux/tmux.conf
 bind-key -T my-keys l switch-client -T my-layouts
-bind-key -T my-layouts -N "Development layout" d source-file ~/.tmux/dev-layout
+bind-key -T my-layouts -N "Development layout" d source-file ~/.config/tmux/layouts/dev-layout
 ```
 
 ## Layouts
 
 Dev layout
-``` tangle:~/.tmux/dev-layout
+``` tangle:~/.config/tmux/layouts/dev-layout
 neww -c "#{pane_current_path}" -n dev nvim .
 splitw -c "#{pane_current_path}" -t 0 -l 20
 selectp -t 0
