@@ -27,6 +27,7 @@ Add Lua settings to configuration folder.
 Import my configurations
 > `~/.config/nvim/init.lua`
 ```lua tangle:~/.config/nvim/init.lua
+require("my.theme")
 require("my.mappings")
 require("my.options")
 require("my.autocmd")
@@ -1090,278 +1091,313 @@ return {
 ```
 
 ## Theme
+> `~/.config/nvim/lua/my/theme.lua`, `~/.config/nvim-lite/lua/my/theme.lua`
 
-If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-
-> `~/.config/nvim/lua/my/plugins/theme.lua`
-```lua tangle:~/.config/nvim/lua/my/plugins/theme.lua
-function _G.get_tabline()
-	local s = ""
-	for tabnr = 1, vim.fn.tabpagenr("$") do
-		local winnr = vim.fn.tabpagewinnr(tabnr)
-		local buflist = vim.fn.tabpagebuflist(tabnr)[winnr]
-		local bufname = vim.fn.bufname(buflist)
-		local bufname_short = vim.fn.fnamemodify(bufname, ":t")
-		if #bufname_short == 0 then
-			bufname_short = "[No Name]"
-		end
-		if tabnr == vim.fn.tabpagenr() then
-			s = s .. "%#TabLineSel#"
-		else
-			s = s .. "%#TabLine#"
-		end
-		s = s .. " " .. tabnr .. ": " .. bufname_short .. " "
-	end
-	s = s .. "%#TabLineFill#"
-	return s
-end
-
-return {
-	"folke/tokyonight.nvim",
-	priority = 1000, -- Make sure to load this before all the other start plugins.
-	init = function()
-		require("tokyonight").setup({
-			on_colors = function(colors)
-				colors.bg = "#2E3434"
-				colors.comment = "#577466"
-				colors.fg_gutter = "#577466"
-				colors.bg_statusline = "#374641"
-				colors.fg_sidebar = "#374641"
-				colors.bg_sidebar = "#2E3434"
-			end,
-		})
-		-- Set colorscheme
-		vim.cmd.colorscheme("tokyonight-night")
-
-		-- Configure highlights
-		vim.cmd.hi("ColorColumn guibg=#374641")
-
-		-- Configure statusline
-		vim.cmd.hi("StatusLine guibg=#A6E3A1 guifg=#374641")
-		vim.cmd.hi("StatusFlags guibg=#374641 guifg=#A6E3A1")
-		vim.o.statusline = " %F [%{strlen(&fenc)?&fenc:&enc}] [%{&ff}] %y [%{&spelllang}] [0x%04B] "
-			.. "%="
-			.. " [%n] %l/%L (%p%%), %c "
-			.. "%#StatusFlags#%{&mod?' [+] ':''}%*"
-
-		-- Configure tabline
-		vim.cmd.hi("TabLine guibg=#374641 guifg=#577466")
-		vim.cmd.hi("TabLineFill guibg=#2E3434")
-		vim.cmd.hi("TabLineSel guibg=#374641 guifg=#A6E3A1")
-
-		vim.o.tabline = "%!v:lua.get_tabline()"
-	end,
+Color palette
+```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+local redox = {
+    bg = "#2E3434",
+    bg_alt = "#343A3A",
+    surface = "#3A4141",
+    overlay = "#414949",
+    fg = "#DCE8E5",
+    muted = "#AFC3BE",
+    subtle = "#919D9B",
+    rust = "#CD8B64",
+    orange = "#E3A36F",
+    teal = "#7EC1AE",
+    sea = "#9FD8C4",
+    cyan = "#8FC7B7",
+    amber = "#D6C38A",
+    red = "#CD8980",
+    warn = "#E3B86F",
+    info = "#8EC6C4",
+    hint = "#98C3B1",
+    cursor = "#FFD7A0",
+    selection = "#3F4A4A",
 }
 ```
 
-For the non-plugin version I use a theme strongly influenced by [tokyonight.nvim](https://github.com/folke/tokyonight.nvim).
+Set options for new theme
+```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+vim.opt.termguicolors = true
+vim.cmd("hi clear")
+if vim.fn.exists("syntax_on") == 1 then
+    vim.cmd("syntax reset")
+end
+vim.g.colors_name = "redox"
+```
 
-> `~/.config/nvim-lite/lua/my/theme.lua`
-```lua tangle:~/.config/nvim-lite/lua/my/theme.lua
-local colors = {
-    bg = "#2E3434",
-    bg_color_column = "#374641",
-    bg_dark = "#16161e",
-    bg_float = "#16161e",
-    bg_highlight = "#292e42",
-    bg_popup = "#16161e",
-    bg_search = "#3d59a1",
-    bg_sidebar = "#2E3434",
-    bg_statusline = "#374641",
-    bg_statusline_active = "#A6E3A1",
-    bg_visual = "#283457",
-    black = "#15161e",
-    blue = "#7aa2f7",
-    blue1 = "#2ac3de",
-    blue5 = "#89ddff",
-    blue7 = "#394b70",
-    border = "#15161e",
-    border_highlight = "#27a1b9",
-    comment = "#577466",
-    cyan = "#7dcfff",
-    dark3 = "#545c7e",
-    dark5 = "#737aa2",
-    diff = {
-        add = "#20303b",
-        change = "#1f2231",
-        delete = "#37222c",
-        text = "#394b70",
-    },
-    error = "#db4b4b",
-    fg = "#c0caf5",
-    fg_dark = "#a9b1d6",
-    fg_float = "#c0caf5",
-    fg_gutter = "#577466",
-    fg_sidebar = "#374641",
-    git = {
-        add = "#449dab",
-        change = "#6183bb",
-        delete = "#914c54",
-    },
-    green = "#9ece6a",
-    green1 = "#73daca",
-    hint = "#1abc9c",
-    info = "#0db9d7",
-    magenta = "#bb9af7",
-    magenta2 = "#ff007c",
-    orange = "#ff9e64",
-    red = "#f7768e",
-    terminal_black = "#414868",
-    warning = "#e0af68",
-    yellow = "#e0af68",
-}
+### Highlight groups
 
-local function getHighlightGroup(c)
-    return {
-        Foo                         = { bg = c.magenta2, fg = c.fg },
-        Comment                     = { fg = c.comment, italic = true }, -- any comment
-        ColorColumn                 = { bg = c.bg_color_column },                    -- used for the columns set with 'colorcolumn'
-        Conceal                     = { fg = c.dark5 },                              -- placeholder characters substituted for concealed text (see 'conceallevel')
-        Cursor                      = { fg = c.bg, bg = c.fg },                      -- character under the cursor
-        lCursor                     = { fg = c.bg, bg = c.fg },                      -- the character under the cursor when |language-mapping| is used (see 'guicursor')
-        CursorIM                    = { fg = c.bg, bg = c.fg },                      -- like Cursor, but used when in IME mode |CursorIM|
-        CursorColumn                = { bg = c.bg_highlight },                       -- Screen-column at the cursor, when 'cursorcolumn' is set.
-        CursorLine                  = { bg = c.bg_highlight },                       -- Screen-line at the cursor, when 'cursorline' is set.  Low-priority if foreground (ctermfg OR guifg) is not set.
-        Directory                   = { fg = c.blue },                               -- directory names (and other special names in listings)
-        DiffAdd                     = { bg = c.diff.add },                           -- diff mode: Added line |diff.txt|
-        DiffChange                  = { bg = c.diff.change },                        -- diff mode: Changed line |diff.txt|
-        DiffDelete                  = { bg = c.diff.delete },                        -- diff mode: Deleted line |diff.txt|
-        DiffText                    = { bg = c.diff.text },                          -- diff mode: Changed text within a changed line |diff.txt|
-        EndOfBuffer                 = { fg = c.bg },                                 -- filler lines (~) after the end of the buffer.  By default, this is highlighted like |hl-NonText|.
-        ErrorMsg                    = { fg = c.error },                              -- error messages on the command line
-        VertSplit                   = { fg = c.border },                             -- the column separating vertically split windows
-        WinSeparator                = { fg = c.border, bold = true },                -- the column separating vertically split windows
-        Folded                      = { fg = c.blue, bg = c.fg_gutter },             -- line used for closed folds
-        FoldColumn                  = { bg = c.bg, fg = c.comment },                 -- 'foldcolumn'
-        SignColumn                  = { bg = c.bg, fg = c.fg_gutter },               -- column where |signs| are displayed
-        SignColumnSB                = { bg = c.bg_sidebar, fg = c.fg_gutter },       -- column where |signs| are displayed
-        Substitute                  = { bg = c.red, fg = c.black },                  -- |:substitute| replacement text highlighting
-        LineNr                      = { fg = c.fg_gutter },                          -- Line number for ":number" and ":#" commands, and when 'number' or 'relativenumber' option is set.
-        CursorLineNr                = { fg = c.orange, bold = true },                -- Like LineNr when 'cursorline' or 'relativenumber' is set for the cursor line.
-        LineNrAbove                 = { fg = c.fg_gutter },
-        LineNrBelow                 = { fg = c.fg_gutter },
-        MatchParen                  = { fg = c.orange, bold = true },           -- The character under the cursor or just before it, if it is a paired bracket, and its match. |pi_paren.txt|
-        ModeMsg                     = { fg = c.fg_dark, bold = true },          -- 'showmode' message (e.g., "-- INSERT -- ")
-        MsgArea                     = { fg = c.fg_dark },                       -- Area for messages and cmdline
-        MoreMsg                     = { fg = c.blue },                          -- |more-prompt|
-        NonText                     = { fg = c.dark3 },                         -- '@' at the end of the window, characters from 'showbreak' and other characters that do not really exist in the text (e.g., ">" displayed when a double-wide character doesn't fit at the end of the line). See also |hl-EndOfBuffer|.
-        Normal                      = { fg = c.fg, bg = c.bg },                 -- normal text
-        NormalNC                    = { fg = c.fg, bg = c.bg },
-        NormalSB                    = { fg = c.fg_sidebar, bg = c.bg_sidebar }, -- normal text in sidebar
-        NormalFloat                 = { fg = c.fg_float, bg = c.bg_float },     -- Normal text in floating windows.
-        FloatBorder                 = { fg = c.border_highlight, bg = c.bg_float },
-        FloatTitle                  = { fg = c.border_highlight, bg = c.bg_float },
-        Pmenu                       = { bg = c.bg_popup, fg = c.fg },                     -- Popup menu: normal item.
-        PmenuMatch                  = { bg = c.bg_popup, fg = c.blue1 },                  -- Popup menu: Matched text in normal item.
-        PmenuSel                    = { bg = c.fg_gutter },
-        PmenuMatchSel               = { bg = c.fg_gutter, fg = c.blue1 },                 -- Popup menu: Matched text in selected item.
-        PmenuSbar                   = { bg = c.bg_popup },                                -- Popup menu: scrollbar.
-        PmenuThumb                  = { bg = c.fg_gutter },                               -- Popup menu: Thumb of the scrollbar.
-        Question                    = { fg = c.blue },                                    -- |hit-enter| prompt and yes/no questions
-        QuickFixLine                = { bg = c.bg_visual, bold = true },                  -- Current |quickfix| item in the quickfix window. Combined with |hl-CursorLine| when the cursor is there.
-        Search                      = { bg = c.bg_search, fg = c.fg },                    -- Last search pattern highlighting (see 'hlsearch').  Also used for similar items that need to stand out.
-        IncSearch                   = { bg = c.orange, fg = c.black },                    -- 'incsearch' highlighting; also used for the text replaced with ":s///c"
-        CurSearch                   = "IncSearch",
-        SpecialKey                  = { fg = c.dark3 },                                   -- Unprintable characters: text displayed differently from what it really is.  But not 'listchars' whitespace. |hl-Whitespace|
-        SpellBad                    = { sp = c.error, undercurl = true },                 -- Word that is not recognized by the spellchecker. |spell| Combined with the highlighting used otherwise.
-        SpellCap                    = { sp = c.warning, undercurl = true },               -- Word that should start with a capital. |spell| Combined with the highlighting used otherwise.
-        SpellLocal                  = { sp = c.info, undercurl = true },                  -- Word that is recognized by the spellchecker as one that is used in another region. |spell| Combined with the highlighting used otherwise.
-        SpellRare                   = { sp = c.hint, undercurl = true },                  -- Word that is recognized by the spellchecker as one that is hardly ever used.  |spell| Combined with the highlighting used otherwise.
-        StatusLine                  = { fg = c.fg_sidebar, bg = c.bg_statusline_active }, -- status line of current window
-        StatusLineNC                = { fg = c.fg_gutter, bg = c.bg_statusline },         -- status lines of not-current windows Note: if this is equal to "StatusLine" Vim will use "^^^" in the status line of the current window.
-        TabLine                     = { bg = c.bg_statusline, fg = c.fg_gutter },         -- tab pages line, not active tab page label
-        TabLineFill                 = { bg = c.black },                                   -- tab pages line, where there are no labels
-        TabLineSel                  = { fg = c.black, bg = c.blue },                      -- tab pages line, active tab page label
-        Title                       = { fg = c.blue, bold = true },                       -- titles for output from ":set all", ":autocmd" etc.
-        Visual                      = { bg = c.bg_visual },                               -- Visual mode selection
-        VisualNOS                   = { bg = c.bg_visual },                               -- Visual mode selection when vim is "Not Owning the Selection".
-        WarningMsg                  = { fg = c.warning },                                 -- warning messages
-        Whitespace                  = { fg = c.fg_gutter },                               -- "nbsp", "space", "tab" and "trail" in 'listchars'
-        WildMenu                    = { bg = c.bg_visual },                               -- current match in 'wildmenu' completion
-        WinBar                      = "StatusLine",                                       -- window bar
-        WinBarNC                    = "StatusLineNC",                                     -- window bar in inactive windows
-        Bold                        = { bold = true, fg = c.fg },                         -- (preferred) any bold text
-        Character                   = { fg = c.green },                                   --  a character constant: 'c', '\n'
-        Constant                    = { fg = c.orange },                                  -- (preferred) any constant
-        Debug                       = { fg = c.orange },                                  --    debugging statements
-        Delimiter                   = "Special",                                          --  character that needs attention
-        Error                       = { fg = c.error },                                   -- (preferred) any erroneous construct
-        Function                    = { fg = c.blue },                                    -- function name (also: methods for classes)
-        Identifier                  = { fg = c.magenta },                                 -- (preferred) any variable name
-        Italic                      = { italic = true, fg = c.fg },                       -- (preferred) any italic text
-        Keyword                     = { fg = c.cyan, italic = true },                     --  any other keyword
-        Operator                    = { fg = c.blue5 },                                   -- "sizeof", "+", "*", etc.
-        PreProc                     = { fg = c.cyan },                                    -- (preferred) generic Preprocessor
-        Special                     = { fg = c.blue1 },                                   -- (preferred) any special symbol
-        Statement                   = { fg = c.magenta },                                 -- (preferred) any statement
-        String                      = { fg = c.green },                                   --   a string constant: "this is a string"
-        Todo                        = { bg = c.yellow, fg = c.bg },                       -- (preferred) anything that needs extra attention; mostly the keywords TODO FIXME and XXX
-        Type                        = { fg = c.blue1 },                                   -- (preferred) int, long, char, etc.
-        Underlined                  = { underline = true },                               -- (preferred) text that stands out, HTML links
-        debugBreakpoint             = { bg = c.info, fg = c.info },                       -- used for breakpoint colors in terminal-debug
-        debugPC                     = { bg = c.bg_sidebar },                              -- used for highlighting the current line in terminal-debug
-        dosIniLabel                 = "@property",
-        helpCommand                 = { bg = c.terminal_black, fg = c.blue },
-        htmlH1                      = { fg = c.magenta, bold = true },
-        htmlH2                      = { fg = c.blue, bold = true },
-        qfFileName                  = { fg = c.blue },
-        qfLineNr                    = { fg = c.dark5 },
+#### Core UI
 
-        -- These groups are for the native LSP client. Some other LSP clients may
-        -- use these groups, or use their own.
-        LspReferenceText            = { bg = c.fg_gutter }, -- used for highlighting "text" references
-        LspReferenceRead            = { bg = c.fg_gutter }, -- used for highlighting "read" references
-        LspReferenceWrite           = { bg = c.fg_gutter }, -- used for highlighting "write" references
-        LspSignatureActiveParameter = { bg = c.bg_visual, bold = true },
-        LspCodeLens                 = { fg = c.comment },
-        LspInlayHint                = { bg = c.blue7, fg = c.dark3 },
-        LspInfoBorder               = { fg = c.border_highlight, bg = c.bg_float },
+```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+vim.api.nvim_set_hl(0, "Normal", { fg = redox.fg, bg = redox.bg })
+vim.api.nvim_set_hl(0, "NormalFloat", { fg = redox.fg, bg = redox.bg_alt })
+vim.api.nvim_set_hl(0, "FloatBorder", { fg = redox.overlay, bg = redox.bg_alt })
+```
 
-        -- diagnostics
-        DiagnosticError             = { fg = c.error },                     -- Used as the base highlight group. Other Diagnostic highlights link to this by default
-        DiagnosticWarn              = { fg = c.warning },                   -- Used as the base highlight group. Other Diagnostic highlights link to this by default
-        DiagnosticInfo              = { fg = c.info },                      -- Used as the base highlight group. Other Diagnostic highlights link to this by default
-        DiagnosticHint              = { fg = c.hint },                      -- Used as the base highlight group. Other Diagnostic highlights link to this by default
-        DiagnosticUnnecessary       = { fg = c.terminal_black },            -- Used as the base highlight group. Other Diagnostic highlights link to this by default
-        DiagnosticVirtualTextError  = { bg = c.error, fg = c.error },       -- Used for "Error" diagnostic virtual text
-        DiagnosticVirtualTextWarn   = { bg = c.warning, fg = c.warning },   -- Used for "Warning" diagnostic virtual text
-        DiagnosticVirtualTextInfo   = { bg = c.info, fg = c.info },         -- Used for "Information" diagnostic virtual text
-        DiagnosticVirtualTextHint   = { bg = c.hint, fg = c.hint },         -- Used for "Hint" diagnostic virtual text
-        DiagnosticUnderlineError    = { undercurl = true, sp = c.error },   -- Used to underline "Error" diagnostics
-        DiagnosticUnderlineWarn     = { undercurl = true, sp = c.warning }, -- Used to underline "Warning" diagnostics
-        DiagnosticUnderlineInfo     = { undercurl = true, sp = c.info },    -- Used to underline "Information" diagnostics
-        DiagnosticUnderlineHint     = { undercurl = true, sp = c.hint },    -- Used to underline "Hint" diagnostics
+Line numbers / cursorline / columns
+```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+vim.api.nvim_set_hl(0, "LineNr", { fg = redox.subtle, bg = "NONE" })
+vim.api.nvim_set_hl(0, "CursorLine", { bg = "#323838" })
+vim.api.nvim_set_hl(0, "CursorColumn", { link = "CursorLine" })
+vim.api.nvim_set_hl(0, "ColorColumn", { link = "CursorLine" })
+vim.api.nvim_set_hl(0, "CursorLineNr", { fg = redox.orange, bold = true })
+```
 
-        -- Health
-        healthError                 = { fg = c.error },
-        healthSuccess               = { fg = c.green1 },
-        healthWarning               = { fg = c.warning },
+Statusline / tabline
+```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+vim.api.nvim_set_hl(0, "StatusLine", { fg = redox.bg, bg = redox.orange, bold = true })
+vim.api.nvim_set_hl(0, "StatusLineNC", { fg = redox.muted, bg = redox.surface })
+vim.api.nvim_set_hl(0, "TabLine", { link = "StatusLineNC" })
+vim.api.nvim_set_hl(0, "TabLineSel", { link = "StatusLine" })
+vim.api.nvim_set_hl(0, "TabLineFill", { link = "Normal" })
+```
 
-        -- diff (not needed anymore?)
-        diffAdded                   = { bg = c.diff.add, fg = c.git.add },
-        diffRemoved                 = { bg = c.diff.delete, fg = c.git.delete },
-        diffChanged                 = { bg = c.diff.change, fg = c.git.change },
-        diffOldFile                 = { fg = c.blue1, bg = c.diff.delete },
-        diffNewFile                 = { fg = c.blue1, bg = c.diff.add },
-        diffFile                    = { fg = c.blue },
-        diffLine                    = { fg = c.comment },
-        diffIndexLine               = { fg = c.magenta },
-        helpExample                 = { fg = c.comment },
-    }
+Splits / borders
+```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+vim.api.nvim_set_hl(0, "VertSplit", { fg = redox.overlay })
+vim.api.nvim_set_hl(0, "WinSeparator", { fg = redox.overlay })
+```
+
+Selection / popup menu
+```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+vim.api.nvim_set_hl(0, "Visual", { bg = redox.selection })
+vim.api.nvim_set_hl(0, "Pmenu", { fg = redox.fg, bg = redox.surface })
+vim.api.nvim_set_hl(0, "PmenuSel", { fg = redox.bg, bg = redox.orange })
+vim.api.nvim_set_hl(0, "PmenuSbar", { bg = redox.surface })
+vim.api.nvim_set_hl(0, "PmenuThumb", { bg = redox.overlay })
+```
+
+Search / matching
+```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+vim.api.nvim_set_hl(0, "Search", { fg = redox.bg, bg = redox.teal })
+vim.api.nvim_set_hl(0, "IncSearch", { fg = redox.bg, bg = redox.rust })
+vim.api.nvim_set_hl(0, "CurSearch", { fg = redox.bg, bg = redox.rust })
+vim.api.nvim_set_hl(0, "MatchParen", { fg = redox.orange, underline = true })
+```
+
+Invisible characters / misc UI
+```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+vim.api.nvim_set_hl(0, "NonText", { fg = redox.subtle })
+vim.api.nvim_set_hl(0, "SpecialKey", { fg = redox.overlay })
+vim.api.nvim_set_hl(0, "Whitespace", { fg = redox.overlay })
+vim.api.nvim_set_hl(0, "SignColumn", { fg = redox.muted, bg = redox.bg })
+vim.api.nvim_set_hl(0, "Folded", { fg = redox.muted, bg = redox.surface })
+vim.api.nvim_set_hl(0, "FoldColumn", { fg = redox.subtle, bg = redox.bg })
+```
+
+Titles / directories / prompts and messages
+```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+vim.api.nvim_set_hl(0, "Title", { fg = redox.orange, bold = true, underline = true })
+vim.api.nvim_set_hl(0, "Directory", { fg = redox.teal })
+vim.api.nvim_set_hl(0, "WildMenu", { link = "PmenuSel" })
+vim.api.nvim_set_hl(0, "ModeMsg", { link = "Normal" })
+vim.api.nvim_set_hl(0, "MoreMsg", { fg = redox.teal })
+vim.api.nvim_set_hl(0, "ErrorMsg", { link = "DiagnosticError" })
+vim.api.nvim_set_hl(0, "WarningMsg", { link = "DiagnosticWarn" })
+```
+
+#### Syntax
+
+```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+vim.api.nvim_set_hl(0, "@comment", { fg = redox.subtle, italic = true })
+vim.api.nvim_set_hl(0, "@keyword", { fg = redox.orange, bold = true })
+vim.api.nvim_set_hl(0, "@conditional", { fg = redox.orange })
+vim.api.nvim_set_hl(0, "@function", { fg = redox.teal })
+vim.api.nvim_set_hl(0, "@method", { link = "@function" })
+vim.api.nvim_set_hl(0, "@type", { fg = redox.amber })
+vim.api.nvim_set_hl(0, "@type.builtin", { fg = redox.amber })
+vim.api.nvim_set_hl(0, "@constant", { fg = redox.amber })
+vim.api.nvim_set_hl(0, "@string", { fg = redox.sea })
+vim.api.nvim_set_hl(0, "@number", { link = "@constant" })
+vim.api.nvim_set_hl(0, "@boolean", { link = "@constant" })
+vim.api.nvim_set_hl(0, "@operator", { fg = "#C9D4D2" })
+vim.api.nvim_set_hl(0, "@field", { fg = "#CFE3DE" })
+vim.api.nvim_set_hl(0, "@property", { link = "@field" })
+vim.api.nvim_set_hl(0, "@variable", { fg = redox.fg })
+vim.api.nvim_set_hl(0, "@variable.builtin", { fg = "#E6D4A3" })
+vim.api.nvim_set_hl(0, "@variable.member", { link = "@type.builtin" })
+vim.api.nvim_set_hl(0, "@attribute", { link = "@function" })
+```
+
+Markdown headings (Tree-sitter)
+```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+vim.api.nvim_set_hl(0, "@markup.heading",   { fg = redox.orange, bold = true })
+vim.api.nvim_set_hl(0, "@markup.heading.1", { fg = redox.orange, bold = true, underline = true })
+vim.api.nvim_set_hl(0, "@markup.heading.2", { fg = redox.rust, bold = true })
+vim.api.nvim_set_hl(0, "@markup.heading.3", { fg = redox.teal, bold = true })
+vim.api.nvim_set_hl(0, "@markup.heading.4", { fg = redox.amber, bold = true })
+vim.api.nvim_set_hl(0, "@markup.heading.5", { fg = redox.cyan, bold = true })
+vim.api.nvim_set_hl(0, "@markup.heading.6", { fg = redox.sea, bold = true })
+```
+
+#### Diagnostics 
+
+```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+vim.api.nvim_set_hl(0, "DiagnosticError", { fg = redox.red })
+vim.api.nvim_set_hl(0, "DiagnosticWarn", { fg = redox.warn })
+vim.api.nvim_set_hl(0, "DiagnosticInfo", { fg = redox.info })
+vim.api.nvim_set_hl(0, "DiagnosticHint", { fg = redox.hint })
+vim.api.nvim_set_hl(0, "DiagnosticVirtualTextError", { fg = redox.red, bg = redox.bg_alt })
+vim.api.nvim_set_hl(0, "DiagnosticVirtualTextWarn", { fg = redox.warn, bg = redox.bg_alt })
+vim.api.nvim_set_hl(0, "DiagnosticVirtualTextInfo", { fg = redox.info, bg = redox.bg_alt })
+vim.api.nvim_set_hl(0, "DiagnosticVirtualTextHint", { fg = redox.hint, bg = redox.bg_alt })
+vim.api.nvim_set_hl(0, "DiagnosticUnderlineError", { undercurl = true, sp = redox.red })
+vim.api.nvim_set_hl(0, "DiagnosticUnderlineWarn", { undercurl = true, sp = redox.warn })
+vim.api.nvim_set_hl(0, "DiagnosticUnderlineInfo", { undercurl = true, sp = redox.info })
+vim.api.nvim_set_hl(0, "DiagnosticUnderlineHint", { undercurl = true, sp = redox.hint })
+vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", { fg = "#4A5353" })
+```
+
+LSP
+```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+vim.api.nvim_set_hl(0, "LspInlayHint", { fg = redox.subtle, bg = redox.bg_alt, italic = true })
+vim.api.nvim_set_hl(0, "LspReferenceText", { bg = redox.bg_alt })
+vim.api.nvim_set_hl(0, "LspReferenceRead", { bg = redox.bg_alt })
+vim.api.nvim_set_hl(0, "LspReferenceWrite", { bg = redox.bg_alt })
+vim.api.nvim_set_hl(0, "LspSignatureActiveParameter", { bg = redox.selection, bold = true })
+vim.api.nvim_set_hl(0, "LspCodeLens", { fg = redox.subtle })
+vim.api.nvim_set_hl(0, "LspInfoBorder", { fg = redox.overlay, bg = redox.bg_alt })
+```
+
+#### Diff & VCS
+
+```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+vim.api.nvim_set_hl(0, "DiffAdd", { bg = "#33403B" })
+vim.api.nvim_set_hl(0, "DiffChange", { bg = "#403F30" })
+vim.api.nvim_set_hl(0, "DiffDelete", { bg = "#4A3333" })
+vim.api.nvim_set_hl(0, "DiffText", { bg = redox.orange })
+vim.api.nvim_set_hl(0, "diffAdded", { bg = "#33403B", fg = "#449dab" })
+vim.api.nvim_set_hl(0, "diffRemoved", { bg = "#4A3333", fg = "#914c54" })
+vim.api.nvim_set_hl(0, "diffChanged", { bg = "#403F30", fg = "#6183bb" })
+vim.api.nvim_set_hl(0, "diffOldFile", { fg = redox.orange, bg = "#4A3333" })
+vim.api.nvim_set_hl(0, "diffNewFile", { fg = redox.orange, bg = "#33403B" })
+vim.api.nvim_set_hl(0, "diffFile", { fg = redox.teal })
+vim.api.nvim_set_hl(0, "diffLine", { fg = redox.subtle })
+vim.api.nvim_set_hl(0, "diffIndexLine", { fg = redox.cyan })
+```
+
+GitSigns
+```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+vim.api.nvim_set_hl(0, "GitSignsAdd", { fg = redox.teal })
+vim.api.nvim_set_hl(0, "GitSignsChange", { fg = redox.amber })
+vim.api.nvim_set_hl(0, "GitSignsDelete", { fg = redox.red })
+```
+
+#### Quickfix / Location list
+
+```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+vim.api.nvim_set_hl(0, "QFFileName", { fg = redox.teal })
+vim.api.nvim_set_hl(0, "QuickFixLine", { fg = redox.bg, bg = redox.orange })
+```
+
+#### LSP Semantic tokens
+
+Types & type-like
+```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+vim.api.nvim_set_hl(0, "@lsp.type.class", { link = "@type" })
+vim.api.nvim_set_hl(0, "@lsp.type.struct", { link = "@type" })
+vim.api.nvim_set_hl(0, "@lsp.type.interface", { link = "@function" })
+vim.api.nvim_set_hl(0, "@lsp.type.enum", { link = "@type" })
+vim.api.nvim_set_hl(0, "@lsp.type.enumMember", { link = "@constant" })
+vim.api.nvim_set_hl(0, "@lsp.type.type", { link = "@type" })
+vim.api.nvim_set_hl(0, "@lsp.type.typeParameter", { link = "@type" })
+vim.api.nvim_set_hl(0, "@lsp.type.union", { link = "@type" })
+```
+
+Functions & callables
+```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+vim.api.nvim_set_hl(0, "@lsp.type.function", { link = "@function" })
+vim.api.nvim_set_hl(0, "@lsp.type.method", { link = "@method" })
+vim.api.nvim_set_hl(0, "@lsp.type.macro", { link = "@function" })
+vim.api.nvim_set_hl(0, "@lsp.type.constructor", { link = "@function" })
+```
+
+Variables & members
+```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+vim.api.nvim_set_hl(0, "@lsp.type.variable", { link = "@variable" })
+vim.api.nvim_set_hl(0, "@lsp.type.parameter", { link = "@variable" })
+vim.api.nvim_set_hl(0, "@lsp.type.property", { link = "@type.builtin" })
+vim.api.nvim_set_hl(0, "@lsp.type.field", { link = "@field" })
+vim.api.nvim_set_hl(0, "@lsp.type.namespace", { link = "@variable" })
+vim.api.nvim_set_hl(0, "@lsp.type.package", { link = "@type" })
+```
+
+Literals & operators
+```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+vim.api.nvim_set_hl(0, "@lsp.type.number", { link = "@constant" })
+vim.api.nvim_set_hl(0, "@lsp.type.boolean", { link = "@constant" })
+vim.api.nvim_set_hl(0, "@lsp.type.string", { link = "@string" })
+vim.api.nvim_set_hl(0, "@lsp.type.escapeSequence", { link = "@string" })
+vim.api.nvim_set_hl(0, "@lsp.type.formatSpecifier", { link = "@string" })
+vim.api.nvim_set_hl(0, "@lsp.type.operator", { link = "@operator" })
+```
+
+Keywords & modifiersua/my/theme.lua
+```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+vim.api.nvim_set_hl(0, "@lsp.type.keyword", { link = "@keyword" })
+vim.api.nvim_set_hl(0, "@lsp.type.modifier", { link = "@keyword" })
+```
+
+Comments, regexps, decorators/attributes
+```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+vim.api.nvim_set_hl(0, "@lsp.type.comment", { link = "@comment" })
+vim.api.nvim_set_hl(0, "@lsp.type.regexp", { link = "@string" })
+vim.api.nvim_set_hl(0, "@lsp.type.decorator", { fg = "#E6D4A3", italic = true })
+```
+
+Builtins/special identifiersm-lite/lua/my/theme.lua
+```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+vim.api.nvim_set_hl(0, "@lsp.type.builtinType", { link = "@type.builtin" })
+vim.api.nvim_set_hl(0, "@lsp.type.selfKeyword", { link = "@variable.builtin" })
+vim.api.nvim_set_hl(0, "@lsp.type.null", { link = "@constant" })
+```
+
+LSP modifiers
+```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+vim.api.nvim_set_hl(0, "@lsp.mod.deprecated", { strikethrough = true })
+vim.api.nvim_set_hl(0, "@lsp.mod.readonly", { underline = true, sp = "#4A5353" })
+vim.api.nvim_set_hl(0, "@lsp.mod.static", { italic = true })
+vim.api.nvim_set_hl(0, "@lsp.mod.abstract", { italic = true })
+vim.api.nvim_set_hl(0, "@lsp.mod.unused", { fg = "#4A5353" })
+vim.api.nvim_set_hl(0, "@lsp.typemod.variable.defaultLibrary", { link = "@variable.builtin" })
+```
+
+### Tabline
+
+```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+function _G.get_tabline()
+    local s = ""
+    for tabnr = 1, vim.fn.tabpagenr("$") do
+        local winnr = vim.fn.tabpagewinnr(tabnr)
+        local buflist = vim.fn.tabpagebuflist(tabnr)[winnr]
+        local bufname = vim.fn.bufname(buflist)
+        local bufname_short = vim.fn.fnamemodify(bufname, ":t")
+        if #bufname_short == 0 then
+            bufname_short = "[No Name]"
+        end
+        if tabnr == vim.fn.tabpagenr() then
+            s = s .. "%#TabLineSel#"
+        else
+            s = s .. "%#TabLine#"
+        end
+        s = s .. " " .. tabnr .. ": " .. bufname_short .. " "
+    end
+    s = s .. "%#TabLineFill#"
+    return s
 end
 
-local groups = getHighlightGroup(colors)
+vim.o.tabline = "%!v:lua.get_tabline()"
+```
 
-for group, hl in pairs(groups) do
-    hl = type(hl) == "string" and { link = hl } or hl
-    vim.api.nvim_set_hl(0, group, hl)
-end
+### Statusline
 
-vim.cmd.hi("StatusFlags guibg=#374641 guifg=#A6E3A1")
-vim.o.statusline = " %F [%{strlen(&fenc)?&fenc:&enc}] [%{&ff}] %y [%{&spelllang}] [0x%04B] "
+```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+vim.o.statusline = " %f [%{strlen(&fenc)?&fenc:&enc}] [%{&ff}] %y [%{&spelllang}] [0x%04B] "
     .. "%="
     .. " [%n] %l/%L (%p%%), %c "
-    .. "%#StatusFlags#%{&mod?' [+] ':''}%*"
-
+    .. "%#StatusLineNC#%{&mod?' [+] ':''}%*"
 ```
-
