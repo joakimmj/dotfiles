@@ -18,22 +18,29 @@ shopt -s histappend
 GIT_PS1_SHOWDIRTYSTATE=true
 GIT_PS1_SHOWUNTRACKEDFILES=true
 GIT_PS1_SHOWUPSTREAM=auto
-unset tags;
-tags=()
+function get_tags(){
+  local tags=()
 
-if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
-    tags=$(cat /etc/debian_chroot)
-fi
-if [ $(id -u) -eq 0 ]; then
-  tags+=("root")
-fi
-if [ -n "$SSH_CLIENT" ]; then
-  tags+=("ssh")
-fi
+  if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+      tags=$(cat /etc/debian_chroot)
+  fi
+  if [ $(id -u) -eq 0 ]; then
+    tags+=("root")
+  fi
+  if [ -n "$SSH_CLIENT" ]; then
+    tags+=("ssh")
+  fi
+  if [[ -n "$VIRTUAL_ENV" ]]; then
+    tags+=("${VIRTUAL_ENV##*/}")
+  fi
+
+  [[ -n "$tags" ]] && echo "${tags:+${tags[*]}-}"
+}
+export VIRTUAL_ENV_DISABLE_PROMPT=1
 redox_teal="\[\e[38;2;126;193;174m\]" # #7EC1AE
 redox_rust="\[\e[38;2;205;139;100m\]" # #CD8B64
 redox_reset="\[\e[0m\]"
-PS1="$redox_rust╭─${tags:+${tags[*]}-}[$redox_teal\A$redox_rust]-[$redox_teal\j$redox_rust]-[$redox_teal\u:\W\$(__git_ps1)$redox_rust]\n╰──\$ $redox_reset"
+PS1="$redox_rust╭─\$(get_tags)[$redox_teal\A$redox_rust]-[$redox_teal\j$redox_rust]-[$redox_teal\u:\W\$(__git_ps1)$redox_rust]\n╰──\$ $redox_reset"
 set -o vi
 bind -m vi-command 'Control-l: clear-screen'
 bind -m vi-insert 'Control-l: clear-screen'

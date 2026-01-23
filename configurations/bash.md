@@ -93,20 +93,32 @@ Add tags if:
 * chrooting inside a sub system
 * logged in as root
 * logged into a SSH client
+* running in virtual environment
 
 ```bash tangle:~/.bashrc
-unset tags;
-tags=()
+function get_tags(){
+  local tags=()
 
-if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
-    tags=$(cat /etc/debian_chroot)
-fi
-if [ $(id -u) -eq 0 ]; then
-  tags+=("root")
-fi
-if [ -n "$SSH_CLIENT" ]; then
-  tags+=("ssh")
-fi
+  if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+      tags=$(cat /etc/debian_chroot)
+  fi
+  if [ $(id -u) -eq 0 ]; then
+    tags+=("root")
+  fi
+  if [ -n "$SSH_CLIENT" ]; then
+    tags+=("ssh")
+  fi
+  if [[ -n "$VIRTUAL_ENV" ]]; then
+    tags+=("${VIRTUAL_ENV##*/}")
+  fi
+
+  [[ -n "$tags" ]] && echo "${tags:+${tags[*]}-}"
+}
+```
+
+Disable default virtual env prompt
+```bash tangle:~/.bashrc
+export VIRTUAL_ENV_DISABLE_PROMPT=1
 ```
 
 Using colors from the Redox theme (24-but RGB)
@@ -133,7 +145,7 @@ Prompt commands:
 * `\$` : if the effective UID is 0, a #, otherwise a $
 
 ```bash tangle:~/.bashrc
-PS1="$redox_rust╭─${tags:+${tags[*]}-}[$redox_teal\A$redox_rust]-[$redox_teal\j$redox_rust]-[$redox_teal\u:\W\$(__git_ps1)$redox_rust]\n╰──\$ $redox_reset"
+PS1="$redox_rust╭─\$(get_tags)[$redox_teal\A$redox_rust]-[$redox_teal\j$redox_rust]-[$redox_teal\u:\W\$(__git_ps1)$redox_rust]\n╰──\$ $redox_reset"
 ```
 
 Set `vi` mode
