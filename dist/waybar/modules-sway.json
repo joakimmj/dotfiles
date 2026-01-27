@@ -1,0 +1,40 @@
+{
+  "sway/workspaces": {
+    "disable-scroll": true,
+    "all-outputs": true,
+    "format": "{icon} {value}",
+    "format-icons": {
+      "www": "",
+      "terminal": "",
+      "edit": "",
+      "music": "",
+      "chat": "",
+      "urgent": "",
+      "focused": "",
+      "default": "",
+      "high-priority-named": [
+        "www",
+        "terminal",
+        "edit"
+      ]
+    }
+  },
+  "sway/scratchpad": {
+    "format": "{icon} {count}",
+    "show-empty": true,
+    "format-icons": [""],
+    "tooltip": true,
+    "tooltip-format": "{app}: {title}"
+  },
+  "sway/mode": {
+    "format": "{}",
+    "align": 0
+  },
+  "sway/window": {
+    "format": "{title}",
+    "max-length": 50,
+    "rewrite": {
+      "bash": " bash"
+    }
+  }
+}

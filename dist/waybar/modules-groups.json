@@ -1,0 +1,31 @@
+{
+  "group/hardware": {
+    "orientation": "horizontal",
+    "modules": [
+      "cpu",
+      "memory",
+      "temperature",
+      "backlight",
+      "battery"
+    ]
+  },
+  "custom/tools": {
+    "format": "",
+    "tooltip-format": "Tools",
+    "on-scroll-up": "true",
+    "on-scroll-down": "true"
+  },
+  "group/tools": {
+    "orientation": "inherit",
+    "drawer": {
+      "transition-duration": 300,
+      "children-class": "not-tools",
+      "transition-left-to-right": false
+    },
+    "modules": [
+      "custom/tools",
+      "custom/calculator",
+      "custom/appmenu"
+    ]
+  }
+}

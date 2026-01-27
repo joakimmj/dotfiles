@@ -1,0 +1,13 @@
+{
+  "custom/calculator": {
+    "format": "",
+    "on-click": "gnome-calculator",
+    "tooltip-format": "Open calculator"
+  },
+  "custom/appmenu": {
+    "format": "Apps",
+    "on-click": "rofi -show drun",
+    "on-click-right": "rofi -show run",
+    "tooltip-format": "Left: Open the application launcher\nRight: Show all keybindings"
+  }
+}
