@@ -1,5 +1,35 @@
 # Nvim
 
+Install neovim (stable)
+```bash
+#!/usr/bin/env bash
+
+git clone --branch stable --single-branch --depth 1 https://github.com/neovim/neovim.git
+cd neovim
+make distclean
+make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX=~/lib/neovim-stable
+make install
+cd ..
+rm -rf neovim
+ln -sf ~/lib/neovim-stable/bin/nvim ~/.local/bin/nvim
+```
+
+Install neovim (nightly)
+```bash
+#!/usr/bin/env bash
+
+git clone --branch nightly --single-branch --depth 1 https://github.com/neovim/neovim.git
+cd neovim
+make distclean
+make CMAKE_BUILD_TYPE=RelWithDebInfo CMAKE_INSTALL_PREFIX=~/lib/neovim-nightly
+make install
+cd ..
+rm -rf neovim
+ln -sf ~/lib/neovim-nightly/bin/nvim ~/.local/bin/nvim-nightly
+```
+
+## Lua setup
+
 Add Lua settings to configuration folder.
 > `~/.config/nvim/.luarc.json`
 ```json tangle:~/.config/nvim/.luarc.json
