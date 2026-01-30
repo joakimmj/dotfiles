@@ -1,3 +1,5 @@
 .idea
 .venv
+nvim-pack-lock.json
+lazy-lock.json
 
