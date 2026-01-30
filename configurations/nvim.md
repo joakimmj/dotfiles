@@ -1364,6 +1364,8 @@ vim.api.nvim_set_hl(0, "@lsp.mod.static", { italic = true })
 vim.api.nvim_set_hl(0, "@lsp.mod.abstract", { italic = true })
 vim.api.nvim_set_hl(0, "@lsp.mod.unused", { fg = "#4A5353" })
 vim.api.nvim_set_hl(0, "@lsp.typemod.variable.defaultLibrary", { link = "@variable.builtin" })
+
+vim.keymap.set("n", "<leader>i", ":Inspect<CR>", { desc = "[i]nspect" })
 ```
 
 ### Tabline
