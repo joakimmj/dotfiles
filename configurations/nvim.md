@@ -394,16 +394,6 @@ Detect tabstop and shiftwidth automatically
 	"tpope/vim-sleuth",
 ```
 
-Highlight todo, notes, etc in comments
-```lua tangle:~/.config/nvim/lua/my/plugins/general.lua
-	{
-		"folke/todo-comments.nvim",
-		event = "VimEnter",
-		dependencies = { "nvim-lua/plenary.nvim" },
-		opts = { signs = false },
-	},
-```
-
 Show colors in Neovim
 ```lua tangle:~/.config/nvim/lua/my/plugins/general.lua
 	{
@@ -993,6 +983,7 @@ return {
 			ensure_installed = {
 				"bash",
 				"c",
+				"comment",
 				"diff",
 				"html",
 				"lua",
@@ -1199,6 +1190,8 @@ vim.api.nvim_set_hl(0, "WarningMsg", { link = "DiagnosticWarn" })
 
 ```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
 vim.api.nvim_set_hl(0, "@comment", { fg = redox.subtle, italic = true })
+vim.api.nvim_set_hl(0, "Todo", { bg = redox.hint, fg = redox.bg, bold = true })
+vim.api.nvim_set_hl(0, "@comment.todo", { link = "Todo" })
 vim.api.nvim_set_hl(0, "@keyword", { fg = redox.orange, bold = true })
 vim.api.nvim_set_hl(0, "@conditional", { fg = redox.orange })
 vim.api.nvim_set_hl(0, "@function", { fg = redox.teal })
