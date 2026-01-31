@@ -1,3 +1,23 @@
+-- TODO: make fullscreen floating window with current buffer?? :thinking
+-- vim.keymap.set("n", "<leader>wz", function ()
+--     local ls = vim.opt.laststatus:get()
+--     if ls == 0 then
+--         vim.opt.laststatus = 2
+--         vim.opt.cmdheight = 1
+--     else
+--         vim.opt.laststatus = 0
+--         vim.opt.cmdheight = 0
+--     end
+-- end, { desc = "[z]en mode" })
+--
+-- -- In init.lua
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = "markdown",
+--   callback = function()
+--     vim.opt_local.textwidth = 80 -- Set max width
+--     vim.opt_local.formatoptions:append("a") -- Auto-format paragraphs
+--   end,
+-- })
 require("my.theme")
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "

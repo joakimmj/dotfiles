@@ -58,6 +58,29 @@ indent_type = "Spaces"
 indent_width = 2
 ```
 
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+-- TODO: make fullscreen floating window with current buffer?? :thinking
+-- vim.keymap.set("n", "<leader>wz", function ()
+--     local ls = vim.opt.laststatus:get()
+--     if ls == 0 then
+--         vim.opt.laststatus = 2
+--         vim.opt.cmdheight = 1
+--     else
+--         vim.opt.laststatus = 0
+--         vim.opt.cmdheight = 0
+--     end
+-- end, { desc = "[z]en mode" })
+--
+-- -- In init.lua
+-- vim.api.nvim_create_autocmd("FileType", {
+--   pattern = "markdown",
+--   callback = function()
+--     vim.opt_local.textwidth = 80 -- Set max width
+--     vim.opt_local.formatoptions:append("a") -- Auto-format paragraphs
+--   end,
+-- })
+```
+
 ## Init
 > `~/.config/nvim/init.lua`, `~/.config/nvim-lite/init.lua`
 
@@ -224,11 +247,13 @@ vim.opt.isfname:append("@-@")
 Decrease update time
 ```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.opt.updatetime = 50
+-- vim.opt.updatetime = 50 -- default: 4000
 ```
 
 Decrease mapped sequence wait time (displays which-key popup sooner)
 ```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.opt.timeoutlen = 300
+-- vim.opt.timeoutlen = 300 -- default: 1000
 ```
 
 Configure how new splits should be opened
