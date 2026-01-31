@@ -35,10 +35,10 @@ vim.keymap.set("n", "<C-j>", "<cmd>try | cnext | catch | cfirst | catch | endtry
 vim.keymap.set("n", "<C-k>", "<cmd>try | cprevious | catch | clast | catch | endtry<CR>zz", { desc = "go to previous quickfix list entry" })
 vim.keymap.set("n", "<C-h>", "<cmd>colder<CR>", { desc = "go to previous quickfix list" })
 vim.keymap.set("n", "<C-l>", "<cmd>cnewer<CR>", { desc = "go to next quickfix list" })
-vim.keymap.set('n', '<leader>q', function()
-    local qf_winid = vim.fn.getqflist({ winid = 0 }).winid
-    local action = qf_winid > 0 and 'cclose' or 'copen'
-    vim.cmd('botright '..action)
+vim.keymap.set("n", "<leader>q", function()
+  local qf_winid = vim.fn.getqflist({ winid = 0 }).winid
+  local action = qf_winid > 0 and "cclose" or "copen"
+  vim.cmd("botright " .. action)
 end, { noremap = true, silent = true, desc = "[q]uickfix list toggle" })
 vim.keymap.set("n", "<left>", "<Nop>")
 vim.keymap.set("n", "<right>", "<Nop>")
@@ -46,4 +46,3 @@ vim.keymap.set("n", "<up>", "<Nop>")
 vim.keymap.set("n", "<down>", "<Nop>")
 vim.keymap.set("n", "<leader>SS", function() vim.cmd([[mksession! .session.vim]]) end, { desc = "[S]ave" })
 vim.keymap.set("n", "<leader>SR", function() vim.cmd([[source .session.vim]]) end, { desc = "[R]estore" })
-vim.keymap.set("n", "<leader>we", ":Lex<CR>", { desc = "[e]xplorer" })
