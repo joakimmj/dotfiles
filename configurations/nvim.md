@@ -59,25 +59,29 @@ indent_width = 2
 ```
 
 ## Init
+> `~/.config/nvim/init.lua`, `~/.config/nvim-lite/init.lua`
 
 Import my configurations
-> `~/.config/nvim/init.lua`
-```lua tangle:~/.config/nvim/init.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 require("my.theme")
 require("my.mappings")
 require("my.options")
 require("my.autocmd")
-require("my.init-lazy")
-```
 
-Configuration for my non-plugin setup
-> `~/.config/nvim-lite/init.lua`
-```lua tangle:~/.config/nvim-lite/init.lua
-require("my.theme")
-require("my.mappings")
-require("my.options")
-require("my.netrw")
-require("my.autocmd")
+local use_lazy_packages, _ = pcall(require, "my.init-lazy")
+if not use_lazy_packages then
+    vim.g.netrw_bufsettings = "noma nomod nu rnu nobl nowrap ro"
+    vim.g.netrw_liststyle=3
+    vim.g.netrw_browse_split = 0
+    vim.g.netrw_banner = 0
+    vim.g.netrw_winsize = 25
+
+    vim.keymap.set("n", "<leader>we", ":Lex<CR>", { desc = "[e]xplorer" })
+    vim.keymap.set("n", "<leader>wg", [[:vimgrep //j ** | copen<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>]], { desc = "[g]rep" })
+    vim.keymap.set("n", "<leader>wf", ":Lex<CR>", { desc = "[f]iles" })
+    vim.keymap.set("n", "<leader><space>", ":ls<CR>:b<Space>", { desc = "[ ] find existing buffers" })
+    vim.keymap.set("n", "<leader>sw", [[:execute "vimgrep /" . expand("<cword>") . "/j **" | cw<CR>]], { desc = "current [w]ord" })
+end
 ```
 
 ## Keymaps
@@ -332,16 +336,6 @@ Disable default folding when opening file
 > `~/.config/nvim/lua/my/options.lua`, `~/.config/nvim-lite/lua/my/options.lua`
 ```lua tangle:~/.config/nvim/lua/my/options.lua,~/.config/nvim-lite/lua/my/options.lua
 vim.opt.foldlevelstart = 99
-```
-
-## Netrw
-
-> `~/.config/nvim-lite/lua/my/netrw.lua`
-```lua tangle:~/.config/nvim-lite/lua/my/netrw.lua
-vim.g.netrw_bufsettings = "noma nomod nu nobl nowrap ro"
-vim.g.netrw_browse_split = 0
-vim.g.netrw_banner = 0
-vim.g.netrw_winsize = 25
 ```
 
 ## Autocmd
