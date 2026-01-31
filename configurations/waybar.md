@@ -2,7 +2,7 @@
 
 ## Modules
 
-```json tangle:~/config/waybar/modules.json
+```json tangle:~/.config/waybar/modules.json
 {
     "network": {
         "format": "{ifname}",
@@ -14,7 +14,6 @@
         "tooltip-format-ethernet": " {ifname}\nIP: {ipaddr}\n up: {bandwidthUpBits} down: {bandwidthDownBits}",
         "tooltip-format-disconnected": "Disconnected",
         "max-length": 50,
-        "on-click-right": "~/.config/ml4w/scripts/nm-applet.sh toggle",
         "on-click": "nm-connection-editor"
     },
     "pulseaudio": {
@@ -92,7 +91,7 @@
 
 ### Sway
 
-```json tangle:~/config/waybar/modules-sway.json
+```json tangle:~/.config/waybar/modules-sway.json
 {
   "sway/workspaces": {
     "disable-scroll": true,
@@ -137,7 +136,7 @@
 
 ### Groups
 
-```json tangle:~/config/waybar/modules-groups.json
+```json tangle:~/.config/waybar/modules-groups.json
 {
   "group/hardware": {
     "orientation": "horizontal",
@@ -172,7 +171,7 @@
 ```
 
 ### Custom
-```json tangle:~/config/waybar/modules-custom.json
+```json tangle:~/.config/waybar/modules-custom.json
 {
   "custom/calculator": {
     "format": "",
@@ -190,7 +189,7 @@
 
 ## Config
 
-```json tangle:~/config/waybar/config
+```json tangle:~/.config/waybar/config
 {
     "position": "top",
     "height": 34, // Waybar height (to be removed for auto height)
@@ -229,7 +228,7 @@
 
 ## Styling
 
-```css tangle:~/config/waybar/style.css
+```css tangle:~/.config/waybar/style.css
 * {
   font-family: JetBrainsMono Nerd Font, monospace;
   font-size: 13px;
