@@ -64,42 +64,23 @@ indent_width = 2
 Import my configurations
 ```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 require("my.theme")
-require("my.mappings")
-require("my.options")
-require("my.autocmd")
-
-local use_lazy_packages, _ = pcall(require, "my.init-lazy")
-if not use_lazy_packages then
-    vim.g.netrw_bufsettings = "noma nomod nu rnu nobl nowrap ro"
-    vim.g.netrw_liststyle=3
-    vim.g.netrw_browse_split = 0
-    vim.g.netrw_banner = 0
-    vim.g.netrw_winsize = 25
-
-    vim.keymap.set("n", "<leader>we", ":Lex<CR>", { desc = "[e]xplorer" })
-    vim.keymap.set("n", "<leader>wg", [[:vimgrep //j ** | copen<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>]], { desc = "[g]rep" })
-    vim.keymap.set("n", "<leader>wf", ":Lex<CR>", { desc = "[f]iles" })
-    vim.keymap.set("n", "<leader><space>", ":ls<CR>:b<Space>", { desc = "[ ] find existing buffers" })
-    vim.keymap.set("n", "<leader>sw", [[:execute "vimgrep /" . expand("<cword>") . "/j **" | cw<CR>]], { desc = "current [w]ord" })
-end
 ```
 
-## Keymaps
-> `~/.config/nvim/lua/my/mappings.lua`, `~/.config/nvim-lite/lua/my/mappings.lua`
+### Keymaps
 
 Change `<leader>` to `Space`
-```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 ```
 
 Remove highlight from search
-```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 ```
 
 Move line up/down
-```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.keymap.set("n", "<A-k>", ":m .-2<CR>==", { desc = "move line up" })
 vim.keymap.set("n", "<A-j>", ":m .+1<CR>==", { desc = "move line down" })
 vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv", { desc = "move selection up" })
@@ -107,47 +88,47 @@ vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv", { desc = "move selection down" 
 ```
 
 Better indenting in visual mode
-```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.keymap.set("v", "<", "<gv", { desc = "indent left and reselect" })
 vim.keymap.set("v", ">", ">gv", { desc = "indent right and reselect" })
 ```
 
 Better J behavior
-```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.keymap.set("n", "J", "mzJ`z", { desc = "join lines and keep cursor position" })
 ```
 
 Toggle line wrap for current buffer
-```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.keymap.set("n", "<leader>dw", "<cmd>set wrap!<CR>", { desc = "toggle [w]rap" })
 ```
 
 Center cursor on up/down
-```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "move cursor up" })
 vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "move cursor down" })
 ```
 
 Center cursor on next/previous search result
-```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.keymap.set("n", "n", "nzzzv", { desc = "next search result (centered)" })
 vim.keymap.set("n", "N", "Nzzzv", { desc = "previous search result (centered)" })
 ```
 
 Yank to/paste from system clipboard
-```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]], { desc = "[y]ank to system clipboard" })
 vim.keymap.set("n", "<leader>Y", [["+Y]], { desc = "[Y]ank rest of line to system clipboard" })
 vim.keymap.set({ "n", "v" }, "<leader>p", [["+p]], { desc = "[p]aste from system clipboard" })
 ```
 
 Paste from yank register (`"0`)
-```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.keymap.set({ "n", "v" }, "<C-p>", "\"0p", { desc = "paste from yank register" })
 ```
 
 Replace all of word under cursor
-```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.keymap.set(
 	"n",
 	"<leader>dr",
@@ -157,7 +138,7 @@ vim.keymap.set(
 ```
 
 Replace selected text
-```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.keymap.set(
 	"v",
 	"<leader>dr",
@@ -167,13 +148,13 @@ vim.keymap.set(
 ```
 
 Diagnostic keymaps
-```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.keymap.set("n", "<leader>dd", vim.diagnostic.setloclist, { desc = "[d]iagnostic (location list)" })
 vim.keymap.set("n", "<leader>wd", vim.diagnostic.setqflist, { desc = "[d]iagnostic (quickfix list)" })
 ```
 
 Quickfix list keymaps
-```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.keymap.set("n", "<C-j>", "<cmd>try | cnext | catch | cfirst | catch | endtry<CR>zz", { desc = "go to next quickfix list entry" })
 vim.keymap.set("n", "<C-k>", "<cmd>try | cprevious | catch | clast | catch | endtry<CR>zz", { desc = "go to previous quickfix list entry" })
 vim.keymap.set("n", "<C-h>", "<cmd>colder<CR>", { desc = "go to previous quickfix list" })
@@ -186,7 +167,7 @@ end, { noremap = true, silent = true, desc = "[q]uickfix list toggle" })
 ```
 
 Disable arrow keys in normal mode
-```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.keymap.set("n", "<left>", "<Nop>")
 vim.keymap.set("n", "<right>", "<Nop>")
 vim.keymap.set("n", "<up>", "<Nop>")
@@ -194,26 +175,25 @@ vim.keymap.set("n", "<down>", "<Nop>")
 ```
 
 Save/restore vim sessions
-```lua tangle:~/.config/nvim/lua/my/mappings.lua,~/.config/nvim-lite/lua/my/mappings.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.keymap.set("n", "<leader>SS", function() vim.cmd([[mksession! .session.vim]]) end, { desc = "[S]ave" })
 vim.keymap.set("n", "<leader>SR", function() vim.cmd([[source .session.vim]]) end, { desc = "[R]estore" })
 ```
 
-## Options
-> `~/.config/nvim/lua/my/options.lua`, `~/.config/nvim-lite/lua/my/options.lua`
+### Options
 
 Enable line number
-```lua tangle:~/.config/nvim/lua/my/options.lua,~/.config/nvim-lite/lua/my/options.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.opt.number = true
 ```
 
 Enable relative line numbers
-```lua tangle:~/.config/nvim/lua/my/options.lua,~/.config/nvim-lite/lua/my/options.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.opt.relativenumber = true
 ```
 
 Change tab spacing to four spaces
-```lua tangle:~/.config/nvim/lua/my/options.lua,~/.config/nvim-lite/lua/my/options.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
@@ -221,7 +201,7 @@ vim.opt.expandtab = true
 ```
 
 Sane defaults
-```lua tangle:~/.config/nvim/lua/my/options.lua,~/.config/nvim-lite/lua/my/options.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.opt.smartindent = true
 
 vim.opt.wrap = false
@@ -242,45 +222,45 @@ vim.opt.isfname:append("@-@")
 ```
 
 Decrease update time
-```lua tangle:~/.config/nvim/lua/my/options.lua,~/.config/nvim-lite/lua/my/options.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.opt.updatetime = 50
 ```
 
 Decrease mapped sequence wait time (displays which-key popup sooner)
-```lua tangle:~/.config/nvim/lua/my/options.lua,~/.config/nvim-lite/lua/my/options.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.opt.timeoutlen = 300
 ```
 
 Configure how new splits should be opened
-```lua tangle:~/.config/nvim/lua/my/options.lua,~/.config/nvim-lite/lua/my/options.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 ```
 
 Sets how neovim will display certain whitespace characters in the editor.
 (See `:help 'list'` and `:help 'listchars'`)
-```lua tangle:~/.config/nvim/lua/my/options.lua,~/.config/nvim-lite/lua/my/options.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.opt.list = true
 vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣", leadmultispace = "|   " }
 ```
 
 Preview substitutions live, as you type!
-```lua tangle:~/.config/nvim/lua/my/options.lua,~/.config/nvim-lite/lua/my/options.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.opt.inccommand = "split"
 ```
 
 Show which line your cursor is on
-```lua tangle:~/.config/nvim/lua/my/options.lua,~/.config/nvim-lite/lua/my/options.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.opt.cursorline = true
 ```
 
 Breakindent
-```lua tangle:~/.config/nvim/lua/my/options.lua,~/.config/nvim-lite/lua/my/options.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.opt.breakindent = true
 ```
 
 Case-insensitive searching UNLESS \C or one or more capital letters in the search term
-```lua tangle:~/.config/nvim/lua/my/options.lua,~/.config/nvim-lite/lua/my/options.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.hlsearch = true
@@ -288,21 +268,20 @@ vim.opt.incsearch = true
 ```
 
 Automatic folding based on treesitter
-```lua tangle:~/.config/nvim/lua/my/options.lua,~/.config/nvim-lite/lua/my/options.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 ```
 
 Disable default folding when opening file
-```lua tangle:~/.config/nvim/lua/my/options.lua,~/.config/nvim-lite/lua/my/options.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.opt.foldlevelstart = 99
 ```
 
-## Autocmd
-> `~/.config/nvim/lua/my/autocmd.lua`, `~/.config/nvim-lite/lua/my/autocmd.lua`
+### Autocmd
 
 Highlight when yanking (copying) text
-```lua tangle:~/.config/nvim/lua/my/autocmd.lua,~/.config/nvim-lite/lua/my/autocmd.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.api.nvim_create_autocmd("TextYankPost", {
 	desc = "Highlight when yanking (copying) text",
 	group = vim.api.nvim_create_augroup("augroup-highlight-yank", { clear = true }),
@@ -313,7 +292,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 ```
 
 Automatically save session when closing nvim
-```lua tangle:~/.config/nvim/lua/my/autocmd.lua,~/.config/nvim-lite/lua/my/autocmd.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.api.nvim_create_autocmd("VimLeave", {
 	desc = "Save session on exit",
 	group = vim.api.nvim_create_augroup("augroup-session-manage", { clear = true }),
@@ -324,7 +303,7 @@ vim.api.nvim_create_autocmd("VimLeave", {
 ```
 
 Reload files when changed on disk
-```lua tangle:~/.config/nvim/lua/my/autocmd.lua,~/.config/nvim-lite/lua/my/autocmd.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "CursorHoldI", "FocusGained" }, {
 	desc = "Check if file changed on disk",
 	group = vim.api.nvim_create_augroup("augroup-file-disk-status", { clear = true }),
@@ -334,7 +313,7 @@ vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "CursorHoldI", "FocusGai
 ```
 
 Add keymaps for executing `Lua` code (for `Lua` buffers only)
-```lua tangle:~/.config/nvim/lua/my/autocmd.lua,~/.config/nvim-lite/lua/my/autocmd.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.api.nvim_create_autocmd('FileType', {
 	desc = 'Lua specific options',
 	pattern = 'lua',
@@ -348,7 +327,7 @@ vim.api.nvim_create_autocmd('FileType', {
 ```
 
 Add keymaps for formatting `JSON` (for `json` buffers only)
-```lua tangle:~/.config/nvim/lua/my/autocmd.lua,~/.config/nvim-lite/lua/my/autocmd.lua
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
 vim.api.nvim_create_autocmd('FileType', {
 	desc = 'Json specific options',
 	pattern = 'json',
@@ -357,6 +336,25 @@ vim.api.nvim_create_autocmd('FileType', {
 		vim.keymap.set("n", "<leader>X", [[%!jq '.']], { buffer = true, desc = "e[X]ecute json formatting" })
 	end,
 })
+```
+
+### Lite vs. plugins
+
+```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+local use_lazy_packages, _ = pcall(require, "my.init-lazy")
+if not use_lazy_packages then
+	vim.g.netrw_bufsettings = "noma nomod nu rnu nobl nowrap ro"
+	vim.g.netrw_liststyle=3
+	vim.g.netrw_browse_split = 0
+	vim.g.netrw_banner = 0
+	vim.g.netrw_winsize = 25
+
+	vim.keymap.set("n", "<leader>we", ":Lex<CR>", { desc = "[e]xplorer" })
+	vim.keymap.set("n", "<leader>wg", [[:vimgrep //j ** | copen<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>]], { desc = "[g]rep" })
+	vim.keymap.set("n", "<leader>wf", ":Lex<CR>", { desc = "[f]iles" })
+	vim.keymap.set("n", "<leader><space>", ":ls<CR>:b<Space>", { desc = "[ ] find existing buffers" })
+	vim.keymap.set("n", "<leader>sw", [[:execute "vimgrep /" . expand("<cword>") . "/j **" | cw<CR>]], { desc = "current [w]ord" })
+end
 ```
 
 ## Lazy (plugins)
