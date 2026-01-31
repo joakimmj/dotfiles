@@ -91,7 +91,9 @@ vim.opt.colorcolumn = "80,120"
 
 vim.opt.isfname:append("@-@")
 vim.opt.updatetime = 50
+-- vim.opt.updatetime = 50 -- default: 4000
 vim.opt.timeoutlen = 300
+-- vim.opt.timeoutlen = 300 -- default: 1000
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 vim.opt.list = true
