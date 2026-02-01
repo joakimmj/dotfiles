@@ -197,10 +197,10 @@
 
     // Load Modules
     "include": [
-        "modules.json",
-        "modules-custom.json",
-        "modules-sway.json",
-        "modules-groups.json"
+        "~/.config/waybar/modules.json",
+        "~/.config/waybar/modules-custom.json",
+        "~/.config/waybar/modules-sway.json",
+        "~/.config/waybar/modules-groups.json"
     ],
 
     // Choose the order of the modules
