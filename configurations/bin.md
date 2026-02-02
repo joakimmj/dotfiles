@@ -36,7 +36,7 @@ curl -s cht.sh/"${util}${query:+~$query}" | less -R
 
 Decode JWT token
 ```js tangle:~/bin/decode-jwt
-#!/bin/node
+#!/usr/bin/env node
 
 function parseJwt(token) {
     const base64Url = token?.split('.')?.[1];
