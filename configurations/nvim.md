@@ -29,9 +29,11 @@ ln -sf ~/lib/neovim-nightly/bin/nvim ~/.local/bin/nvim-nightly
 ```
 
 ## Lua setup
+
+### LSP
 > `~/.config/nvim/.luarc.json`, `~/.config/nvim-lite/.luarc.json`
 
-Add Lua settings to configuration folder.
+Configuration of the Lua language server
 ```json tangle:~/.config/nvim/.luarc.json,~/.config/nvim-lite/.luarc.json
 {
     "runtime": {
@@ -52,7 +54,10 @@ Add Lua settings to configuration folder.
 }
 ```
 
-Set style rules for our `Lua` files
+### Formatting
+> `~/.config/nvim/.stylua.toml`, `~/.config/nvim-lite/.stylua.toml`
+
+Set formatting rules for `StyLua`
 ```toml tangle:~/.config/nvim/.stylua.toml,~/.config/nvim-lite/.stylua.toml
 indent_type = "Spaces"
 indent_width = 2
