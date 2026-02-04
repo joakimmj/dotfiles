@@ -5,7 +5,10 @@ local wezterm = require 'wezterm'
 local config = wezterm.config_builder()
 
 -- Theme
-config.font = wezterm.font 'JetBrains Mono'
+config.font = wezterm.font_with_fallback({
+    { family = 'JetBrainsMono Nerd Font', weight = 'DemiBold' },
+    { family = 'JetBrains Mono', weight = 'DemiBold' },
+})
 config.color_schemes = {
     ["redox"] = {
       foreground = "#DCE8E5",
