@@ -76,14 +76,15 @@
     },
     "battery": {
         "states": {
-            "good": 95,
+            "good": 80,
             "warning": 30,
             "critical": 15
         },
-        "format": "{icon} {capacity}%",
+        "format": "{icon} {capacity}% ({time})",
         "format-charging": " {capacity}%",
         "format-plugged": " {capacity}%",
         "format-alt": "{time} {icon}",
+        "format-time": "{H}h {M}m",
         "format-icons": ["", "", "", "", ""]
     }
 }
@@ -189,7 +190,7 @@
 
 ## Config
 
-```json tangle:~/.config/waybar/config
+```json tangle:~/.config/waybar/config.jsonc
 {
     "position": "top",
     "height": 34, // Waybar height (to be removed for auto height)
@@ -208,10 +209,10 @@
         "idle_inhibitor",
         "sway/mode",
         "sway/workspaces",
-        "sway/scratchpad"
+        "sway/scratchpad",
+        "sway/window"
     ],
     "modules-center": [
-        "sway/window"
     ],
     "modules-right": [
         "group/tools",
@@ -230,8 +231,9 @@
 
 ```css tangle:~/.config/waybar/style.css
 * {
-  font-family: JetBrainsMono Nerd Font, monospace;
-  font-size: 13px;
+  font-family: "JetBrainsMono Nerd Font", monospace;
+  font-size: 14px;
+  font-weight: bold;
   border: none;
   border-radius: 6px;
 }
