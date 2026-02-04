@@ -41,7 +41,7 @@ output * bg ~/.config/sway/wallpaper.png fill
 #          timeout 300 'swaylock -f -c 000000' \
 #          timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
 #          before-sleep 'swaylock -f -c 000000'
-font pango:JetBrains Mono 11
+font pango:JetBrainsMono Nerd Font 11
 default_border none
 default_floating_border pixel 3
 titlebar_padding 1

@@ -5,12 +5,12 @@
 ### Variables
 
 Modifier
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 set $mod Mod4
 ```
 
 Navigation
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 set $left h
 set $down j
 set $up k
@@ -18,7 +18,7 @@ set $right l
 ```
 
 Workspaces
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 set $wp1 1:www
 set $wp2 2:terminal
 set $wp3 3:edit
@@ -32,7 +32,7 @@ set $wp10 10
 ```
 
 Modes
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 set $mode-default "default"
 set $mode-resize "Resize windows"
 set $mode-layout "[n]ormal  |  [t]abbed   |  [s]tacked  |  [f]loating  |  [F11] fullscreen"
@@ -41,7 +41,7 @@ set $mode-system "[l]ock  |  log[o]ut  |  [h]ibernate  |  [s]uspend  |  [p]owero
 ```
 
 Apps
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 set $term wezterm
 set $menu rofi -show run
 set $menu-daemon rofi -show drun
@@ -52,13 +52,13 @@ set $editor wezterm -e nvim
 ```
 
 Load system-wide defaults
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 include /etc/sway/config-vars.d/*
 ```
 
 ### Input configuration
 
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 input "*" {
     xkb_layout "us"
     xkb_variant "altgr-intl"
@@ -78,7 +78,7 @@ Example configuration:
 
 You can get the names of your outputs by running: swaymsg -t get_outputs
 
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 output * bg ~/.config/sway/wallpaper.png fill
 ```
 
@@ -89,7 +89,7 @@ This will lock your screen after 300 seconds of inactivity, then turn off
 your displays after another 300 seconds, and turn your screens back on when
 resumed. It will also lock your screen before your computer goes to sleep.
 
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 # exec swayidle -w \
 #          timeout 300 'swaylock -f -c 000000' \
 #          timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
@@ -97,12 +97,12 @@ resumed. It will also lock your screen before your computer goes to sleep.
 ```
 
 ### Font
-```bash tangle:~/config/sway/config
-font pango:JetBrains Mono 11
+```bash tangle:~/.config/sway/config
+font pango:JetBrainsMono Nerd Font 11
 ```
 
 ### Looks and feels
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 default_border none
 default_floating_border pixel 3
 titlebar_padding 1
@@ -138,12 +138,12 @@ workspace_auto_back_and_forth no
 
 ### Floating windows
 Use Mouse+$super to drag floating windows to their wanted position
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 floating_modifier $mod normal
 ```
 
 ### Autostart
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 # exec_always --no-startup-id chmod 755 ~/config/sway/autostart.sh
 # exec_always --no-startup-id chmod 755 ~/config/sway/win_menu.py
 # exec_always --no-startup-id chmod 755 ~/config/sway/init_json.sh
@@ -158,26 +158,26 @@ floating_modifier $mod normal
 #### Applications
 
 Terminal
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 bindsym $mod+t exec $term
 for_window [app_id="term-popup"] floating enable, resize set 80 ppt 80 ppt, border pixel 3
 bindsym $mod+Shift+t exec wezterm start --class term-popup
 ```
 
 Web browser
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 bindsym $mod+w workspace $wp1;exec $web-browser
 bindsym Shift+$mod+w exec $web-browser
 bindsym Ctrl+$mod+w exec $web-browser-private
 ```
 
 File browser
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 bindsym $mod+f exec $file-browser
 ```
 
 Editor
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 bindsym $mod+e workspace $wp3;exec $editor
 bindsym Shift+$mod+e exec $editor
 ```
@@ -185,36 +185,36 @@ bindsym Shift+$mod+e exec $editor
 #### System
 
 Print help
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 for_window [app_id="term-popup-help"] floating enable, resize set 830 px 80 ppt, border pixel 3
 bindsym $mod+p exec wezterm start --class term-popup-help -- less ~/.config/sway/keybindings.txt
 ```
 
 Task manager
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 for_window [app_id="term-popup-task-manager"] floating enable, resize set 80 ppt 80 ppt, border pixel 3
 bindsym Ctrl+Alt+Delete exec wezterm start --class term-popup-task-manager -- htop
 ```
 
 Start app launcher
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 bindsym $mod+Return exec $menu-daemon
 bindsym $mod+Shift+Return exec $menu
 ```
 
 Reload the configuration file
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 bindsym $mod+Shift+c reload
 ```
 
 Kill focused pane
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 bindsym $mod+Shift+q kill
 bindsym Alt+F4 kill
 ```
 
 Fullscreen focused pane
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 bindsym $mod+F11 fullscreen
 ```
 
@@ -224,20 +224,20 @@ Sway has a "scratchpad", which is a bag of holding for windows.
 You can send windows there and get them back later.
 
 Move the currently focused window to the scratchpad
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 bindsym $mod+Shift+minus move scratchpad
 ```
 
 Show the next scratchpad window or hide the focused scratchpad window.
 If there are multiple scratchpad windows, this command cycles through them.
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 bindsym $mod+minus scratchpad show
 ```
 
 #### Desktop navigation
 
 Focus pane
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 bindsym $mod+$left focus left
 bindsym $mod+Left focus left
 bindsym $mod+$down focus down
@@ -249,7 +249,7 @@ bindsym $mod+Right focus right
 ```
 
 Move pane
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 bindsym $mod+Shift+$left move left
 bindsym $mod+Shift+Left move left
 bindsym $mod+Shift+$down move down
@@ -261,7 +261,7 @@ bindsym $mod+Shift+Right move right
 ```
 
 Switch to workspace
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 bindsym $mod+1 workspace $wp1
 bindsym $mod+2 workspace $wp2
 bindsym $mod+3 workspace $wp3
@@ -283,7 +283,7 @@ bindsym Shift+ALT+TAB workspace prev
 ```
 
 Move focused pane to workspace
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 bindsym $mod+Shift+1 move container to workspace $wp1; workspace $wp1
 bindsym $mod+Shift+2 move container to workspace $wp2; workspace $wp2
 bindsym $mod+Shift+3 move container to workspace $wp3; workspace $wp3
@@ -300,7 +300,7 @@ bindsym $mod+Shift+0 move container to workspace $wp10; workspace $wp10
 
 #### System
 
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 mode $mode-system {
     # bindsym s exec --no-startup-id gksudo pm-suspend, mode $mode-default, exec pkill i3-nagbar
     # bindsym h exec --no-startup-id gksudo pm-hibernate, mode $mode-default, exec pkill i3-nagbar
@@ -319,7 +319,7 @@ bindsym $mod+x mode $mode-system
 #### Resize
 Resize window (you can also use the mouse for that)
 
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 mode $mode-resize {
     bindsym $left resize shrink width 10px
     bindsym Left resize shrink width 10px
@@ -338,7 +338,7 @@ bindsym $mod+r mode $mode-resize
 ```
 
 #### Desktop layout
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 mode $mode-layout {
     bindsym n layout toggle split
     bindsym t layout tabbed
@@ -355,7 +355,7 @@ bindsym $mod+o mode $mode-layout
 ```
 
 #### Move
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 mode $mode-move  {
     # move focused window
     bindsym $left move left
@@ -401,7 +401,7 @@ bindsym $mod+m mode $mode-move
 
 ### Bar
 
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 bar {
     swaybar_command waybar
     position top
@@ -413,13 +413,13 @@ bar {
 
 Load additional, modular configuration snippets 
 
-```bash tangle:~/config/sway/config
+```bash tangle:~/.config/sway/config
 include /etc/sway/config.d/*
 ```
 
 ## Help text
 
-```text tangle:~/config/sway/keybindings.txt
+```text tangle:~/.config/sway/keybindings.txt
 ====[ KEYBINDINGS  ]============================================================
 
 # programs
