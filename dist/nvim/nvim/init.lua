@@ -138,3 +138,59 @@ if not use_lazy_packages then
 	vim.keymap.set("n", "<leader><space>", ":ls<CR>:b<Space>", { desc = "[ ] find existing buffers" })
 	vim.keymap.set("n", "<leader>sw", [[:execute "vimgrep /" . expand("<cword>") . "/j **" | cw<CR>]], { desc = "current [w]ord" })
 end
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "markdown",
+  callback = function()
+    local md = require("md-mode")
+
+    md.setup({
+      add_commands = true,
+      callout_types = {
+        "NOTE",
+        "TIP",
+        "IMPORTANT",
+        "WARNING",
+        "CAUTION",
+      },
+      presentation = {
+        show_line_numbers = true,
+        show_relative_line_numbers = false,
+        gutter_width = 6,
+        keymaps = {
+          next = "n",
+          previous = "p",
+          quit = "q",
+        },
+      },
+    })
+
+    -- Formatting (visual mode)
+    vim.keymap.set("v", "<leader>mfb", md.format.toggle_bold, { desc = "Toggle Bold" })
+    vim.keymap.set("v", "<leader>mfi", md.format.toggle_italic, { desc = "Toggle Italic" })
+    vim.keymap.set("v", "<leader>mfs", md.format.toggle_strikethrough, { desc = "Toggle Strikethrough" })
+    vim.keymap.set("v", "<leader>mfc", md.format.toggle_inline_code, { desc = "Toggle Inline Code" })
+
+    -- Lists (normal mode)
+    vim.keymap.set("n", "<leader>mlx", md.list.toggle_task, { desc = "Toggle Task" })
+
+    -- Generators (normal mode)
+    vim.keymap.set("n", "<leader>mgt", md.generator.generate_toc, { desc = "Generate TOC" })
+    vim.keymap.set("n", "<leader>mgT", md.generator.add_table, { desc = "Add Table" })
+    vim.keymap.set({"n", "v"}, "<leader>mgl", md.generator.add_link, { desc = "Add Link" })
+    vim.keymap.set("n", "<leader>mgi", md.generator.add_image, { desc = "Add Image" })
+    vim.keymap.set("n", "<leader>mgf", md.generator.add_footnote, { desc = "Add Footnote" })
+    vim.keymap.set("n", "<leader>mgc", md.generator.add_code_block, { desc = "Add Code Block" })
+    vim.keymap.set("n", "<leader>mgq", md.generator.add_block_quote, { desc = "Add Block Quote" })
+    vim.keymap.set("n", "<leader>mgo", md.generator.add_callout, { desc = "Add Callout" })
+    vim.keymap.set("n", "<leader>mgr", md.generator.add_reference_style_link, { desc = "Add Reference-Style Link" })
+
+    -- Presentation (normal mode)
+    vim.keymap.set("n", "<leader>mps", md.presentation.start_presentation, { desc = "Start Presentation" })
+    vim.keymap.set("n", "<leader>mpn", function() md.presentation.navigate(1) end, { desc = "Next Slide" })
+    vim.keymap.set("n", "<leader>mpp", function() md.presentation.navigate(-1) end, { desc = "Previous Slide" })
+    vim.keymap.set("n", "<leader>mpq", md.presentation.close_presentation, { desc = "Close Presentation" })
+
+    -- Tangle (normal mode)
+    vim.keymap.set("n", "<leader>mt", md.tangle.tangle_code_blocks, { desc = "Tangle Code Blocks" })
+  end,
+})

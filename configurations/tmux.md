@@ -172,12 +172,14 @@ bind-key -T my-keys -N "Jump to directory" j send-keys "cd $(find -L ~/dev ~/pro
 bind-key -T my-keys -N "Search up" / copy-mode \; send-key "?"
 ```
 
-Popup scratchpad.
+Popup scratchpad and make sure the current folder exist in the scratchpad
 ``` tangle:~/.config/tmux/tmux.conf
 bind-key -T my-keys -N "Popup scratchpad" p if-shell -F '#{==:#{session_name},scratchpad}' {
     detach-client
 } {
-    display-popup -w 80% -h 80% -T "[ SCRATCHPAD ]" -S "fg=#E3A36F" -E "tmux new-session -A -s scratchpad -n home -c ~/"
+    run-shell "tmux has-session -t scratchpad 2>/dev/null || tmux new-session -d -s scratchpad -n home -c ~/"
+    run-shell "tmux has-session -t scratchpad:#{b:pane_current_path} 2>/dev/null || tmux new-window -t scratchpad -n '#{b:pane_current_path}' -c '#{pane_current_path}'"
+    display-popup -w 80% -h 80% -T "[ SCRATCHPAD ]" -S "fg=#E3A36F" -E "tmux attach-session -t scratchpad"
 }
 ```
 

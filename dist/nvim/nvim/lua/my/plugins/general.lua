@@ -6,4 +6,9 @@ return {
 			require("colorizer").setup()
 		end,
 	},
+  {
+    "md-mode",
+    dir = "~/dev/md-mode.nvim",
+    ft = "markdown",
+  },
 }
