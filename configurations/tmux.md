@@ -174,10 +174,20 @@ bind-key -T my-keys -N "Search up" / copy-mode \; send-key "?"
 
 Popup scratchpad.
 ``` tangle:~/.config/tmux/tmux.conf
-bind-key -T my-keys -N "Popup scratchpad" p if-shell -F '#{==:#{session_name},scratchpad}' {
+bind-key -T my-keys -N "Popup scratchpad" p if-shell 'echo "#{session_name}" | grep -q "^scratchpad"' {
     detach-client
 } {
     display-popup -w 80% -h 80% -T "[ SCRATCHPAD ]" -S "fg=#E3A36F" -E "tmux new-session -A -s scratchpad -n home -c ~/"
+}
+```
+
+Popup scratchpad for current window.
+``` tangle:~/.config/tmux/tmux.conf
+bind-key -T my-keys -N "Popup scratchpad (current window)" P if-shell 'echo "#{session_name}" | grep -q "^scratchpad"' {
+    detach-client
+} {
+    run-shell "tmux has-session -t scratchpad_#{window_name} 2>/dev/null || tmux new-session -d -s scratchpad_#{window_name} -n '#{window_name}' -c '#{pane_current_path}'"
+    run-shell 'tmux display-popup -w 80% -h 80% -T "[ SCRATCHPAD ]" -S "fg=#E3A36F" -E "tmux attach-session -t scratchpad_#{window_name}"'
 }
 ```
 
