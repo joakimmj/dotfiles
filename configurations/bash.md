@@ -123,8 +123,8 @@ export VIRTUAL_ENV_DISABLE_PROMPT=1
 
 Using colors from the Redox theme (24-but RGB)
 ```bash tangle:~/.bashrc
-redox_teal="\[\e[38;2;126;193;174m\]" # #7EC1AE
-redox_rust="\[\e[38;2;205;139;100m\]" # #CD8B64
+redox_teal="\e[38;2;126;193;174m"     # #7EC1AE
+redox_rust="\e[38;2;205;139;100m"     # #CD8B64
 redox_reset="\[\e[0m\]"
 ```
 
@@ -145,14 +145,25 @@ Prompt commands:
 * `\$` : if the effective UID is 0, a #, otherwise a $
 
 ```bash tangle:~/.bashrc
-PS1="$redox_rust╭─\$(get_tags)[$redox_teal\A$redox_rust]-[$redox_teal\j$redox_rust]-[$redox_teal\u:\W\$(__git_ps1)$redox_rust]\n╰──\$ $redox_reset"
+PS1="\[$redox_rust\]╭─\$(get_tags)[\[$redox_teal\]\A\[$redox_rust\]]-[\[$redox_teal\]\j\[$redox_rust\]]-[\[$redox_teal\]\u:\W\$(__git_ps1)\[$redox_rust\]]\n╰──\$ $redox_reset"
 ```
 
 Set `vi` mode
 ```bash tangle:~/.bashrc
 set -o vi
+```
+
+Allow using `<C-l>` to clear screen in both modes.
+```bash tangle:~/.bashrc
 bind -m vi-command 'Control-l: clear-screen'
 bind -m vi-insert 'Control-l: clear-screen'
+```
+
+Change cursor between the two modes
+```bash tangle:~/.bashrc
+bind "set show-mode-in-prompt on"
+bind "set vi-cmd-mode-string \"\1\e[2 q$redox_rust\2\""
+bind "set vi-ins-mode-string \"\1\e[6 q$redox_rust\2\""
 ```
 
 ## Alias
