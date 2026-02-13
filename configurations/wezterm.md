@@ -1,14 +1,23 @@
 # WexTerm
 
-```lua tangle:~/.wezterm.lua
+```lua tangle:~/.config/wezterm/wezterm.lua
 local wezterm = require 'wezterm'
 local config = wezterm.config_builder()
+```
 
--- Theme
+## Theme
+
+Set font and font size
+```lua tangle:~/.config/wezterm/wezterm.lua
+config.font_size = 12.0
 config.font = wezterm.font_with_fallback({
     { family = 'JetBrainsMono Nerd Font', weight = 'DemiBold' },
     { family = 'JetBrains Mono', weight = 'DemiBold' },
 })
+```
+
+Setup colors and set theme
+```lua tangle:~/.config/wezterm/wezterm.lua
 config.color_schemes = {
     ["redox"] = {
       foreground = "#DCE8E5",
@@ -39,24 +48,54 @@ config.color_schemes = {
     },
 };
 config.color_scheme = "redox";
+```
 
--- Window decorations
+## Window decorations
+
+```lua tangle:~/.config/wezterm/wezterm.lua
 config.enable_tab_bar = false
-config.window_decorations = 'RESIZE'
+config.window_decorations = "RESIZE"
+config.window_background_opacity = 0.5
+```
 
-wezterm.on('toggle-window-decorations', function(window, pane)
+## Events
+
+Function for toggling configs
+```lua tangle:~/.config/wezterm/wezterm.lua
+local function toggle_override(window, override, params)
     local overrides = window:get_config_overrides() or {}
-    if overrides.window_decorations == 'RESIZE' then
-        overrides.window_decorations = 'TITLE|RESIZE'
+    if not overrides[override] then
+        overrides[override] = params
     else
-        overrides.window_decorations = 'RESIZE'
+        overrides[override] = nil
     end
     window:set_config_overrides(overrides)
+end
+```
+
+Event for toggling window decorations
+```lua tangle:~/.config/wezterm/wezterm.lua
+wezterm.on("toggle-window-decorations", function(window, _)
+    toggle_override(window, "window_decorations", "TITLE|RESIZE")
 end)
+```
 
--- Keymaps
+Event for toggling window opacity
+```lua tangle:~/.config/wezterm/wezterm.lua
+wezterm.on("toggle-opacity", function(window, _)
+    toggle_override(window, "window_background_opacity", 1)
+end)
+```
+
+## Keymaps
+
+Disable the default keybindings
+```lua tangle:~/.config/wezterm/wezterm.lua
 config.disable_default_key_bindings = true
+```
 
+Setup wanted keybindings
+```lua tangle:~/.config/wezterm/wezterm.lua
 local act = wezterm.action
 config.keys = {
     { key = 'v',   mods = 'CTRL',                action = act.PasteFrom 'Clipboard' },
@@ -68,11 +107,15 @@ config.keys = {
     { key = 'p',   mods = 'CTRL|SHIFT',          action = act.ActivateCommandPalette },
     { key = 'r',   mods = 'CTRL|SHIFT',          action = act.ReloadConfiguration },
     { key = 'w',   mods = 'CTRL|SHIFT',          action = act.EmitEvent 'toggle-window-decorations' },
+    { key = "b",   mods = "CTRL|SHIFT",          action = act.EmitEvent("toggle-opacity") },
     { key = 'f',   mods = 'CTRL|SHIFT',          action = act.ToggleFullScreen },
     { key = ' ',   mods = 'CTRL|SHIFT',          action = act.QuickSelect },
     { key = 'F11', action = act.ToggleFullScreen },
 }
+```
 
+Return the config
+```lua tangle:~/.config/wezterm/wezterm.lua
 return config
 ```
 

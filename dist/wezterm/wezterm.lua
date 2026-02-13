@@ -1,7 +1,6 @@
 local wezterm = require 'wezterm'
 local config = wezterm.config_builder()
-
--- Theme
+config.font_size = 12.0
 config.font = wezterm.font_with_fallback({
     { family = 'JetBrainsMono Nerd Font', weight = 'DemiBold' },
     { family = 'JetBrains Mono', weight = 'DemiBold' },
@@ -36,24 +35,25 @@ config.color_schemes = {
     },
 };
 config.color_scheme = "redox";
-
--- Window decorations
 config.enable_tab_bar = false
-config.window_decorations = 'RESIZE'
-
-wezterm.on('toggle-window-decorations', function(window, pane)
+config.window_decorations = "RESIZE"
+config.window_background_opacity = 0.5
+local function toggle_override(window, override, params)
     local overrides = window:get_config_overrides() or {}
-    if overrides.window_decorations == 'RESIZE' then
-        overrides.window_decorations = 'TITLE|RESIZE'
+    if not overrides[override] then
+        overrides[override] = params
     else
-        overrides.window_decorations = 'RESIZE'
+        overrides[override] = nil
     end
     window:set_config_overrides(overrides)
+end
+wezterm.on("toggle-window-decorations", function(window, _)
+    toggle_override(window, "window_decorations", "TITLE|RESIZE")
 end)
-
--- Keymaps
+wezterm.on("toggle-opacity", function(window, _)
+    toggle_override(window, "window_background_opacity", 1)
+end)
 config.disable_default_key_bindings = true
-
 local act = wezterm.action
 config.keys = {
     { key = 'v',   mods = 'CTRL',                action = act.PasteFrom 'Clipboard' },
@@ -65,9 +65,9 @@ config.keys = {
     { key = 'p',   mods = 'CTRL|SHIFT',          action = act.ActivateCommandPalette },
     { key = 'r',   mods = 'CTRL|SHIFT',          action = act.ReloadConfiguration },
     { key = 'w',   mods = 'CTRL|SHIFT',          action = act.EmitEvent 'toggle-window-decorations' },
+    { key = "b",   mods = "CTRL|SHIFT",          action = act.EmitEvent("toggle-opacity") },
     { key = 'f',   mods = 'CTRL|SHIFT',          action = act.ToggleFullScreen },
     { key = ' ',   mods = 'CTRL|SHIFT',          action = act.QuickSelect },
     { key = 'F11', action = act.ToggleFullScreen },
 }
-
 return config
