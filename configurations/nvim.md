@@ -28,13 +28,43 @@ rm -rf neovim
 ln -sf ~/lib/neovim-nightly/bin/nvim ~/.local/bin/nvim-nightly
 ```
 
+## Generate config
+
+This `Neovim` config can be generated using `md-tangle` with different options.
+
+For a simple configuration without any plugins, just run:
+```bash
+md-tangle configurations/nvim.md
+```
+
+All plugins are tagget with the following tags:
+- `plugins`
+- `autocomplete`
+- `colorizer`
+- `formatting`
+- `gitsigns`
+- `lsp`
+- `sleuth`
+- `snacks`
+- `treesitter`
+- `which-key`
+
+You can include all plugins by running:
+```bash
+md-tangle configurations/nvim.md -i plugins
+```
+
+or cherry-pick the plugins you want:
+```bash
+md-tangle configurations/nvim.md -i gitsigns,snacks,treesitter
+```
+
 ## Lua setup
 
 ### LSP
-> `~/.config/nvim/.luarc.json`, `~/.config/nvim-lite/.luarc.json`
 
 Configuration of the Lua language server
-```json tangle:~/.config/nvim/.luarc.json,~/.config/nvim-lite/.luarc.json
+```json tangle:~/.config/nvim/.luarc.json
 {
     "runtime": {
         "version": "LuaJIT"
@@ -55,37 +85,35 @@ Configuration of the Lua language server
 ```
 
 ### Formatting
-> `~/.config/nvim/.stylua.toml`, `~/.config/nvim-lite/.stylua.toml`
 
 Set formatting rules for `StyLua`
-```toml tangle:~/.config/nvim/.stylua.toml,~/.config/nvim-lite/.stylua.toml
+```toml tangle:~/.config/nvim/.stylua.toml
 indent_type = "Spaces"
 indent_width = 2
 ```
 
 ## Init
-> `~/.config/nvim/init.lua`, `~/.config/nvim-lite/init.lua`
 
 Import my configurations
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 require("my.theme")
 ```
 
 ### Keymaps
 
 Change `<leader>` to `Space`
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 ```
 
 Remove highlight from search
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 ```
 
 Move line up/down
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.keymap.set("n", "<A-k>", ":m .-2<CR>==", { desc = "move line up" })
 vim.keymap.set("n", "<A-j>", ":m .+1<CR>==", { desc = "move line down" })
 vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv", { desc = "move selection up" })
@@ -93,47 +121,47 @@ vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv", { desc = "move selection down" 
 ```
 
 Better indenting in visual mode
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.keymap.set("v", "<", "<gv", { desc = "indent left and reselect" })
 vim.keymap.set("v", ">", ">gv", { desc = "indent right and reselect" })
 ```
 
 Better J behavior
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.keymap.set("n", "J", "mzJ`z", { desc = "join lines and keep cursor position" })
 ```
 
 Toggle line wrap for current buffer
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.keymap.set("n", "<leader>dw", "<cmd>set wrap!<CR>", { desc = "toggle [w]rap" })
 ```
 
 Center cursor on up/down
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "move cursor up" })
 vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "move cursor down" })
 ```
 
 Center cursor on next/previous search result
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.keymap.set("n", "n", "nzzzv", { desc = "next search result (centered)" })
 vim.keymap.set("n", "N", "Nzzzv", { desc = "previous search result (centered)" })
 ```
 
 Yank to/paste from system clipboard
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]], { desc = "[y]ank to system clipboard" })
 vim.keymap.set("n", "<leader>Y", [["+Y]], { desc = "[Y]ank rest of line to system clipboard" })
 vim.keymap.set({ "n", "v" }, "<leader>p", [["+p]], { desc = "[p]aste from system clipboard" })
 ```
 
 Paste from yank register (`"0`)
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.keymap.set({ "n", "v" }, "<C-p>", "\"0p", { desc = "paste from yank register" })
 ```
 
 Replace all of word under cursor
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.keymap.set(
 	"n",
 	"<leader>dr",
@@ -143,7 +171,7 @@ vim.keymap.set(
 ```
 
 Replace selected text
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.keymap.set(
 	"v",
 	"<leader>dr",
@@ -153,13 +181,13 @@ vim.keymap.set(
 ```
 
 Diagnostic keymaps
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.keymap.set("n", "<leader>dd", vim.diagnostic.setloclist, { desc = "[d]iagnostic (location list)" })
 vim.keymap.set("n", "<leader>wd", vim.diagnostic.setqflist, { desc = "[d]iagnostic (quickfix list)" })
 ```
 
 Quickfix list keymaps
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.keymap.set("n", "<C-j>", "<cmd>try | cnext | catch | cfirst | catch | endtry<CR>zz", { desc = "go to next quickfix list entry" })
 vim.keymap.set("n", "<C-k>", "<cmd>try | cprevious | catch | clast | catch | endtry<CR>zz", { desc = "go to previous quickfix list entry" })
 vim.keymap.set("n", "<C-h>", "<cmd>colder<CR>", { desc = "go to previous quickfix list" })
@@ -172,7 +200,7 @@ end, { noremap = true, silent = true, desc = "[q]uickfix list toggle" })
 ```
 
 Disable arrow keys in normal mode
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.keymap.set("n", "<left>", "<Nop>")
 vim.keymap.set("n", "<right>", "<Nop>")
 vim.keymap.set("n", "<up>", "<Nop>")
@@ -180,7 +208,7 @@ vim.keymap.set("n", "<down>", "<Nop>")
 ```
 
 Save/restore vim sessions
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.keymap.set("n", "<leader>SS", function() vim.cmd([[mksession! .session.vim]]) end, { desc = "[S]ave" })
 vim.keymap.set("n", "<leader>SR", function() vim.cmd([[source .session.vim]]) end, { desc = "[R]estore" })
 ```
@@ -188,17 +216,17 @@ vim.keymap.set("n", "<leader>SR", function() vim.cmd([[source .session.vim]]) en
 ### Options
 
 Enable line number
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.opt.number = true
 ```
 
 Enable relative line numbers
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.opt.relativenumber = true
 ```
 
 Change tab spacing to four spaces
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
 vim.opt.shiftwidth = 4
@@ -206,7 +234,7 @@ vim.opt.expandtab = true
 ```
 
 Sane defaults
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.opt.smartindent = true
 
 vim.opt.wrap = false
@@ -227,45 +255,45 @@ vim.opt.isfname:append("@-@")
 ```
 
 Decrease update time
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.opt.updatetime = 50
 ```
 
 Decrease mapped sequence wait time (displays which-key popup sooner)
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.opt.timeoutlen = 300
 ```
 
 Configure how new splits should be opened
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.opt.splitright = true
 vim.opt.splitbelow = true
 ```
 
 Sets how neovim will display certain whitespace characters in the editor.
 (See `:help 'list'` and `:help 'listchars'`)
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.opt.list = true
 vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣", leadmultispace = "|   " }
 ```
 
 Preview substitutions live, as you type!
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.opt.inccommand = "split"
 ```
 
 Show which line your cursor is on
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.opt.cursorline = true
 ```
 
 Breakindent
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.opt.breakindent = true
 ```
 
 Case-insensitive searching UNLESS \C or one or more capital letters in the search term
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.hlsearch = true
@@ -273,20 +301,20 @@ vim.opt.incsearch = true
 ```
 
 Automatic folding based on treesitter
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 ```
 
 Disable default folding when opening file
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.opt.foldlevelstart = 99
 ```
 
 ### Autocmd
 
 Highlight when yanking (copying) text
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.api.nvim_create_autocmd("TextYankPost", {
 	desc = "Highlight when yanking (copying) text",
 	group = vim.api.nvim_create_augroup("augroup-highlight-yank", { clear = true }),
@@ -297,7 +325,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 ```
 
 Automatically save session when closing nvim
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.api.nvim_create_autocmd("VimLeave", {
 	desc = "Save session on exit",
 	group = vim.api.nvim_create_augroup("augroup-session-manage", { clear = true }),
@@ -308,7 +336,7 @@ vim.api.nvim_create_autocmd("VimLeave", {
 ```
 
 Reload files when changed on disk
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "CursorHoldI", "FocusGained" }, {
 	desc = "Check if file changed on disk",
 	group = vim.api.nvim_create_augroup("augroup-file-disk-status", { clear = true }),
@@ -318,7 +346,7 @@ vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "CursorHoldI", "FocusGai
 ```
 
 Add keymaps for executing `Lua` code (for `Lua` buffers only)
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.api.nvim_create_autocmd('FileType', {
 	desc = 'Lua specific options',
 	pattern = 'lua',
@@ -332,7 +360,7 @@ vim.api.nvim_create_autocmd('FileType', {
 ```
 
 Add keymaps for formatting `JSON` (for `json` buffers only)
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 vim.api.nvim_create_autocmd('FileType', {
 	desc = 'Json specific options',
 	pattern = 'json',
@@ -345,7 +373,7 @@ vim.api.nvim_create_autocmd('FileType', {
 
 ### Lite vs. plugins
 
-```lua tangle:~/.config/nvim/init.lua,~/.config/nvim-lite/init.lua
+```lua tangle:~/.config/nvim/init.lua
 local use_lazy_packages, _ = pcall(require, "my.init-lazy")
 if not use_lazy_packages then
 	vim.g.netrw_bufsettings = "noma nomod nu rnu nobl nowrap ro"
@@ -363,10 +391,10 @@ end
 ```
 
 ## Lazy (plugins)
-> `~/.config/nvim/lua/my/init-lazy.lua`
+> `tags:plugins,autocomplete,colorizer,formatting,gitsigns,lsp,sleuth,snacks,treesitter,which-key`
 
 Init `lazy.nvim`
-```lua tangle:~/.config/nvim/lua/my/init-lazy.lua
+```lua tangle:~/.config/nvim/lua/my/init-lazy.lua tags:plugins,autocomplete,colorizer,formatting,gitsigns,lsp,sleuth,snacks,treesitter,which-key
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
 	vim.fn.system({
@@ -386,37 +414,35 @@ require("lazy").setup({
 })
 ```
 
-### general
-> `~/.config/nvim/lua/my/plugins/general.lua`
-
-General plugins
-```lua tangle:~/.config/nvim/lua/my/plugins/general.lua
-return {
-```
+### sleuth
+> `tags:plugins,sleuth`
 
 Detect tabstop and shiftwidth automatically
-```lua tangle:~/.config/nvim/lua/my/plugins/general.lua
+```lua tangle:~/.config/nvim/lua/my/plugins/sleuth.lua tags:plugins,sleuth
+return {
 	"tpope/vim-sleuth",
+}
 ```
 
+### colorizer
+> `tags:plugins,colorizer`
+
 Show colors in Neovim
-```lua tangle:~/.config/nvim/lua/my/plugins/general.lua
+```lua tangle:~/.config/nvim/lua/my/plugins/colorizer.lua tags:plugins,colorizer
+return {
 	{
 		"norcalli/nvim-colorizer.lua",
 		config = function()
 			require("colorizer").setup()
 		end,
 	},
-```
-
-```lua tangle:~/.config/nvim/lua/my/plugins/general.lua
 }
 ```
 
 ### autocompletion
-> `~/.config/nvim/lua/my/plugins/autocomplete.lua`
+> `tags:plugins,autocomplete`
 
-```lua tangle:~/.config/nvim/lua/my/plugins/autocomplete.lua
+```lua tangle:~/.config/nvim/lua/my/plugins/autocomplete.lua tags:plugins,autocomplete
 return {
 	{
 		"hrsh7th/nvim-cmp",
@@ -537,9 +563,9 @@ return {
 ```
 
 ### formatting
-> `~/.config/nvim/lua/my/plugins/formatting.lua`
+> `tags:plugins,formatting`
 
-```lua tangle:~/.config/nvim/lua/my/plugins/formatting.lua
+```lua tangle:~/.config/nvim/lua/my/plugins/formatting.lua tags:plugins,formatting
 return {
 	{
 		"stevearc/conform.nvim",
@@ -605,10 +631,10 @@ return {
 ```
 
 ### gitsigns.nvim
-> `~/.config/nvim/lua/my/plugins/gitsigns.lua`
+> `tags:plugins,gitsigns`
 
 Adds git related signs to the gutter, as well as utilities for managing changes
-```lua tangle:~/.config/nvim/lua/my/plugins/gitsigns.lua
+```lua tangle:~/.config/nvim/lua/my/plugins/gitsigns.lua tags:plugins,gitsigns
 return {
 	"lewis6991/gitsigns.nvim",
 	opts = {
@@ -676,9 +702,9 @@ return {
 ```
 
 ### LSP
-> `~/.config/nvim/lua/my/plugins/lsp.lua`
+> `tags:plugins,lsp`
 
-```lua tangle:~/.config/nvim/lua/my/plugins/lsp.lua
+```lua tangle:~/.config/nvim/lua/my/plugins/lsp.lua tags:plugins,lsp
 return {
 	{ "nvim-java/nvim-java" },
 	{
@@ -892,9 +918,9 @@ return {
 ```
 
 ### snacks.nvim
-> `~/.config/nvim/lua/my/plugins/snacks.lua`
+> `tags:plugins,snacks`
 
-```lua tangle:~/.config/nvim/lua/my/plugins/snacks.lua
+```lua tangle:~/.config/nvim/lua/my/plugins/snacks.lua tags:plugins,snacks
 return {
     {
         "folke/snacks.nvim",
@@ -974,10 +1000,10 @@ return {
 ```
 
 ### treesitter
-> `~/.config/nvim/lua/my/plugins/treesitter.lua`
+> `tags:plugins,treesitter`
 
 Highlight, edit, and navigate code
-```lua tangle:~/.config/nvim/lua/my/plugins/treesitter.lua
+```lua tangle:~/.config/nvim/lua/my/plugins/treesitter.lua tags:plugins,treesitter
 return {
 	{
 		"nvim-treesitter/nvim-treesitter",
@@ -1023,10 +1049,10 @@ return {
 ```
 
 ### which-key
-> `~/.config/nvim/lua/my/plugins/which-key.lua`
+> `tags:plugins,which-key`
 
 Useful plugin to show you pending keybinds.
-```lua tangle:~/.config/nvim/lua/my/plugins/which-key.lua
+```lua tangle:~/.config/nvim/lua/my/plugins/which-key.lua tags:plugins,which-key
 return {
 	"folke/which-key.nvim",
 	event = "VimEnter", -- Sets the loading event to 'VimEnter'
@@ -1082,10 +1108,9 @@ return {
 ```
 
 ## Theme
-> `~/.config/nvim/lua/my/theme.lua`, `~/.config/nvim-lite/lua/my/theme.lua`
 
 Color palette
-```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+```lua tangle:~/.config/nvim/lua/my/theme.lua
 local redox = {
     bg = "#2E3434",
     bg_alt = "#343A3A",
@@ -1110,7 +1135,7 @@ local redox = {
 ```
 
 Set options for new theme
-```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+```lua tangle:~/.config/nvim/lua/my/theme.lua
 vim.opt.termguicolors = true
 vim.cmd("hi clear")
 if vim.fn.exists("syntax_on") == 1 then
@@ -1123,14 +1148,14 @@ vim.g.colors_name = "redox"
 
 #### Core UI
 
-```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+```lua tangle:~/.config/nvim/lua/my/theme.lua
 vim.api.nvim_set_hl(0, "Normal", { fg = redox.fg, bg = redox.bg })
 vim.api.nvim_set_hl(0, "NormalFloat", { fg = redox.fg, bg = redox.bg_alt })
 vim.api.nvim_set_hl(0, "FloatBorder", { fg = redox.overlay, bg = redox.bg_alt })
 ```
 
 Line numbers / cursorline / columns
-```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+```lua tangle:~/.config/nvim/lua/my/theme.lua
 vim.api.nvim_set_hl(0, "LineNr", { fg = redox.subtle, bg = "NONE" })
 vim.api.nvim_set_hl(0, "CursorLine", { bg = "#323838" })
 vim.api.nvim_set_hl(0, "CursorColumn", { link = "CursorLine" })
@@ -1139,7 +1164,7 @@ vim.api.nvim_set_hl(0, "CursorLineNr", { fg = redox.orange, bold = true })
 ```
 
 Statusline / tabline
-```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+```lua tangle:~/.config/nvim/lua/my/theme.lua
 vim.api.nvim_set_hl(0, "StatusLine", { fg = redox.bg, bg = redox.orange, bold = true })
 vim.api.nvim_set_hl(0, "StatusLineNC", { fg = redox.muted, bg = redox.surface })
 vim.api.nvim_set_hl(0, "TabLine", { link = "StatusLineNC" })
@@ -1148,13 +1173,13 @@ vim.api.nvim_set_hl(0, "TabLineFill", { link = "Normal" })
 ```
 
 Splits / borders
-```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+```lua tangle:~/.config/nvim/lua/my/theme.lua
 vim.api.nvim_set_hl(0, "VertSplit", { fg = redox.overlay })
 vim.api.nvim_set_hl(0, "WinSeparator", { fg = redox.overlay })
 ```
 
 Selection / popup menu
-```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+```lua tangle:~/.config/nvim/lua/my/theme.lua
 vim.api.nvim_set_hl(0, "Visual", { bg = redox.selection })
 vim.api.nvim_set_hl(0, "Pmenu", { fg = redox.fg, bg = redox.surface })
 vim.api.nvim_set_hl(0, "PmenuSel", { fg = redox.bg, bg = redox.orange })
@@ -1163,7 +1188,7 @@ vim.api.nvim_set_hl(0, "PmenuThumb", { bg = redox.overlay })
 ```
 
 Search / matching
-```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+```lua tangle:~/.config/nvim/lua/my/theme.lua
 vim.api.nvim_set_hl(0, "Search", { fg = redox.bg, bg = redox.teal })
 vim.api.nvim_set_hl(0, "IncSearch", { fg = redox.bg, bg = redox.rust })
 vim.api.nvim_set_hl(0, "CurSearch", { fg = redox.bg, bg = redox.rust })
@@ -1171,7 +1196,7 @@ vim.api.nvim_set_hl(0, "MatchParen", { fg = redox.orange, underline = true })
 ```
 
 Invisible characters / misc UI
-```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+```lua tangle:~/.config/nvim/lua/my/theme.lua
 vim.api.nvim_set_hl(0, "NonText", { fg = redox.subtle })
 vim.api.nvim_set_hl(0, "SpecialKey", { fg = redox.overlay })
 vim.api.nvim_set_hl(0, "Whitespace", { fg = redox.overlay })
@@ -1181,7 +1206,7 @@ vim.api.nvim_set_hl(0, "FoldColumn", { fg = redox.subtle, bg = redox.bg })
 ```
 
 Titles / directories / prompts and messages
-```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+```lua tangle:~/.config/nvim/lua/my/theme.lua
 vim.api.nvim_set_hl(0, "Title", { fg = redox.orange, bold = true, underline = true })
 vim.api.nvim_set_hl(0, "Directory", { fg = redox.teal })
 vim.api.nvim_set_hl(0, "WildMenu", { link = "PmenuSel" })
@@ -1193,7 +1218,7 @@ vim.api.nvim_set_hl(0, "WarningMsg", { link = "DiagnosticWarn" })
 
 #### Syntax
 
-```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+```lua tangle:~/.config/nvim/lua/my/theme.lua
 vim.api.nvim_set_hl(0, "@comment", { fg = redox.subtle, italic = true })
 vim.api.nvim_set_hl(0, "Todo", { bg = redox.hint, fg = redox.bg, bold = true })
 vim.api.nvim_set_hl(0, "@comment.todo", { link = "Todo" })
@@ -1217,7 +1242,7 @@ vim.api.nvim_set_hl(0, "@attribute", { link = "@function" })
 ```
 
 Markdown headings (Tree-sitter)
-```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+```lua tangle:~/.config/nvim/lua/my/theme.lua
 vim.api.nvim_set_hl(0, "@markup.heading",   { fg = redox.orange, bold = true })
 vim.api.nvim_set_hl(0, "@markup.heading.1", { fg = redox.orange, bold = true, underline = true })
 vim.api.nvim_set_hl(0, "@markup.heading.2", { fg = redox.rust, bold = true })
@@ -1229,7 +1254,7 @@ vim.api.nvim_set_hl(0, "@markup.heading.6", { fg = redox.sea, bold = true })
 
 #### Diagnostics 
 
-```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+```lua tangle:~/.config/nvim/lua/my/theme.lua
 vim.api.nvim_set_hl(0, "DiagnosticError", { fg = redox.red })
 vim.api.nvim_set_hl(0, "DiagnosticWarn", { fg = redox.warn })
 vim.api.nvim_set_hl(0, "DiagnosticInfo", { fg = redox.info })
@@ -1246,7 +1271,7 @@ vim.api.nvim_set_hl(0, "DiagnosticUnnecessary", { fg = "#4A5353" })
 ```
 
 LSP
-```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+```lua tangle:~/.config/nvim/lua/my/theme.lua
 vim.api.nvim_set_hl(0, "LspInlayHint", { fg = redox.subtle, bg = redox.bg_alt, italic = true })
 vim.api.nvim_set_hl(0, "LspReferenceText", { bg = redox.bg_alt })
 vim.api.nvim_set_hl(0, "LspReferenceRead", { bg = redox.bg_alt })
@@ -1258,7 +1283,7 @@ vim.api.nvim_set_hl(0, "LspInfoBorder", { fg = redox.overlay, bg = redox.bg_alt 
 
 #### Diff & VCS
 
-```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+```lua tangle:~/.config/nvim/lua/my/theme.lua
 vim.api.nvim_set_hl(0, "DiffAdd", { bg = "#33403B" })
 vim.api.nvim_set_hl(0, "DiffChange", { bg = "#403F30" })
 vim.api.nvim_set_hl(0, "DiffDelete", { bg = "#4A3333" })
@@ -1274,7 +1299,7 @@ vim.api.nvim_set_hl(0, "diffIndexLine", { fg = redox.cyan })
 ```
 
 GitSigns
-```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+```lua tangle:~/.config/nvim/lua/my/theme.lua
 vim.api.nvim_set_hl(0, "GitSignsAdd", { fg = redox.teal })
 vim.api.nvim_set_hl(0, "GitSignsChange", { fg = redox.amber })
 vim.api.nvim_set_hl(0, "GitSignsDelete", { fg = redox.red })
@@ -1282,7 +1307,7 @@ vim.api.nvim_set_hl(0, "GitSignsDelete", { fg = redox.red })
 
 #### Quickfix / Location list
 
-```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+```lua tangle:~/.config/nvim/lua/my/theme.lua
 vim.api.nvim_set_hl(0, "QFFileName", { fg = redox.teal })
 vim.api.nvim_set_hl(0, "QuickFixLine", { fg = redox.bg, bg = redox.orange })
 ```
@@ -1290,7 +1315,7 @@ vim.api.nvim_set_hl(0, "QuickFixLine", { fg = redox.bg, bg = redox.orange })
 #### LSP Semantic tokens
 
 Types & type-like
-```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+```lua tangle:~/.config/nvim/lua/my/theme.lua
 vim.api.nvim_set_hl(0, "@lsp.type.class", { link = "@type" })
 vim.api.nvim_set_hl(0, "@lsp.type.struct", { link = "@type" })
 vim.api.nvim_set_hl(0, "@lsp.type.interface", { link = "@function" })
@@ -1302,7 +1327,7 @@ vim.api.nvim_set_hl(0, "@lsp.type.union", { link = "@type" })
 ```
 
 Functions & callables
-```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+```lua tangle:~/.config/nvim/lua/my/theme.lua
 vim.api.nvim_set_hl(0, "@lsp.type.function", { link = "@function" })
 vim.api.nvim_set_hl(0, "@lsp.type.method", { link = "@method" })
 vim.api.nvim_set_hl(0, "@lsp.type.macro", { link = "@function" })
@@ -1310,7 +1335,7 @@ vim.api.nvim_set_hl(0, "@lsp.type.constructor", { link = "@function" })
 ```
 
 Variables & members
-```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+```lua tangle:~/.config/nvim/lua/my/theme.lua
 vim.api.nvim_set_hl(0, "@lsp.type.variable", { link = "@variable" })
 vim.api.nvim_set_hl(0, "@lsp.type.parameter", { link = "@variable" })
 vim.api.nvim_set_hl(0, "@lsp.type.property", { link = "@type.builtin" })
@@ -1320,7 +1345,7 @@ vim.api.nvim_set_hl(0, "@lsp.type.package", { link = "@type" })
 ```
 
 Literals & operators
-```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+```lua tangle:~/.config/nvim/lua/my/theme.lua
 vim.api.nvim_set_hl(0, "@lsp.type.number", { link = "@constant" })
 vim.api.nvim_set_hl(0, "@lsp.type.boolean", { link = "@constant" })
 vim.api.nvim_set_hl(0, "@lsp.type.string", { link = "@string" })
@@ -1330,27 +1355,27 @@ vim.api.nvim_set_hl(0, "@lsp.type.operator", { link = "@operator" })
 ```
 
 Keywords & modifiersua/my/theme.lua
-```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+```lua tangle:~/.config/nvim/lua/my/theme.lua
 vim.api.nvim_set_hl(0, "@lsp.type.keyword", { link = "@keyword" })
 vim.api.nvim_set_hl(0, "@lsp.type.modifier", { link = "@keyword" })
 ```
 
 Comments, regexps, decorators/attributes
-```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+```lua tangle:~/.config/nvim/lua/my/theme.lua
 vim.api.nvim_set_hl(0, "@lsp.type.comment", { link = "@comment" })
 vim.api.nvim_set_hl(0, "@lsp.type.regexp", { link = "@string" })
 vim.api.nvim_set_hl(0, "@lsp.type.decorator", { fg = "#E6D4A3", italic = true })
 ```
 
 Builtins/special identifiersm-lite/lua/my/theme.lua
-```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+```lua tangle:~/.config/nvim/lua/my/theme.lua
 vim.api.nvim_set_hl(0, "@lsp.type.builtinType", { link = "@type.builtin" })
 vim.api.nvim_set_hl(0, "@lsp.type.selfKeyword", { link = "@variable.builtin" })
 vim.api.nvim_set_hl(0, "@lsp.type.null", { link = "@constant" })
 ```
 
 LSP modifiers
-```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+```lua tangle:~/.config/nvim/lua/my/theme.lua
 vim.api.nvim_set_hl(0, "@lsp.mod.deprecated", { strikethrough = true })
 vim.api.nvim_set_hl(0, "@lsp.mod.readonly", { underline = true, sp = "#4A5353" })
 vim.api.nvim_set_hl(0, "@lsp.mod.static", { italic = true })
@@ -1361,7 +1386,7 @@ vim.api.nvim_set_hl(0, "@lsp.typemod.variable.defaultLibrary", { link = "@variab
 
 ### Tabline
 
-```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+```lua tangle:~/.config/nvim/lua/my/theme.lua
 function _G.get_tabline()
     local s = ""
     for tabnr = 1, vim.fn.tabpagenr("$") do
@@ -1388,7 +1413,7 @@ vim.o.tabline = "%!v:lua.get_tabline()"
 
 ### Statusline
 
-```lua tangle:~/.config/nvim/lua/my/theme.lua,~/.config/nvim-lite/lua/my/theme.lua
+```lua tangle:~/.config/nvim/lua/my/theme.lua
 vim.o.statusline = " %f [%{strlen(&fenc)?&fenc:&enc}] [%{&ff}] %y [%{&spelllang}] [0x%04B] "
     .. "%="
     .. " [%n] %l/%L (%p%%), %c "
