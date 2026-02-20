@@ -28,6 +28,14 @@ rm -rf neovim
 ln -sf ~/lib/neovim-nightly/bin/nvim ~/.local/bin/nvim-nightly
 ```
 
+## Table of content
+
+- [Generate config](#generate-config)
+- [Lua setup](#lua-setup)
+- [Init](#init)
+- [Lazy (plugins)](#lazy-plugins)
+- [Theme](#theme)
+
 ## Generate config
 
 This `Neovim` config can be generated using `md-tangle` with different options.
