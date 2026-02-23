@@ -55,7 +55,7 @@ config.color_scheme = "redox";
 ```lua tangle:~/.config/wezterm/wezterm.lua
 config.enable_tab_bar = false
 config.window_decorations = "RESIZE"
-config.window_background_opacity = 0.5
+config.window_background_opacity = 0.9
 ```
 
 ## Events
