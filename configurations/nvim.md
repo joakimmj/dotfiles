@@ -116,6 +116,7 @@ vim.g.maplocalleader = " "
 
 -- theme = require("my.theme")
 -- theme.setup({ transparent = true, })
+-- TODO: <leader>t prefix is used for tmp scratch files today..
 -- vim.keymap.set("n", "<leader>tb", theme.toggle_transparancy, { desc = "[t]oggle [b]ackground" })
 ```
 

@@ -55,7 +55,15 @@ config.color_scheme = "redox";
 ```lua tangle:~/.config/wezterm/wezterm.lua
 config.enable_tab_bar = false
 config.window_decorations = "RESIZE"
-config.window_background_opacity = 0.9
+config.window_background_opacity = 1.0
+config.text_background_opacity = 1.0
+```
+
+Add background image
+> tags:bg-image
+
+```lua tangle:~/.config/wezterm/wezterm.lua tags:bg-image
+config.window_background_image = wezterm.config_dir .. "/wallpaper-2.png"
 ```
 
 ## Events
@@ -83,7 +91,8 @@ end)
 Event for toggling window opacity
 ```lua tangle:~/.config/wezterm/wezterm.lua
 wezterm.on("toggle-opacity", function(window, _)
-    toggle_override(window, "window_background_opacity", 1)
+    toggle_override(window, "window_background_opacity", .8)
+    -- toggle_override(window, "window_background_image", "")
 end)
 ```
 
