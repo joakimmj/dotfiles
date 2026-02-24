@@ -114,6 +114,59 @@ Change `<leader>` to `Space`
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
+-- vim.keymap.set('n', '<leader>ss', ':set spell!<CR>', { desc = 'Toggle Spellcheck' })
+-- vim.keymap.set('n', '<leader>sn', ']s', { desc = 'Next Spell Error' })
+-- vim.keymap.set('n', '<leader>sp', '[s', { desc = 'Previous Spell Error' })
+-- vim.keymap.set('n', '<leader>sa', 'zg', { desc = 'Add Word to Dictionary' })
+-- vim.keymap.set('n', '<leader>s=', 'z=', { desc = 'Suggest Spellings' })
+
+local augroup = vim.api.nvim_create_augroup("UserConfig", { clear = true })
+vim.api.nvim_create_autocmd("FileType", {
+  group = augroup,
+  pattern = { "markdown", "text", "gitcommit" },
+  callback = function()
+    vim.opt_local.wrap = true
+    vim.opt_local.linebreak = true
+    vim.opt_local.spell = true
+  end,
+})
+
+vim.diagnostic.config({
+  jump = {
+    float = true, -- open float when jumping to diagnostic
+  },
+  update_in_insert = false,
+  float = {
+    source = true, -- Always show the source of the diagnostic
+    focusable = false,
+    border = "rounded", -- Use a 'single' line border style (other options: 'rounded', 'double', 'none')
+    style = "minimal",
+  },
+  virtual_lines = false,
+  -- virtual_lines = {
+  --   current_line = true, -- Only show for current line
+  -- },
+  virtual_text = false, -- Disable inline virtual text if you prefer only floats
+  -- virtual_text = {
+  --   current_line = true, -- Only show for current line
+  -- },
+})
+vim.keymap.set("n", "<leader>td", function()
+  vim.diagnostic.enable(not vim.diagnostic.is_enabled())
+end, { desc = "[t]oggle [d]iagnostic" })
+vim.keymap.set("n", "<C-w>D", function()
+  local current = vim.diagnostic.config().virtual_lines or false
+  vim.diagnostic.config({ virtual_lines = not current })
+end, { desc = "Toggle diagnostics" })
+vim.keymap.set("n", "<leader>tl", function()
+  local current = vim.diagnostic.config().virtual_lines or false
+  vim.diagnostic.config({ virtual_lines = not current })
+end, { desc = "[t]oggle virtual [l]ines" })
+vim.keymap.set("n", "<leader>tv", function()
+  local current = vim.diagnostic.config().virtual_text or false
+  vim.diagnostic.config({ virtual_text = not current })
+end, { desc = "[t]oggle [v]irtual text" })
+
 -- theme = require("my.theme")
 -- theme.setup({ transparent = true, })
 -- TODO: <leader>t prefix is used for tmp scratch files today..
