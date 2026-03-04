@@ -52,6 +52,7 @@ All plugins are tagget with the following tags:
 - `formatting`
 - `gitsigns`
 - `lsp`
+- `md-tangle`
 - `sleuth`
 - `snacks`
 - `theme`
@@ -493,6 +494,33 @@ return {
   init = function()
     vim.cmd.colorscheme("redox")
     vim.keymap.set("n", "<leader>tb", require("redox").toggle_transparency, { desc = "[t]oggle [b]ackground" })
+  end,
+}
+```
+
+### md-tangle
+> `tags:plugins,md-tangle`
+
+Tangles markdown files (like this one)
+```lua tangle:~/.config/nvim/lua/my/plugins/md-tangle.lua tags:plugins,md-tangle
+return {
+  "joakimmj/md-tangle.nvim",
+  ft = "markdown",
+  config = function()
+    local md = require("md-tangle")
+    md.setup({
+      prompt_tags = true,
+    })
+
+    vim.keymap.set("n", "<leader>cmi", function()
+      md.insert_block()
+    end, { buffer = true, desc = "[m]arkdown [i]nsert code block" })
+    vim.keymap.set("n", "<leader>cmt", function()
+      md.tangle()
+    end, { buffer = true, desc = "[m]arkdown [t]angle current file" })
+    vim.keymap.set("n", "<leader>cmT", function()
+      md.tangle({ force = true })
+    end, { buffer = true, desc = "[m]arkdown force [T]angle current file" })
   end,
 }
 ```
