@@ -32,8 +32,18 @@ vim.keymap.set(
 )
 vim.keymap.set("n", "<leader>dd", vim.diagnostic.setloclist, { desc = "[d]iagnostic (location list)" })
 vim.keymap.set("n", "<leader>wd", vim.diagnostic.setqflist, { desc = "[d]iagnostic (quickfix list)" })
-vim.keymap.set("n", "<C-j>", "<cmd>try | cnext | catch | cfirst | catch | endtry<CR>zz", { desc = "go to next quickfix list entry" })
-vim.keymap.set("n", "<C-k>", "<cmd>try | cprevious | catch | clast | catch | endtry<CR>zz", { desc = "go to previous quickfix list entry" })
+vim.keymap.set(
+  "n",
+  "<c-j>",
+  "<cmd>try | cnext | catch | cfirst | catch | endtry<cr>zz",
+  { desc = "go to next quickfix list entry" }
+)
+vim.keymap.set(
+  "n",
+  "<c-k>",
+  "<cmd>try | cprevious | catch | clast | catch | endtry<cr>zz",
+  { desc = "go to previous quickfix list entry" }
+)
 vim.keymap.set("n", "<C-h>", "<cmd>colder<CR>", { desc = "go to previous quickfix list" })
 vim.keymap.set("n", "<C-l>", "<cmd>cnewer<CR>", { desc = "go to next quickfix list" })
 vim.keymap.set("n", "<leader>q", function()
@@ -45,8 +55,12 @@ vim.keymap.set("n", "<left>", "<Nop>")
 vim.keymap.set("n", "<right>", "<Nop>")
 vim.keymap.set("n", "<up>", "<Nop>")
 vim.keymap.set("n", "<down>", "<Nop>")
-vim.keymap.set("n", "<leader>SS", function() vim.cmd([[mksession! .session.vim]]) end, { desc = "[S]ave" })
-vim.keymap.set("n", "<leader>SR", function() vim.cmd([[source .session.vim]]) end, { desc = "[R]estore" })
+vim.keymap.set("n", "<leader>SS", function()
+  vim.cmd([[mksession! .session.vim]])
+end, { desc = "[S]ave" })
+vim.keymap.set("n", "<leader>SR", function()
+  vim.cmd([[source .session.vim]])
+end, { desc = "[R]estore" })
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.tabstop = 4
@@ -87,54 +101,64 @@ vim.opt.foldmethod = "expr"
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 vim.opt.foldlevelstart = 99
 vim.api.nvim_create_autocmd("TextYankPost", {
-	desc = "Highlight when yanking (copying) text",
-	group = vim.api.nvim_create_augroup("augroup-highlight-yank", { clear = true }),
-	callback = function()
-		vim.highlight.on_yank()
-	end,
+  desc = "Highlight when yanking (copying) text",
+  group = vim.api.nvim_create_augroup("augroup-highlight-yank", { clear = true }),
+  callback = function()
+    vim.highlight.on_yank()
+  end,
 })
 vim.api.nvim_create_autocmd("VimLeave", {
-	desc = "Save session on exit",
-	group = vim.api.nvim_create_augroup("augroup-session-manage", { clear = true }),
-	callback = function()
-		vim.cmd([[silent! mksession! .session.vim]])
-	end,
+  desc = "Save session on exit",
+  group = vim.api.nvim_create_augroup("augroup-session-manage", { clear = true }),
+  callback = function()
+    vim.cmd([[silent! mksession! .session.vim]])
+  end,
 })
 vim.api.nvim_create_autocmd({ "BufEnter", "CursorHold", "CursorHoldI", "FocusGained" }, {
-	desc = "Check if file changed on disk",
-	group = vim.api.nvim_create_augroup("augroup-file-disk-status", { clear = true }),
-	pattern = { "*" },
-	command = "if mode() != 'c' | checktime | endif",
+  desc = "Check if file changed on disk",
+  group = vim.api.nvim_create_augroup("augroup-file-disk-status", { clear = true }),
+  pattern = { "*" },
+  command = "if mode() != 'c' | checktime | endif",
 })
-vim.api.nvim_create_autocmd('FileType', {
-	desc = 'Lua specific options',
-	pattern = 'lua',
-	group = vim.api.nvim_create_augroup('augroup-lua-options', { clear = true }),
-	callback = function()
-		vim.keymap.set("n", "<leader>X", "<cmd>source %<CR>", { buffer = true, desc = "e[X]ecute lua file" })
-		vim.keymap.set("n", "<leader>x", ":.lua<CR>", { buffer = true, desc = "e[x]ecute lua line" })
-		vim.keymap.set("v", "<leader>x", ":lua<CR>", { buffer = true, desc = "e[x]ecute lua selection" })
-	end,
+vim.api.nvim_create_autocmd("FileType", {
+  desc = "Lua specific options",
+  pattern = "lua",
+  group = vim.api.nvim_create_augroup("augroup-lua-options", { clear = true }),
+  callback = function()
+    vim.keymap.set("n", "<leader>X", "<cmd>source %<CR>", { buffer = true, desc = "e[X]ecute lua file" })
+    vim.keymap.set("n", "<leader>x", ":.lua<CR>", { buffer = true, desc = "e[x]ecute lua line" })
+    vim.keymap.set("v", "<leader>x", ":lua<CR>", { buffer = true, desc = "e[x]ecute lua selection" })
+  end,
 })
-vim.api.nvim_create_autocmd('FileType', {
-	desc = 'Json specific options',
-	pattern = 'json',
-	group = vim.api.nvim_create_augroup('augroup-json-options', { clear = true }),
-	callback = function()
-		vim.keymap.set("n", "<leader>X", [[%!jq '.']], { buffer = true, desc = "e[X]ecute json formatting" })
-	end,
+vim.api.nvim_create_autocmd("FileType", {
+  desc = "Json specific options",
+  pattern = "json",
+  group = vim.api.nvim_create_augroup("augroup-json-options", { clear = true }),
+  callback = function()
+    vim.keymap.set("n", "<leader>X", [[%!jq '.']], { buffer = true, desc = "e[X]ecute json formatting" })
+  end,
 })
 local use_lazy_packages, _ = pcall(require, "my.init-lazy")
 if not use_lazy_packages then
-	vim.g.netrw_bufsettings = "noma nomod nu rnu nobl nowrap ro"
-	vim.g.netrw_liststyle=3
-	vim.g.netrw_browse_split = 0
-	vim.g.netrw_banner = 0
-	vim.g.netrw_winsize = 25
+  vim.g.netrw_bufsettings = "noma nomod nu rnu nobl nowrap ro"
+  vim.g.netrw_liststyle = 3
+  vim.g.netrw_browse_split = 0
+  vim.g.netrw_banner = 0
+  vim.g.netrw_winsize = 25
 
-	vim.keymap.set("n", "<leader>we", ":Lex<CR>", { desc = "[e]xplorer" })
-	vim.keymap.set("n", "<leader>wg", [[:vimgrep //j ** | copen<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>]], { desc = "[g]rep" })
-	vim.keymap.set("n", "<leader>wf", ":Lex<CR>", { desc = "[f]iles" })
-	vim.keymap.set("n", "<leader><space>", ":ls<CR>:b<Space>", { desc = "[ ] find existing buffers" })
-	vim.keymap.set("n", "<leader>sw", [[:execute "vimgrep /" . expand("<cword>") . "/j **" | cw<CR>]], { desc = "current [w]ord" })
+  vim.keymap.set("n", "<leader>we", ":Lex<CR>", { desc = "[e]xplorer" })
+  vim.keymap.set(
+    "n",
+    "<leader>wg",
+    [[:vimgrep //j ** | copen<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>]],
+    { desc = "[g]rep" }
+  )
+  vim.keymap.set("n", "<leader>wf", ":Lex<CR>", { desc = "[f]iles" })
+  vim.keymap.set("n", "<leader><space>", ":ls<CR>:b<Space>", { desc = "[ ] find existing buffers" })
+  vim.keymap.set(
+    "n",
+    "<leader>sw",
+    [[:execute "vimgrep /" . expand("<cword>") . "/j **" | cw<CR>]],
+    { desc = "current [w]ord" }
+  )
 end

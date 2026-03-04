@@ -1,28 +1,28 @@
 local redox = {
-    bg = "#2E3434",
-    bg_alt = "#343A3A",
-    surface = "#3A4141",
-    overlay = "#414949",
-    fg = "#DCE8E5",
-    muted = "#AFC3BE",
-    subtle = "#919D9B",
-    rust = "#CD8B64",
-    orange = "#E3A36F",
-    teal = "#7EC1AE",
-    sea = "#9FD8C4",
-    cyan = "#8FC7B7",
-    amber = "#D6C38A",
-    red = "#CD8980",
-    warn = "#E3B86F",
-    info = "#8EC6C4",
-    hint = "#98C3B1",
-    cursor = "#FFD7A0",
-    selection = "#3F4A4A",
+  bg = "#2E3434",
+  bg_alt = "#343A3A",
+  surface = "#3A4141",
+  overlay = "#414949",
+  fg = "#DCE8E5",
+  muted = "#AFC3BE",
+  subtle = "#919D9B",
+  rust = "#CD8B64",
+  orange = "#E3A36F",
+  teal = "#7EC1AE",
+  sea = "#9FD8C4",
+  cyan = "#8FC7B7",
+  amber = "#D6C38A",
+  red = "#CD8980",
+  warn = "#E3B86F",
+  info = "#8EC6C4",
+  hint = "#98C3B1",
+  cursor = "#FFD7A0",
+  selection = "#3F4A4A",
 }
 vim.opt.termguicolors = true
 vim.cmd("hi clear")
 if vim.fn.exists("syntax_on") == 1 then
-    vim.cmd("syntax reset")
+  vim.cmd("syntax reset")
 end
 vim.g.colors_name = "redox"
 vim.api.nvim_set_hl(0, "Normal", { fg = redox.fg, bg = redox.bg })
@@ -82,7 +82,7 @@ vim.api.nvim_set_hl(0, "@variable", { fg = redox.fg })
 vim.api.nvim_set_hl(0, "@variable.builtin", { fg = "#E6D4A3" })
 vim.api.nvim_set_hl(0, "@variable.member", { link = "@type.builtin" })
 vim.api.nvim_set_hl(0, "@attribute", { link = "@function" })
-vim.api.nvim_set_hl(0, "@markup.heading",   { fg = redox.orange, bold = true })
+vim.api.nvim_set_hl(0, "@markup.heading", { fg = redox.orange, bold = true })
 vim.api.nvim_set_hl(0, "@markup.heading.1", { fg = redox.orange, bold = true, underline = true })
 vim.api.nvim_set_hl(0, "@markup.heading.2", { fg = redox.rust, bold = true })
 vim.api.nvim_set_hl(0, "@markup.heading.3", { fg = redox.teal, bold = true })
@@ -165,28 +165,28 @@ vim.api.nvim_set_hl(0, "@lsp.mod.abstract", { italic = true })
 vim.api.nvim_set_hl(0, "@lsp.mod.unused", { fg = "#4A5353" })
 vim.api.nvim_set_hl(0, "@lsp.typemod.variable.defaultLibrary", { link = "@variable.builtin" })
 function _G.get_tabline()
-    local s = ""
-    for tabnr = 1, vim.fn.tabpagenr("$") do
-        local winnr = vim.fn.tabpagewinnr(tabnr)
-        local buflist = vim.fn.tabpagebuflist(tabnr)[winnr]
-        local bufname = vim.fn.bufname(buflist)
-        local bufname_short = vim.fn.fnamemodify(bufname, ":t")
-        if #bufname_short == 0 then
-            bufname_short = "[No Name]"
-        end
-        if tabnr == vim.fn.tabpagenr() then
-            s = s .. "%#TabLineSel#"
-        else
-            s = s .. "%#TabLine#"
-        end
-        s = s .. " " .. tabnr .. ": " .. bufname_short .. " "
+  local s = ""
+  for tabnr = 1, vim.fn.tabpagenr("$") do
+    local winnr = vim.fn.tabpagewinnr(tabnr)
+    local buflist = vim.fn.tabpagebuflist(tabnr)[winnr]
+    local bufname = vim.fn.bufname(buflist)
+    local bufname_short = vim.fn.fnamemodify(bufname, ":t")
+    if #bufname_short == 0 then
+      bufname_short = "[No Name]"
     end
-    s = s .. "%#TabLineFill#"
-    return s
+    if tabnr == vim.fn.tabpagenr() then
+      s = s .. "%#TabLineSel#"
+    else
+      s = s .. "%#TabLine#"
+    end
+    s = s .. " " .. tabnr .. ": " .. bufname_short .. " "
+  end
+  s = s .. "%#TabLineFill#"
+  return s
 end
 
 vim.o.tabline = "%!v:lua.get_tabline()"
 vim.o.statusline = " %f [%{strlen(&fenc)?&fenc:&enc}] [%{&ff}] %y [%{&spelllang}] [0x%04B] "
-    .. "%="
-    .. " [%n] %l/%L (%p%%), %c "
-    .. "%#StatusLineNC#%{&mod?' [+] ':''}%*"
+  .. "%="
+  .. " [%n] %l/%L (%p%%), %c "
+  .. "%#StatusLineNC#%{&mod?' [+] ':''}%*"
