@@ -1,4 +1,3 @@
-require("my.theme")
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
@@ -138,8 +137,38 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.keymap.set("n", "<leader>X", [[%!jq '.']], { buffer = true, desc = "e[X]ecute json formatting" })
   end,
 })
+function _G.get_tabline()
+  local s = ""
+  for tabnr = 1, vim.fn.tabpagenr("$") do
+    local winnr = vim.fn.tabpagewinnr(tabnr)
+    local buflist = vim.fn.tabpagebuflist(tabnr)[winnr]
+    local bufname = vim.fn.bufname(buflist)
+    local bufname_short = vim.fn.fnamemodify(bufname, ":t")
+    if #bufname_short == 0 then
+      bufname_short = "[No Name]"
+    end
+    if tabnr == vim.fn.tabpagenr() then
+      s = s .. "%#TabLineSel#"
+    else
+      s = s .. "%#TabLine#"
+    end
+    s = s .. " " .. tabnr .. ": " .. bufname_short .. " "
+  end
+  s = s .. "%#TabLineFill#"
+  return s
+end
+
+vim.o.tabline = "%!v:lua.get_tabline()"
+vim.o.statusline = " %f [%{strlen(&fenc)?&fenc:&enc}] [%{&ff}] %y [%{&spelllang}] [0x%04B] "
+  .. "%="
+  .. " [%n] %l/%L (%p%%), %c "
+  .. "%#StatusLineNC#%{&mod?' [+] ':''}%*"
 local use_lazy_packages, _ = pcall(require, "my.init-lazy")
 if not use_lazy_packages then
+  if require("lazy.core.config").plugins["redox.nvim"] == nil then
+    require("my.theme")
+  end
+
   vim.g.netrw_bufsettings = "noma nomod nu rnu nobl nowrap ro"
   vim.g.netrw_liststyle = 3
   vim.g.netrw_browse_split = 0

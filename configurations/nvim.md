@@ -54,6 +54,7 @@ All plugins are tagget with the following tags:
 - `lsp`
 - `sleuth`
 - `snacks`
+- `theme`
 - `treesitter`
 - `which-key`
 
@@ -101,11 +102,6 @@ indent_width = 2
 ```
 
 ## Init
-
-Import my configurations
-```lua tangle:~/.config/nvim/init.lua
-require("my.theme")
-```
 
 ### Keymaps
 
@@ -393,11 +389,51 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 ```
 
+### Tabline
+
+```lua tangle:~/.config/nvim/init.lua
+function _G.get_tabline()
+  local s = ""
+  for tabnr = 1, vim.fn.tabpagenr("$") do
+    local winnr = vim.fn.tabpagewinnr(tabnr)
+    local buflist = vim.fn.tabpagebuflist(tabnr)[winnr]
+    local bufname = vim.fn.bufname(buflist)
+    local bufname_short = vim.fn.fnamemodify(bufname, ":t")
+    if #bufname_short == 0 then
+      bufname_short = "[No Name]"
+    end
+    if tabnr == vim.fn.tabpagenr() then
+      s = s .. "%#TabLineSel#"
+    else
+      s = s .. "%#TabLine#"
+    end
+    s = s .. " " .. tabnr .. ": " .. bufname_short .. " "
+  end
+  s = s .. "%#TabLineFill#"
+  return s
+end
+
+vim.o.tabline = "%!v:lua.get_tabline()"
+```
+
+### Statusline
+
+```lua tangle:~/.config/nvim/init.lua
+vim.o.statusline = " %f [%{strlen(&fenc)?&fenc:&enc}] [%{&ff}] %y [%{&spelllang}] [0x%04B] "
+  .. "%="
+  .. " [%n] %l/%L (%p%%), %c "
+  .. "%#StatusLineNC#%{&mod?' [+] ':''}%*"
+```
+
 ### Lite vs. plugins
 
 ```lua tangle:~/.config/nvim/init.lua
 local use_lazy_packages, _ = pcall(require, "my.init-lazy")
 if not use_lazy_packages then
+  if require("lazy.core.config").plugins["redox.nvim"] == nil then
+    require("my.theme")
+  end
+
   vim.g.netrw_bufsettings = "noma nomod nu rnu nobl nowrap ro"
   vim.g.netrw_liststyle = 3
   vim.g.netrw_browse_split = 0
@@ -444,6 +480,21 @@ require("lazy").setup({
   spec = "my.plugins",
   change_detection = { notify = false },
 })
+```
+
+### theme
+> `tags:plugins,theme`
+
+Load the redox theme.
+```lua tangle:~/.config/nvim/lua/my/plugins/theme.lua tags:plugins,theme
+return {
+  "joakimmj/redox.nvim",
+  priority = 1000,
+  init = function()
+    vim.cmd.colorscheme("redox")
+    vim.keymap.set("n", "<leader>tb", require("redox").toggle_transparency, { desc = "[t]oggle [b]ackground" })
+  end,
+}
 ```
 
 ### sleuth
@@ -763,7 +814,16 @@ return {
 
       -- Useful status updates for LSP.
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { "j-hui/fidget.nvim", opts = {} },
+      {
+        "j-hui/fidget.nvim",
+        opts = {
+          notification = {
+            window = {
+              winblend = 0,
+            },
+          },
+        },
+      },
 
       -- Allows extra capabilities provided by nvim-cmp
       "hrsh7th/cmp-nvim-lsp",
@@ -1570,40 +1630,4 @@ vim.api.nvim_set_hl(0, "@lsp.mod.static", { italic = true })
 vim.api.nvim_set_hl(0, "@lsp.mod.abstract", { italic = true })
 vim.api.nvim_set_hl(0, "@lsp.mod.unused", { fg = "#4A5353" })
 vim.api.nvim_set_hl(0, "@lsp.typemod.variable.defaultLibrary", { link = "@variable.builtin" })
-```
-
-### Tabline
-
-```lua tangle:~/.config/nvim/lua/my/theme.lua
-function _G.get_tabline()
-  local s = ""
-  for tabnr = 1, vim.fn.tabpagenr("$") do
-    local winnr = vim.fn.tabpagewinnr(tabnr)
-    local buflist = vim.fn.tabpagebuflist(tabnr)[winnr]
-    local bufname = vim.fn.bufname(buflist)
-    local bufname_short = vim.fn.fnamemodify(bufname, ":t")
-    if #bufname_short == 0 then
-      bufname_short = "[No Name]"
-    end
-    if tabnr == vim.fn.tabpagenr() then
-      s = s .. "%#TabLineSel#"
-    else
-      s = s .. "%#TabLine#"
-    end
-    s = s .. " " .. tabnr .. ": " .. bufname_short .. " "
-  end
-  s = s .. "%#TabLineFill#"
-  return s
-end
-
-vim.o.tabline = "%!v:lua.get_tabline()"
-```
-
-### Statusline
-
-```lua tangle:~/.config/nvim/lua/my/theme.lua
-vim.o.statusline = " %f [%{strlen(&fenc)?&fenc:&enc}] [%{&ff}] %y [%{&spelllang}] [0x%04B] "
-  .. "%="
-  .. " [%n] %l/%L (%p%%), %c "
-  .. "%#StatusLineNC#%{&mod?' [+] ':''}%*"
 ```

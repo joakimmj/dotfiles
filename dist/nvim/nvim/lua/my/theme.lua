@@ -164,29 +164,3 @@ vim.api.nvim_set_hl(0, "@lsp.mod.static", { italic = true })
 vim.api.nvim_set_hl(0, "@lsp.mod.abstract", { italic = true })
 vim.api.nvim_set_hl(0, "@lsp.mod.unused", { fg = "#4A5353" })
 vim.api.nvim_set_hl(0, "@lsp.typemod.variable.defaultLibrary", { link = "@variable.builtin" })
-function _G.get_tabline()
-  local s = ""
-  for tabnr = 1, vim.fn.tabpagenr("$") do
-    local winnr = vim.fn.tabpagewinnr(tabnr)
-    local buflist = vim.fn.tabpagebuflist(tabnr)[winnr]
-    local bufname = vim.fn.bufname(buflist)
-    local bufname_short = vim.fn.fnamemodify(bufname, ":t")
-    if #bufname_short == 0 then
-      bufname_short = "[No Name]"
-    end
-    if tabnr == vim.fn.tabpagenr() then
-      s = s .. "%#TabLineSel#"
-    else
-      s = s .. "%#TabLine#"
-    end
-    s = s .. " " .. tabnr .. ": " .. bufname_short .. " "
-  end
-  s = s .. "%#TabLineFill#"
-  return s
-end
-
-vim.o.tabline = "%!v:lua.get_tabline()"
-vim.o.statusline = " %f [%{strlen(&fenc)?&fenc:&enc}] [%{&ff}] %y [%{&spelllang}] [0x%04B] "
-  .. "%="
-  .. " [%n] %l/%L (%p%%), %c "
-  .. "%#StatusLineNC#%{&mod?' [+] ':''}%*"
