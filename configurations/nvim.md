@@ -484,6 +484,16 @@ vim.o.statusline = " %f [%{strlen(&fenc)?&fenc:&enc}] [%{&ff}] %y [%{&spelllang}
   .. "%#StatusLineNC#%{&mod?' [+] ':''}%*"
 ```
 
+### Wallpaper
+
+[TANGLE_CP:../assets/wallpaper.png]: # (tangle:~/.config/nvim/wallpaper.png)
+
+<!-- TANGLE_CP:../assets/wallpaper.png tangle:~/.config/nvim/wallpaper.png -->
+
+[TANGLE]: # (cp:../assets/wallpaper.png tangle:~/.config/nvim/wallpaper.png)
+
+![wallpaper](../assets/wallpaper.png)
+
 ### Lite vs. plugins
 
 ```lua tangle:~/.config/nvim/init.lua
