@@ -165,7 +165,7 @@ bind-key -T root C-a switch-client -T my-keys
 bind-key -T my-keys -N "Reload config" r source-file ~/.config/tmux/tmux.conf \; display-message "~/.config/tmux/tmux.conf reloaded"
 bind-key -T my-keys -N "Edit config" e send-keys "nvim ~/.config/tmux/tmux.conf" Enter
 bind-key -T my-keys -N "Jump to last window" Space last-window
-bind-key -T my-keys -N "Popup terminal" t display-popup -w 80% -h 80% -T "[ TERMINAL ]" -S "fg=#E3A36F" -E
+bind-key -T my-keys -N "Popup terminal" t display-popup -w 80% -h 80% -T "[ TERMINAL ]" -S "fg=#E3A36F" -d "#{pane_current_path}" -E
 bind-key -T my-keys -N "Popup search and create session" s display-popup -T "[ CREATE/OPEN SESSION ]" -S "fg=#E3A36F" -E "tmuxs"
 bind-key -T my-keys -N "Popup search and create window" w display-popup -T "[ CREATE/OPEN WINDOW ]" -S "fg=#E3A36F" -E "dev"
 bind-key -T my-keys -N "Jump to directory" j send-keys "cd $(find -L ~/dev ~/projects ~/.config -mindepth 1 -maxdepth 1 -type d | fzf)" Enter

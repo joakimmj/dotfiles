@@ -37,7 +37,8 @@ config.color_schemes = {
 config.color_scheme = "redox";
 config.enable_tab_bar = false
 config.window_decorations = "RESIZE"
-config.window_background_opacity = 0.5
+config.window_background_opacity = 1.0
+config.text_background_opacity = 1.0
 local function toggle_override(window, override, params)
     local overrides = window:get_config_overrides() or {}
     if not overrides[override] then
@@ -51,7 +52,8 @@ wezterm.on("toggle-window-decorations", function(window, _)
     toggle_override(window, "window_decorations", "TITLE|RESIZE")
 end)
 wezterm.on("toggle-opacity", function(window, _)
-    toggle_override(window, "window_background_opacity", 1)
+    toggle_override(window, "window_background_opacity", .8)
+    -- toggle_override(window, "window_background_image", "")
 end)
 config.disable_default_key_bindings = true
 local act = wezterm.action
