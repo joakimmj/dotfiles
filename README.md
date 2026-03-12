@@ -1,3 +1,58 @@
+---
+TANGLE_CP(./assets/wallpaper.png): ~/tmp/wallpaper.png,~/.config/tmux/wallpaper.png
+TANGLE_CP(./assets/lock-screen.png): ~/tmp/lock-screen.png,~/.config/tmux/lock-screen.png
+TANGLE_CP:
+  - src: ./assets/wallpaper.png 
+    dest: ~/tmp/wallpaper.png,~/.config/tmux/wallpaper.png
+    tags: bg-image
+  - src: ./assets/lock-screen.png
+    dest: ~/tmp/lock-screen.png,~/.config/tmux/lock-screen.png
+---
+# TANGLE_CP
+
+```lua tangle:~/tmp/init.lua
+echo("some tangled code block")
+```
+
+## FRONTMATTER
+
+```yaml
+TANGLE_CP(./assets/wallpaper.png): ~/tmp/wallpaper.png,~/.config/tmux/wallpaper.png
+TANGLE_CP(./assets/lock-screen.png): ~/tmp/lock-screen.png,~/.config/tmux/lock-screen.png
+TANGLE_CP:
+  - src: ./assets/wallpaper.png 
+    dest: ~/tmp/wallpaper.png,~/.config/tmux/wallpaper.png
+    tags: bg-image
+  - src: ./assets/lock-screen.png
+    dest: ~/tmp/lock-screen.png,~/.config/tmux/lock-screen.png
+```
+
+## VISIBLE INLINE
+
+> TANGLE_CP:./assets/wallpaper.png tangle:~/tmp/wallpaper.png
+
+## HIDDEN INLINE
+
+```md
+[TANGLE_CP:./assets/wallpaper.png]: # (tangle:~/tmp/wallpaper.png)
+
+<!-- TANGLE_CP:./assets/wallpaper.png tangle:~/tmp/wallpaper.png -->
+
+<!-- TANGLE_CP:./assets/wallpaper.png tangle:~/.config/wezterm/background.png tags:bg-image -->
+
+[TANGLE]: # (cp:./assets/wallpaper.png tangle:~/tmp/wallpaper.png)
+```
+
+[TANGLE_CP:./assets/wallpaper.png]: # (tangle:~/tmp/wallpaper.png)
+
+<!-- TANGLE_CP:./assets/wallpaper.png tangle:~/.config/wezterm/background.png tags:bg-image -->
+
+<!-- TANGLE_CP:./assets/wallpaper.png tangle:~/tmp/wallpaper.png -->
+
+[TANGLE]: # (cp:./assets/wallpaper.png tangle:~/tmp/wallpaper.png)
+
+![wallpaper](./assets/wallpaper.png)
+
 # dotfiles
 
 This is a repository containing most of my configurations. They are
