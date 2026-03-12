@@ -13,7 +13,7 @@ md-tangle configurations/nvim.md -f -d dist/nvim/nvim-lite/
 md-tangle configurations/sway.md -f -d dist/sway/
 md-tangle configurations/tmux.md -f -d dist/tmux/
 md-tangle configurations/waybar.md -f -d dist/waybar/
-md-tangle configurations/wezterm.md -f -d dist/wezterm/
+md-tangle configurations/wezterm.md -i bg-image -f -d dist/wezterm/
 md-tangle configurations/xmodmap.md -f -d dist/xmodmap/
 md-tangle configurations/yazi.md -f -d dist/yazi/
 

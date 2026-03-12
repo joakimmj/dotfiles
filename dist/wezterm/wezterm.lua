@@ -39,6 +39,7 @@ config.enable_tab_bar = false
 config.window_decorations = "RESIZE"
 config.window_background_opacity = 1.0
 config.text_background_opacity = 1.0
+config.window_background_image = wezterm.config_dir .. "/background.png"
 local function toggle_override(window, override, params)
     local overrides = window:get_config_overrides() or {}
     if not overrides[override] then

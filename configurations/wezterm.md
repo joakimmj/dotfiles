@@ -62,8 +62,10 @@ config.text_background_opacity = 1.0
 Add background image
 > tags:bg-image
 
+<!-- TANGLE_CP:./assets/wallpaper.png tangle:~/.config/wezterm/background.png tags:bg-image -->
+
 ```lua tangle:~/.config/wezterm/wezterm.lua tags:bg-image
-config.window_background_image = wezterm.config_dir .. "/wallpaper-2.png"
+config.window_background_image = wezterm.config_dir .. "/background.png"
 ```
 
 ## Events
