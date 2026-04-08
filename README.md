@@ -14,6 +14,8 @@ TANGLE_CP:
 echo("some tangled code block")
 ```
 
+Hidden copy command, and let user decide if they want to document the copying.
+
 ## FRONTMATTER
 
 ```yaml
