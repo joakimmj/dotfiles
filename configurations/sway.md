@@ -19,8 +19,8 @@ set $right l
 
 Workspaces
 ```bash tangle:~/.config/sway/config
-set $wp1 1:www
-set $wp2 2:terminal
+set $wp1 1:terminal
+set $wp2 2:www
 set $wp3 3:edit
 set $wp4 4:music
 set $wp5 5:graphics
@@ -166,7 +166,7 @@ bindsym $mod+Shift+t exec wezterm start --class term-popup
 
 Web browser
 ```bash tangle:~/.config/sway/config
-bindsym $mod+w workspace $wp1;exec $web-browser
+bindsym $mod+w workspace $wp2;exec $web-browser
 bindsym Shift+$mod+w exec $web-browser
 bindsym Ctrl+$mod+w exec $web-browser-private
 ```
