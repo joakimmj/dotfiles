@@ -31,9 +31,10 @@ set -as terminal-overrides ',xterm-256color:Tc'
 set -g default-terminal "${TERM}"
 ```
 
-No bells
+No bells, but show activity in other windows
 ``` tangle:~/.config/tmux/tmux.conf
 set -g bell-action none
+setw -g monitor-activity on
 ```
 
 Attach to next session if one session is closed
