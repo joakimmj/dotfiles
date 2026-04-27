@@ -75,15 +75,13 @@ focus_follows_mouse no
 workspace_auto_back_and_forth no
 floating_modifier $mod normal
 # exec_always --no-startup-id chmod 755 ~/config/sway/autostart.sh
-# exec_always --no-startup-id chmod 755 ~/config/sway/win_menu.py
-# exec_always --no-startup-id chmod 755 ~/config/sway/init_json.sh
-# exec_always --no-startup-id chmod 755 ~/config/sway/spotify_info.sh
 # exec --no-startup-id ~/config/sway/autostart.sh
-# exec_always --no-startup-id i3-msg 'workspace $wp2'
-# exec --no-startup-id gnome-terminal
+# exec_always --no-startup-id swaymsg 'workspace $wp2'
+# exec --no-startup-id $term
+exec --no-startup-id swaymsg "workspace $wp2; exec $term"
 bindsym $mod+t exec $term
 for_window [app_id="term-popup"] floating enable, resize set 80 ppt 80 ppt, border pixel 3
-bindsym $mod+Shift+t exec wezterm start --class term-popup
+bindsym $mod+Shift+t exec $term start --class term-popup
 bindsym $mod+w workspace $wp1;exec $web-browser
 bindsym Shift+$mod+w exec $web-browser
 bindsym Ctrl+$mod+w exec $web-browser-private
@@ -91,7 +89,7 @@ bindsym $mod+f exec $file-browser
 bindsym $mod+e workspace $wp3;exec $editor
 bindsym Shift+$mod+e exec $editor
 for_window [app_id="term-popup-help"] floating enable, resize set 830 px 80 ppt, border pixel 3
-bindsym $mod+p exec wezterm start --class term-popup-help -- less ~/.config/sway/keybindings.txt
+bindsym $mod+p exec $term start --class term-popup-help -- less ~/.config/sway/keybindings.txt
 for_window [app_id="term-popup-task-manager"] floating enable, resize set 80 ppt 80 ppt, border pixel 3
 bindsym Ctrl+Alt+Delete exec wezterm start --class term-popup-task-manager -- htop
 bindsym $mod+Return exec $menu-daemon

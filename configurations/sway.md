@@ -145,12 +145,10 @@ floating_modifier $mod normal
 ### Autostart
 ```bash tangle:~/.config/sway/config
 # exec_always --no-startup-id chmod 755 ~/config/sway/autostart.sh
-# exec_always --no-startup-id chmod 755 ~/config/sway/win_menu.py
-# exec_always --no-startup-id chmod 755 ~/config/sway/init_json.sh
-# exec_always --no-startup-id chmod 755 ~/config/sway/spotify_info.sh
 # exec --no-startup-id ~/config/sway/autostart.sh
-# exec_always --no-startup-id i3-msg 'workspace $wp2'
-# exec --no-startup-id gnome-terminal
+# exec_always --no-startup-id swaymsg 'workspace $wp2'
+# exec --no-startup-id $term
+exec --no-startup-id swaymsg "workspace $wp2; exec $term"
 ```
 
 ### Keybindings
@@ -161,7 +159,7 @@ Terminal
 ```bash tangle:~/.config/sway/config
 bindsym $mod+t exec $term
 for_window [app_id="term-popup"] floating enable, resize set 80 ppt 80 ppt, border pixel 3
-bindsym $mod+Shift+t exec wezterm start --class term-popup
+bindsym $mod+Shift+t exec $term start --class term-popup
 ```
 
 Web browser
@@ -187,7 +185,7 @@ bindsym Shift+$mod+e exec $editor
 Print help
 ```bash tangle:~/.config/sway/config
 for_window [app_id="term-popup-help"] floating enable, resize set 830 px 80 ppt, border pixel 3
-bindsym $mod+p exec wezterm start --class term-popup-help -- less ~/.config/sway/keybindings.txt
+bindsym $mod+p exec $term start --class term-popup-help -- less ~/.config/sway/keybindings.txt
 ```
 
 Task manager
