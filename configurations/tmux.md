@@ -196,6 +196,7 @@ bind-key -T my-keys -N "Popup scratchpad (current window)" P if-shell 'echo "#{s
 
 Prefixed with `C-a c`
 ``` tangle:~/.config/tmux/tmux.conf
+bind-key -T my-keys c switch-client -T cheatsheets
 bind-key -T cheatsheets -N "Cheatsheet" c display-popup -T "[ CHEATSHEETS ]" -S "fg=#E3A36F" -E "cht-sh"
 bind-key -T cheatsheets -N "Cheatsheet (programming languages)" l display-popup -T "[ CHEATSHEETS ]" -S "fg=#E3A36F" -E "cht-lang"
 bind-key -T cheatsheets -N "Cheatsheet (utils)" u display-popup -T "[ CHEATSHEETS ]" -S "fg=#E3A36F" -E "cht-util"
