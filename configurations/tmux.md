@@ -35,6 +35,8 @@ No bells, but show activity in other windows
 ``` tangle:~/.config/tmux/tmux.conf
 set -g bell-action none
 setw -g monitor-activity on
+set -g monitor-bell on
+set -g visual-bell on
 ```
 
 Attach to next session if one session is closed
@@ -64,9 +66,9 @@ set -g status-style "bg=#2E3434,fg=#6B7A78"
 Window titles
 ``` tangle:~/.config/tmux/tmux.conf
 setw -g window-status-style "fg=#8FA7A3,bg=#2E3434"
-setw -g window-status-format " #I:#W "
+setw -g window-status-format "#{?window_bell_flag, [!],#{?window_activity_flag, [#],}} #I:#W "
 setw -g window-status-current-style "fg=#2E3434,bg=#E3A36F"
-setw -g window-status-current-format " #I:#W "
+setw -g window-status-current-format "#{?window_zoomed_flag, [#{window_panes}],} #I:#W "
 ```
 
 Add git branch to left status (default length: 10)
