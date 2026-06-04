@@ -1,4 +1,4 @@
-# WexTerm
+# WezTerm
 
 ```lua tangle:~/.config/wezterm/wezterm.lua
 local wezterm = require 'wezterm'

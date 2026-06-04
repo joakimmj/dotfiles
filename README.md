@@ -22,7 +22,7 @@ tangled with the CLI tool [md-tangle][1].
     * [wallpaper](assets/wallpaper.png)
 * [tmux](configurations/tmux.md)
 * [waybar](configurations/waybar.md)
-* [WexTerm](configurations/wezterm.md)
+* [WezTerm](configurations/wezterm.md)
 * [Xmodmap](configurations/xmodmap.md)
 * [Yazi](configurations/yazi.md)
 
