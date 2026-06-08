@@ -1,4 +1,4 @@
-.PHONY: all build clean
+.PHONY: all build clean help tangle
 
 VENV_DIR := .venv
 VENV_PYTHON := $(VENV_DIR)/bin/python
@@ -42,3 +42,16 @@ build: $(MD_TANGLE)
 	$(MD_TANGLE) configurations/wezterm.md -f -d dist/wezterm/
 	$(MD_TANGLE) configurations/xmodmap.md -f -d dist/xmodmap/
 	$(MD_TANGLE) configurations/yazi.md -f -d dist/yazi/
+
+# Show md-tangle help page
+help: $(MD_TANGLE)
+	$(MD_TANGLE) --help
+
+# Tangle a specific configuration (drop-in for md-tangle; args after --).
+# Usage: make tangle -- configurations/nvim.md -i plugins -f -d dist/nvim/
+tangle: $(MD_TANGLE)
+	$(MD_TANGLE) $(filter-out tangle,$(MAKECMDGOALS))
+
+# Swallow passthrough words so make doesn't treat them as real targets.
+%:
+	@:
