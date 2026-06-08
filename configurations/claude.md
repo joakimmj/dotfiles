@@ -60,7 +60,7 @@ defaults (`enabled: true`, `mode: balanced`) on first run.
 ```json tangle:~/.claude/plugins/no-fluff/.claude-plugin/plugin.json
 {
   "name": "no-fluff",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Token-efficient speaking style: strips conversational fluff while preserving technical accuracy. Default mode is high-compression; terse mode is telegraphic.",
   "author": {
     "name": "zero_ir",
@@ -97,6 +97,16 @@ defaults (`enabled: true`, `mode: balanced`) on first run.
           {
             "type": "command",
             "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks-handlers/session-start.sh\""
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks-handlers/user-prompt-submit.sh\""
           }
         ]
       }
@@ -154,6 +164,7 @@ Maximum compression. Telegraphic style.
 - Abbreviate plain words; NEVER abbreviate code, identifiers, function/API/type names, paths
 - Keep 100% technical accuracy: paths, line numbers, errors, code exact
 - Code blocks, commit messages, PR text: write NORMALLY
+- Summaries/wrap-ups: SAME terse rules — no \"All green\", no prose recap, no pleasantries. Drift is worst here; self-check before sending.
 - Auto-clarity: switch to normal prose for security warnings, irreversible-action confirmations, and ambiguous multi-step instructions; resume telegraphic style after
 
 Examples:
@@ -175,6 +186,7 @@ Maximum compression while preserving technical accuracy:
 - Code-first explanations
 - Fragments preferred over sentences
 - Keep only actionable information: file paths, error messages, code snippets, line numbers
+- Summaries/wrap-ups: SAME rules apply — no prose recap, no pleasantries; self-check before sending
 
 Examples:
 ❌ \"The bug is in line 87 where the token expiry check uses < instead of <=\"
@@ -186,6 +198,39 @@ fi
 # Output hook JSON (jq escapes newlines/quotes so the string stays valid JSON)
 jq -n --arg ctx "$INSTRUCTIONS" \
   '{hookSpecificOutput: {hookEventName: "SessionStart", additionalContext: $ctx}}'
+```
+
+### UserPromptSubmit handler
+
+Per-turn reinforcement. `SessionStart` injects the full ruleset once → salience
+decays over long sessions, worst at end-of-task summaries. This hook re-injects a
+short reminder before every user turn so the style stays salient. Shares the same
+state file; silent when disabled or `verbose`.
+
+```sh tangle:~/.claude/plugins/no-fluff/hooks-handlers/user-prompt-submit.sh
+#!/usr/bin/env bash
+set -euo pipefail
+
+STATE_FILE="$HOME/.claude/no-fluff.state.md"
+
+# No state yet → SessionStart will create it; nothing to reinforce.
+[[ -f "$STATE_FILE" ]] || exit 0
+
+FRONTMATTER=$(sed -n '/^---$/,/^---$/{ /^---$/d; p; }' "$STATE_FILE")
+ENABLED=$(echo "$FRONTMATTER" | grep '^enabled:' | awk '{print $2}')
+MODE=$(echo "$FRONTMATTER" | grep '^mode:' | awk '{print $2}')
+
+[[ "$ENABLED" != "true" ]] && exit 0
+[[ "$MODE" == "verbose" ]] && exit 0
+
+if [[ "$MODE" == "terse" ]]; then
+  REMINDER="No-fluff TERSE active. Fragments, arrows (→), drop articles/pronouns/pleasantries; code/paths/identifiers exact. Summaries follow same rules — no \"All green\", no prose recap. Self-check THIS reply before sending."
+else
+  REMINDER="No-fluff active. Strip fluff, answer-first, fragments over sentences; 100% technical accuracy. Summaries follow same rules — no prose recap. Self-check THIS reply before sending."
+fi
+
+jq -n --arg ctx "$REMINDER" \
+  '{hookSpecificOutput: {hookEventName: "UserPromptSubmit", additionalContext: $ctx}}'
 ```
 
 ### Skill
