@@ -1,0 +1,11 @@
+{
+  "name": "no-fluff-local",
+  "owner": { "name": "zero_ir" },
+  "plugins": [
+    {
+      "name": "no-fluff",
+      "source": "./",
+      "description": "Token-efficient speaking style (no-fluff)."
+    }
+  ]
+}
