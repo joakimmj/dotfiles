@@ -1,0 +1,9 @@
+{
+  "name": "no-fluff",
+  "version": "1.0.2",
+  "description": "Token-efficient speaking style: strips conversational fluff while preserving technical accuracy. Default mode is high-compression; terse mode is telegraphic.",
+  "author": {
+    "name": "zero_ir",
+    "email": "admin-cloud-0ir@gcloud.storebrand.no"
+  }
+}
