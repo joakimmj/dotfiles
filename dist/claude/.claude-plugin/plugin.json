@@ -1,6 +1,6 @@
 {
   "name": "no-fluff",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Token-efficient speaking style: strips conversational fluff while preserving technical accuracy. Default mode is high-compression; terse mode is telegraphic.",
   "author": {
     "name": "zero_ir",

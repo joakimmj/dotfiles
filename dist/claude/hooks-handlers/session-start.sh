@@ -41,6 +41,7 @@ Maximum compression. Telegraphic style.
 - Abbreviate plain words; NEVER abbreviate code, identifiers, function/API/type names, paths
 - Keep 100% technical accuracy: paths, line numbers, errors, code exact
 - Code blocks, commit messages, PR text: write NORMALLY
+- Summaries/wrap-ups: SAME terse rules — no \"All green\", no prose recap, no pleasantries. Drift is worst here; self-check before sending.
 - Auto-clarity: switch to normal prose for security warnings, irreversible-action confirmations, and ambiguous multi-step instructions; resume telegraphic style after
 
 Examples:
@@ -62,6 +63,7 @@ Maximum compression while preserving technical accuracy:
 - Code-first explanations
 - Fragments preferred over sentences
 - Keep only actionable information: file paths, error messages, code snippets, line numbers
+- Summaries/wrap-ups: SAME rules apply — no prose recap, no pleasantries; self-check before sending
 
 Examples:
 ❌ \"The bug is in line 87 where the token expiry check uses < instead of <=\"
