@@ -3,6 +3,7 @@ name: no-fluff
 description: Toggle or configure no-fluff speaking mode. Triggers: "toggle no-fluff", "change speaking style", "turn off no-fluff", "switch to terse mode", "enable verbose mode"
 argument-hint: [on|off|balanced|terse|verbose]
 allowed-tools: [Read, Write, Edit]
+disable-model-invocation: true
 ---
 
 # No-Fluff Mode Toggle
@@ -40,15 +41,16 @@ Control the no-fluff token-efficient speaking style.
    ---
    ~~~
 
-4. **Inform user**: "No-fluff: [mode] (enabled: [true|false]). Restart Claude Code to apply."
+4. **Inform user**: "No-fluff: [mode] (enabled: [true|false]). Full effect on next prompt; `/clear` for cleanest transition, or restart for fresh session."
 
-5. **Note**: The SessionStart hook only fires at launch — changes require a restart.
+5. **Note**: The per-turn UserPromptSubmit hook detects the switch and emits full override rules immediately. The original SessionStart injection remains in context but is overridden. `/clear` removes the stale context; restart gives a fully clean session.
 
 ## State template
 ~~~yaml
 ---
 enabled: true
 mode: balanced
+session_mode: balanced
 ---
 
 # No-Fluff State
@@ -57,4 +59,5 @@ Live state for the no-fluff speaking style. Edit via `/no-fluff:no-fluff` or by 
 
 - `enabled`: `true` | `false`
 - `mode`: `balanced` | `terse` | `verbose`
+- `session_mode`: managed by SessionStart hook (do not edit manually)
 ~~~

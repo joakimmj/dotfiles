@@ -32,7 +32,7 @@ After editing the plugin, bump the `version` in the [plugin manifest](#plugin-ma
 Code:
 
 * `/plugin marketplace update no-fluff-local`
-* `/plugin install no-fluff@no-fluff-local`
+* `/plugin update no-fluff@no-fluff-local`
 
 As with install, changes require a Claude Code restart (the hook only fires at
 launch).
@@ -51,7 +51,10 @@ launch).
 ### State
 
 Live state lives at `~/.claude/no-fluff.state.md`. It is auto-created with
-defaults (`enabled: true`, `mode: balanced`) on first run.
+defaults (`enabled: true`, `mode: balanced`) on first run. The `SessionStart`
+hook also writes `session_mode` to track what was injected at launch — this lets
+`UserPromptSubmit` detect mid-session mode switches and emit full override rules
+instead of a short reminder.
 
 ## Configuration
 
@@ -60,7 +63,7 @@ defaults (`enabled: true`, `mode: balanced`) on first run.
 ```json tangle:~/.claude/plugins/no-fluff/.claude-plugin/plugin.json
 {
   "name": "no-fluff",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Token-efficient speaking style: strips conversational fluff while preserving technical accuracy. Default mode is high-compression; terse mode is telegraphic.",
   "author": {
     "name": "zero_ir",
@@ -96,7 +99,17 @@ defaults (`enabled: true`, `mode: balanced`) on first run.
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks-handlers/session-start.sh\""
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks-handlers/session-start.sh\" SessionStart"
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"${CLAUDE_PLUGIN_ROOT}/hooks-handlers/session-start.sh\" SubagentStart"
           }
         ]
       }
@@ -115,48 +128,13 @@ defaults (`enabled: true`, `mode: balanced`) on first run.
 }
 ```
 
-### SessionStart handler
+### Style rules
 
-Reads the state file (creating it with defaults if missing), parses the
-frontmatter, and emits the style as `additionalContext` via `jq`.
+Shared rule files read by both `session-start.sh` and `user-prompt-submit.sh`.
+Single source of truth — edit here, both scripts pick up the change.
 
-```sh tangle:~/.claude/plugins/no-fluff/hooks-handlers/session-start.sh
-#!/usr/bin/env bash
-set -euo pipefail
-
-# Stable, writable state path (decoupled from the versioned plugin cache).
-STATE_FILE="$HOME/.claude/no-fluff.state.md"
-
-# Create with defaults on first run so the style applies immediately post-install.
-if [[ ! -f "$STATE_FILE" ]]; then
-  mkdir -p "$(dirname "$STATE_FILE")"
-  cat > "$STATE_FILE" << 'INIT'
----
-enabled: true
-mode: balanced
----
-
-# No-Fluff State
-
-Live state for the no-fluff speaking style. Edit via `/no-fluff:no-fluff` or by hand.
-
-- `enabled`: `true` | `false`
-- `mode`: `balanced` | `terse` | `verbose`
-INIT
-fi
-
-# Extract frontmatter
-FRONTMATTER=$(sed -n '/^---$/,/^---$/{ /^---$/d; p; }' "$STATE_FILE")
-ENABLED=$(echo "$FRONTMATTER" | grep '^enabled:' | awk '{print $2}')
-MODE=$(echo "$FRONTMATTER" | grep '^mode:' | awk '{print $2}')
-
-# Exit if disabled or verbose
-[[ "$ENABLED" != "true" ]] && exit 0
-[[ "$MODE" == "verbose" ]] && exit 0
-
-# Select instructions based on mode
-if [[ "$MODE" == "terse" ]]; then
-  INSTRUCTIONS="SPEAKING STYLE: No-Fluff Terse
+```md tangle:~/.claude/plugins/no-fluff/rules/terse.md
+SPEAKING STYLE: No-Fluff Terse
 
 Maximum compression. Telegraphic style.
 - Drop articles, pronouns, filler, pleasantries, hedging
@@ -164,19 +142,20 @@ Maximum compression. Telegraphic style.
 - Abbreviate plain words; NEVER abbreviate code, identifiers, function/API/type names, paths
 - Keep 100% technical accuracy: paths, line numbers, errors, code exact
 - Code blocks, commit messages, PR text: write NORMALLY
-- Summaries/wrap-ups: SAME terse rules — no \"All green\", no prose recap, no pleasantries. Drift is worst here; self-check before sending.
+- Summaries/wrap-ups: SAME terse rules — no "All green", no prose recap, no pleasantries. Drift is worst here; self-check before sending.
 - Auto-clarity: switch to normal prose for security warnings, irreversible-action confirmations, and ambiguous multi-step instructions; resume telegraphic style after
 
 Examples:
-❌ \"I'd be happy to help! Let me take a look at that authentication issue.\"
-✅ \"Auth middleware bug. Token expiry check use \\\`<\\\` not \\\`<=\\\`. Fix line 87.\"
-❌ \"Each render creates a new object reference, so the prop changes and it re-renders.\"
-✅ \"New object ref each render → prop change → re-render. Wrap in \\\`useMemo\\\`.\"
+❌ "I'd be happy to help! Let me take a look at that authentication issue."
+✅ "Auth middleware bug. Token expiry check use `<` not `<=`. Fix line 87."
+❌ "Each render creates a new object reference, so the prop changes and it re-renders."
+✅ "New object ref each render → prop change → re-render. Wrap in `useMemo`."
 
-Strip everything non-essential."
-else
-  # Default to balanced
-  INSTRUCTIONS="SPEAKING STYLE: No-Fluff (default)
+Strip everything non-essential.
+```
+
+```md tangle:~/.claude/plugins/no-fluff/rules/balanced.md
+SPEAKING STYLE: No-Fluff (default)
 
 Maximum compression while preserving technical accuracy:
 - Strip all conversational elements
@@ -189,15 +168,79 @@ Maximum compression while preserving technical accuracy:
 - Summaries/wrap-ups: SAME rules apply — no prose recap, no pleasantries; self-check before sending
 
 Examples:
-❌ \"The bug is in line 87 where the token expiry check uses < instead of <=\"
-✅ \"Line 87: \\\`<\\\` → \\\`<=\\\`. Token expiry logic.\"
+❌ "The bug is in line 87 where the token expiry check uses < instead of <="
+✅ "Line 87: `<` → `<=`. Token expiry logic."
 
-Extreme brevity. Zero fluff."
+Extreme brevity. Zero fluff.
+```
+
+### SessionStart / SubagentStart handler
+
+Shared handler for `SessionStart` and `SubagentStart` hooks. Accepts the hook
+event name as `$1` (defaults to `SessionStart`). Reads the state file (creating
+it atomically with defaults if missing), parses the frontmatter, records
+`session_mode` on `SessionStart`, and emits the style as `additionalContext`
+from the shared rule files via `jq`.
+
+```sh tangle:~/.claude/plugins/no-fluff/hooks-handlers/session-start.sh
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Hook event name from caller (SessionStart, SubagentStart); defaults to SessionStart.
+EVENT_NAME="${1:-SessionStart}"
+
+# Stable, writable state path (decoupled from the versioned plugin cache).
+STATE_FILE="$HOME/.claude/no-fluff.state.md"
+
+# Create with defaults on first run so the style applies immediately post-install.
+# Uses atomic write (mktemp + mv) to avoid races when parallel sessions start.
+if [[ ! -f "$STATE_FILE" ]]; then
+  mkdir -p "$(dirname "$STATE_FILE")"
+  TMPFILE=$(mktemp "${STATE_FILE}.XXXXXX")
+  cat > "$TMPFILE" << 'INIT'
+---
+enabled: true
+mode: balanced
+---
+
+# No-Fluff State
+
+Live state for the no-fluff speaking style. Edit via `/no-fluff:no-fluff` or by hand.
+
+- `enabled`: `true` | `false`
+- `mode`: `balanced` | `terse` | `verbose`
+INIT
+  mv "$TMPFILE" "$STATE_FILE"
 fi
 
+# Extract frontmatter
+FRONTMATTER=$(sed -n '/^---$/,/^---$/{ /^---$/d; p; }' "$STATE_FILE")
+ENABLED=$(echo "$FRONTMATTER" | grep '^enabled:' | awk '{print $2}')
+MODE=$(echo "$FRONTMATTER" | grep '^mode:' | awk '{print $2}')
+
+# Exit if disabled or verbose
+[[ "$ENABLED" != "true" ]] && exit 0
+[[ "$MODE" == "verbose" ]] && exit 0
+
+# Record which mode was injected at session start so UserPromptSubmit can detect
+# mid-session switches and emit a full override instead of a short reminder.
+# Only write on SessionStart (not SubagentStart) to avoid clobbering the session record.
+if [[ "$EVENT_NAME" == "SessionStart" ]]; then
+  if grep -q '^session_mode:' "$STATE_FILE"; then
+    sed -i "s/^session_mode:.*/session_mode: $MODE/" "$STATE_FILE"
+  else
+    sed -i "/^mode:/a session_mode: $MODE" "$STATE_FILE"
+  fi
+fi
+
+# Read style rules from shared file (single source of truth).
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PLUGIN_ROOT="$(dirname "$SCRIPT_DIR")"
+INSTRUCTIONS=$(cat "$PLUGIN_ROOT/rules/$MODE.md")
+
 # Output hook JSON (jq escapes newlines/quotes so the string stays valid JSON)
-jq -n --arg ctx "$INSTRUCTIONS" \
-  '{hookSpecificOutput: {hookEventName: "SessionStart", additionalContext: $ctx}}'
+jq -n --arg ctx "$INSTRUCTIONS" --arg evt "$EVENT_NAME" \
+  '{hookSpecificOutput: {hookEventName: $evt, additionalContext: $ctx}}'
 ```
 
 ### UserPromptSubmit handler
@@ -206,6 +249,10 @@ Per-turn reinforcement. `SessionStart` injects the full ruleset once → salienc
 decays over long sessions, worst at end-of-task summaries. This hook re-injects a
 short reminder before every user turn so the style stays salient. Shares the same
 state file; silent when disabled or `verbose`.
+
+When a mid-session mode switch is detected (`session_mode` ≠ `mode`), emits full
+override rules instead of the short reminder — explicitly overriding the stale
+`SessionStart` context.
 
 ```sh tangle:~/.claude/plugins/no-fluff/hooks-handlers/user-prompt-submit.sh
 #!/usr/bin/env bash
@@ -219,14 +266,34 @@ STATE_FILE="$HOME/.claude/no-fluff.state.md"
 FRONTMATTER=$(sed -n '/^---$/,/^---$/{ /^---$/d; p; }' "$STATE_FILE")
 ENABLED=$(echo "$FRONTMATTER" | grep '^enabled:' | awk '{print $2}')
 MODE=$(echo "$FRONTMATTER" | grep '^mode:' | awk '{print $2}')
+SESSION_MODE=$(echo "$FRONTMATTER" | grep '^session_mode:' | awk '{print $2}')
 
 [[ "$ENABLED" != "true" ]] && exit 0
 [[ "$MODE" == "verbose" ]] && exit 0
 
-if [[ "$MODE" == "terse" ]]; then
-  REMINDER="No-fluff TERSE active. Fragments, arrows (→), drop articles/pronouns/pleasantries; code/paths/identifiers exact. Summaries follow same rules — no \"All green\", no prose recap. Self-check THIS reply before sending."
+# Detect mid-session mode switch: session_mode (set at SessionStart) differs from
+# current mode (changed via skill). Emit full override rules to replace stale
+# SessionStart context instead of a short reminder.
+MODE_SWITCHED=false
+if [[ -n "$SESSION_MODE" && "$SESSION_MODE" != "$MODE" ]]; then
+  MODE_SWITCHED=true
+fi
+
+if [[ "$MODE_SWITCHED" == "true" ]]; then
+  # Full override — read from shared rule file, prepend override preamble.
+  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  PLUGIN_ROOT="$(dirname "$SCRIPT_DIR")"
+  RULES=$(cat "$PLUGIN_ROOT/rules/$MODE.md")
+  REMINDER="OVERRIDE previous speaking style instructions — mode switched mid-session.
+
+$RULES"
 else
-  REMINDER="No-fluff active. Strip fluff, answer-first, fragments over sentences; 100% technical accuracy. Summaries follow same rules — no prose recap. Self-check THIS reply before sending."
+  # Normal per-turn reminder (mode unchanged since session start)
+  if [[ "$MODE" == "terse" ]]; then
+    REMINDER="No-fluff TERSE active. Fragments, arrows (→), drop articles/pronouns/pleasantries; code/paths/identifiers exact. Summaries follow same rules — no \"All green\", no prose recap. Self-check THIS reply before sending."
+  else
+    REMINDER="No-fluff active. Strip fluff, answer-first, fragments over sentences; 100% technical accuracy. Summaries follow same rules — no prose recap. Self-check THIS reply before sending."
+  fi
 fi
 
 jq -n --arg ctx "$REMINDER" \
@@ -243,6 +310,7 @@ name: no-fluff
 description: Toggle or configure no-fluff speaking mode. Triggers: "toggle no-fluff", "change speaking style", "turn off no-fluff", "switch to terse mode", "enable verbose mode"
 argument-hint: [on|off|balanced|terse|verbose]
 allowed-tools: [Read, Write, Edit]
+disable-model-invocation: true
 ---
 
 # No-Fluff Mode Toggle
@@ -280,15 +348,16 @@ Control the no-fluff token-efficient speaking style.
    ---
    ~~~
 
-4. **Inform user**: "No-fluff: [mode] (enabled: [true|false]). Restart Claude Code to apply."
+4. **Inform user**: "No-fluff: [mode] (enabled: [true|false]). Full effect on next prompt; `/clear` for cleanest transition, or restart for fresh session."
 
-5. **Note**: The SessionStart hook only fires at launch — changes require a restart.
+5. **Note**: The per-turn UserPromptSubmit hook detects the switch and emits full override rules immediately. The original SessionStart injection remains in context but is overridden. `/clear` removes the stale context; restart gives a fully clean session.
 
 ## State template
 ~~~yaml
 ---
 enabled: true
 mode: balanced
+session_mode: balanced
 ---
 
 # No-Fluff State
@@ -297,5 +366,6 @@ Live state for the no-fluff speaking style. Edit via `/no-fluff:no-fluff` or by 
 
 - `enabled`: `true` | `false`
 - `mode`: `balanced` | `terse` | `verbose`
+- `session_mode`: managed by SessionStart hook (do not edit manually)
 ~~~
 ```
