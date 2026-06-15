@@ -313,6 +313,12 @@ restore_session() {
 case "$1" in
 save)
   echo "-- Saving:"
+  tmux list-windows -a -F "#S,#W,#{pane_current_path}" | grep -v "^scratchpad" > "$session_file"
+  cat "$session_file"
+  exit 0
+  ;;
+saveall)
+  echo "-- Saving:"
   tmux list-windows -a -F "#S,#W,#{pane_current_path}" > "$session_file"
   cat "$session_file"
   exit 0
