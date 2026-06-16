@@ -3,6 +3,10 @@
 Configuration for [Claude Code](https://docs.claude.com/en/docs/claude-code) — my
 local plugins.
 
+```md tangle:~/.claude/CLAUDE.md
+# Global Claude memory
+```
+
 ## Plugin: no-fluff
 
 Token-efficient speaking style: strips conversational fluff while preserving 100%
