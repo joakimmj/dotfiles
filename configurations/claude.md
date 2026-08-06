@@ -1,5 +1,23 @@
 # Claude
 
+<!-- TOC -->
+- [Claude](#claude)
+  - [Skills](#skills)
+    - [Handover](#handover)
+    - [Study notes](#study-notes)
+  - [Plugins](#plugins)
+    - [no-fluff](#no-fluff)
+      - [Install](#install)
+      - [Update](#update)
+      - [Usage](#usage)
+      - [State](#state)
+      - [Hook registration](#hook-registration)
+      - [Style rules](#style-rules)
+      - [SessionStart / SubagentStart handler](#sessionstart--subagentstart-handler)
+      - [UserPromptSubmit handler](#userpromptsubmit-handler)
+      - [Skill](#skill)
+<!-- /TOC -->
+
 Configuration for [Claude Code](https://docs.claude.com/en/docs/claude-code) — my
 local plugins.
 
@@ -7,7 +25,228 @@ local plugins.
 # Global Claude memory
 ```
 
-## Plugin: no-fluff
+## Skills
+
+### Handover
+```md tangle:~/.claude/skills/handover/SKILL.md
+---
+name: handover
+description: >-
+  Snapshot the current session's context into a markdown handover file under
+  ~/documents/handovers so a fresh Claude session can be brought up to speed by
+  reading it. MANUAL TRIGGER ONLY — use exclusively when the user explicitly asks
+  to "create a handover", "hand off", "save session context", or similar. Never
+  auto-invoke. Optional arg: a slug/name for the file.
+---
+
+# Handover
+
+Capture *this* conversation's working context → one markdown file the user can feed
+to a new session ("read <path> to get up to speed"). Manual only.
+
+## 1. Determine the slug
+
+- If the user passed an arg → use it (kebab-case it) as `<slug>`.
+- Else → derive a short kebab-case topic slug from the conversation (e.g.
+  `auth-refactor`, `nix-flake-debug`).
+
+## 2. Compute the date
+
+~~~bash
+date +%F   # → YYYY-MM-DD
+~~~
+
+Use shell `date` — do not rely on any in-harness clock. Used for the H1 and any
+`## UPDATE <date>` sections in the body.
+
+## 3. Ensure the directory
+
+~~~bash
+mkdir -p ~/documents/handovers
+~~~
+
+## 4. Write the file
+
+Path: `~/documents/handovers/handover-<slug>.md`
+
+Filename is ALWAYS `handover-<slug>.md` (literal `handover-` prefix + kebab slug +
+`.md`), whether the slug came from an arg or was auto-derived. Chronology lives in the
+content: the H1 date and any `## UPDATE <date>` sections are the only date markers, so
+never omit them.
+
+Content — keep it lean, exactly these sections:
+
+~~~markdown
+# Handover: <topic>  (<YYYY-MM-DD>)
+
+## Environment & location
+- Repo / project root: <absolute path, or "none — not in a repo">
+- Working dir at handover time: <absolute path>
+- Git branch + state: <branch, dirty/clean, ahead/behind>
+- Runtime notes: dev-shells, env vars, services needed to resume
+
+## Goal & current state
+- Original task / intent
+- Progress so far: done vs pending
+
+## Decisions & next steps
+- Key decisions made (+ rationale)
+- Open questions
+- Explicit next actions for the new session
+~~~
+
+**Project-agnostic — the document must stand alone.** The new session may start in
+a DIFFERENT cwd, repo, or even outside any project. Therefore:
+
+- Use ABSOLUTE paths everywhere; never rely on an implied/relative cwd.
+- State explicitly where the work lives (repo root + branch) so the reader can
+  `cd` there themselves — do not assume they are already there.
+- Spell out any environment needed to resume (dev-shell, services, env vars).
+- Never reference "this project" / "the current repo" implicitly — name it.
+
+Fill from the actual conversation. Be concrete: real paths, branch names, command
+results, blockers. The new session has ZERO prior context — write so it can resume
+cold from any directory.
+
+### Collisions
+
+Before writing, check whether `handover-<slug>.md` already exists. If it does, use
+AskUserQuestion to choose:
+- **merge** — append an `## UPDATE <YYYY-MM-DD> — <summary>` section to the existing
+  file (lead with `> Read this section first; it supersedes …` when it overrides
+  earlier analysis). Keeps one file per subject with a running history.
+- **replace** — overwrite the file wholesale.
+- **add new** — write to `handover-<slug>-2.md` (increment `-3`, … if taken).
+
+## 5. Report
+
+Print the absolute path written, plus a one-liner:
+
+> Start a new session and tell Claude: `read <path>`
+```
+
+### Study notes
+```md tangle:~/.claude/skills/study-notes/SKILL.md
+---
+name: study-notes
+description: >-
+  Turn the current conversation into Zettelkasten-style learning notes (one
+  markdown file per topic) under ~/documents/notes, with tag frontmatter and up/down
+  cross-links to related notes. MANUAL TRIGGER ONLY — use exclusively when the user
+  explicitly asks to make study/learning notes from the conversation. Never
+  auto-invoke. Optional args: explicit topic name(s).
+---
+
+# Study notes
+
+Distill learnable topics from *this* conversation into per-topic notes the user can
+study and grow over time. Manual only.
+
+## 1. Identify candidate topics
+
+- If the user passed topic(s) as args → use those.
+- Else → split the conversation into natural topic boundaries (one concept per
+  note; prefer several focused notes over one broad one).
+
+## 2. Confirm per topic
+
+Use AskUserQuestion to confirm WHICH candidate topics to actually write. Do not
+generate notes blindly — let the user drop/keep topics first.
+
+## 3. Ensure the directory
+
+~~~bash
+mkdir -p ~/documents/notes
+~~~
+
+## 4. Scan existing notes for linking (before writing)
+
+~~~bash
+ls ~/documents/notes/
+grep -rl '<tag-or-keyword>' ~/documents/notes/ 2>/dev/null
+~~~
+
+Find related existing notes (by tag or filename topic). These become `*up*`
+(broader/parent) or `*down*` (narrower/children) links. Also link notes created in
+THIS batch to each other where a hierarchy exists.
+
+## 5. Write one file per confirmed topic
+
+Path: `~/documents/notes/<subject>_<topic>.md`
+
+- `<subject>` = the note's **first tag** (broadest/primary subject), kebab-case.
+  Order `tags` so the broadest subject is first (e.g. `java`, `istio`, `kubernetes`,
+  `software-design`, `cli`). Files group by subject; search notes by tag.
+- `<topic>` is kebab-case.
+- **No subject repetition**: if `<topic>` starts with `<subject>-`, strip that leading
+  segment (subject `java` + topic `java-dynamic-proxy-exceptions` →
+  `java_dynamic-proxy-exceptions.md`, NOT `java_java-…`).
+
+Format exactly:
+
+~~~markdown
+---
+tags:
+  - tag1
+  - tag2
+  - tag3
+---
+
+- *up*: [java-lists](java_lists.md)
+- *down*: [optional-map](java_optional-map.md), [optional-orelse](java_optional-orelse.md)
+
+---
+
+# <topic>
+
+<content>
+~~~
+
+Format rules:
+- Frontmatter holds `tags` ONLY (no `up:`/`down:` keys).
+- Links live in the body. Relative filenames within `~/documents/notes/`.
+- `*down*` may list multiple, comma-separated.
+- ALWAYS emit BOTH `*up*` and `*down*` lines, even when there are no links — leave
+  them empty (`- *up*: ` / `- *down*: `). Never drop either line.
+
+### Collisions
+
+Before writing, check (via step 4's `ls`) whether `<subject>_<topic>.md` already
+exists. If it does, use AskUserQuestion to choose:
+- **merge** — fold the new material into the existing note; keep its frontmatter and
+  `*up*`/`*down*` links, add any new tags. Preferred when it's the same topic.
+- **replace** — overwrite the file wholesale.
+- **add new** — write to `<subject>_<topic>-2.md` (increment `-3`, … if taken).
+
+### Content
+
+- Source: distill what was discussed in the conversation AND enrich with your own
+  knowledge for fuller learning material.
+- Depth: decide per topic — teaching depth (explanations, cause→effect, code
+  examples, gotchas) vs concise reference, whichever fits. Code blocks normally.
+
+## 6. Update reciprocal links in existing notes
+
+Links are bidirectional — a one-way link is a bug. For every link from a NEW note
+to an EXISTING note, edit that existing note to add the reciprocal:
+
+- new note's `*up*: [E]` → open E, add the new note to E's `*down*` line.
+- new note's `*down*: [E]` → open E, add the new note to E's `*up*` line.
+
+When adding to a non-empty `*down*` line, append comma-separated; keep existing
+links. Touch only the `*up*`/`*down*` lines — never alter an existing note's
+frontmatter or content. (New-note ↔ new-note pairs are already mutually linked from
+step 5; this step is only for pre-existing files.)
+
+## 7. Report
+
+- Every created note path.
+- Every existing note edited for reciprocal links.
+```
+
+## Plugins
+
+### no-fluff
 
 Token-efficient speaking style: strips conversational fluff while preserving 100%
 technical accuracy. A `SessionStart` hook reads a stable state file and injects the
@@ -20,7 +259,7 @@ Modes:
   causality (code/identifiers/paths kept exact)
 * `verbose` — same as off (standard Claude)
 
-### Install
+#### Install
 
 In Claude Code:
 
@@ -29,7 +268,7 @@ In Claude Code:
 
 Changes require a Claude Code restart (the hook only fires at launch).
 
-### Update
+#### Update
 
 After editing the plugin, bump the `version` in the [plugin manifest](#plugin-manifest)
 — Claude Code only treats it as an update when the version changes. Then, in Claude
@@ -41,7 +280,7 @@ Code:
 As with install, changes require a Claude Code restart (the hook only fires at
 launch).
 
-### Usage
+#### Usage
 
 ```text
 /no-fluff:no-fluff            # show current status
@@ -52,7 +291,7 @@ launch).
 /no-fluff:no-fluff verbose    # same as off
 ```
 
-### State
+#### State
 
 Live state lives at `~/.claude/no-fluff.state.md`. It is auto-created with
 defaults (`enabled: true`, `mode: balanced`) on first run. The `SessionStart`
@@ -60,39 +299,7 @@ hook also writes `session_mode` to track what was injected at launch — this le
 `UserPromptSubmit` detect mid-session mode switches and emit full override rules
 instead of a short reminder.
 
-## Configuration
-
-### Plugin manifest
-
-```json tangle:~/.claude/plugins/no-fluff/.claude-plugin/plugin.json
-{
-  "name": "no-fluff",
-  "version": "1.0.4",
-  "description": "Token-efficient speaking style: strips conversational fluff while preserving technical accuracy. Default mode is high-compression; terse mode is telegraphic.",
-  "author": {
-    "name": "zero_ir",
-    "email": "admin-cloud-0ir@gcloud.storebrand.no"
-  }
-}
-```
-
-### Local marketplace
-
-```json tangle:~/.claude/plugins/no-fluff/.claude-plugin/marketplace.json
-{
-  "name": "no-fluff-local",
-  "owner": { "name": "zero_ir" },
-  "plugins": [
-    {
-      "name": "no-fluff",
-      "source": "./",
-      "description": "Token-efficient speaking style (no-fluff)."
-    }
-  ]
-}
-```
-
-### Hook registration
+#### Hook registration
 
 ```json tangle:~/.claude/plugins/no-fluff/hooks/hooks.json
 {
@@ -132,7 +339,7 @@ instead of a short reminder.
 }
 ```
 
-### Style rules
+#### Style rules
 
 Shared rule files read by both `session-start.sh` and `user-prompt-submit.sh`.
 Single source of truth — edit here, both scripts pick up the change.
@@ -178,7 +385,7 @@ Examples:
 Extreme brevity. Zero fluff.
 ```
 
-### SessionStart / SubagentStart handler
+#### SessionStart / SubagentStart handler
 
 Shared handler for `SessionStart` and `SubagentStart` hooks. Accepts the hook
 event name as `$1` (defaults to `SessionStart`). Reads the state file (creating
@@ -247,7 +454,7 @@ jq -n --arg ctx "$INSTRUCTIONS" --arg evt "$EVENT_NAME" \
   '{hookSpecificOutput: {hookEventName: $evt, additionalContext: $ctx}}'
 ```
 
-### UserPromptSubmit handler
+#### UserPromptSubmit handler
 
 Per-turn reinforcement. `SessionStart` injects the full ruleset once → salience
 decays over long sessions, worst at end-of-task summaries. This hook re-injects a
@@ -304,7 +511,7 @@ jq -n --arg ctx "$REMINDER" \
   '{hookSpecificOutput: {hookEventName: "UserPromptSubmit", additionalContext: $ctx}}'
 ```
 
-### Skill
+#### Skill
 
 Defines the `/no-fluff:no-fluff` toggle command.
 
