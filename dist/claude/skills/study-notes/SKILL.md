@@ -3,9 +3,9 @@ name: study-notes
 description: >-
   Turn the current conversation into Zettelkasten-style learning notes (one
   markdown file per topic) under ~/documents/notes, with tag frontmatter and up/down
-  cross-links to related notes. MANUAL TRIGGER ONLY — use exclusively when the user
-  explicitly asks to make study/learning notes from the conversation. Never
-  auto-invoke. Optional args: explicit topic name(s).
+  cross-links to related notes.
+disable-model-invocation: true
+argument-hint: "[slug]"
 ---
 
 # Study notes

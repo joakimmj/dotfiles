@@ -3,9 +3,9 @@ name: handover
 description: >-
   Snapshot the current session's context into a markdown handover file under
   ~/documents/handovers so a fresh Claude session can be brought up to speed by
-  reading it. MANUAL TRIGGER ONLY — use exclusively when the user explicitly asks
-  to "create a handover", "hand off", "save session context", or similar. Never
-  auto-invoke. Optional arg: a slug/name for the file.
+  reading it.
+disable-model-invocation: true
+argument-hint: "[slug]"
 ---
 
 # Handover
