@@ -1,5 +1,32 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
+vim.diagnostic.config({
+  jump = {
+    on_jump = function(_, bufnr)
+      vim.diagnostic.open_float({ bufnr = bufnr })
+    end,
+  },
+  update_in_insert = false,
+  float = {
+    source = true,
+    focusable = false,
+    border = "rounded",
+    style = "minimal",
+  },
+  virtual_lines = false,
+  virtual_text = false,
+})
+vim.keymap.set("n", "<leader>td", function()
+  vim.diagnostic.enable(not vim.diagnostic.is_enabled())
+end, { desc = "[t]oggle [d]iagnostic" })
+vim.keymap.set("n", "<leader>tl", function()
+  local current = vim.diagnostic.config().virtual_lines or false
+  vim.diagnostic.config({ virtual_lines = not current })
+end, { desc = "[t]oggle virtual [l]ines" })
+vim.keymap.set("n", "<leader>tv", function()
+  local current = vim.diagnostic.config().virtual_text or false
+  vim.diagnostic.config({ virtual_text = not current })
+end, { desc = "[t]oggle [v]irtual text" })
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 vim.keymap.set("n", "<A-k>", ":m .-2<CR>==", { desc = "move line up" })
 vim.keymap.set("n", "<A-j>", ":m .+1<CR>==", { desc = "move line down" })
@@ -16,19 +43,9 @@ vim.keymap.set("n", "N", "Nzzzv", { desc = "previous search result (centered)" }
 vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]], { desc = "[y]ank to system clipboard" })
 vim.keymap.set("n", "<leader>Y", [["+Y]], { desc = "[Y]ank rest of line to system clipboard" })
 vim.keymap.set({ "n", "v" }, "<leader>p", [["+p]], { desc = "[p]aste from system clipboard" })
-vim.keymap.set({ "n", "v" }, "<C-p>", "\"0p", { desc = "paste from yank register" })
-vim.keymap.set(
-	"n",
-	"<leader>dr",
-	[[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
-	{ desc = "[r]eplace word" }
-)
-vim.keymap.set(
-	"v",
-	"<leader>dr",
-	[["hy:%s/<C-r>h//gI<left><left><left>]],
-	{ desc = "[r]eplace selected text" }
-)
+vim.keymap.set({ "n", "v" }, "<C-p>", '"0p', { desc = "paste from yank register" })
+vim.keymap.set("n", "<leader>dr", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = "[r]eplace word" })
+vim.keymap.set("v", "<leader>dr", [["hy:%s/<C-r>h//gI<left><left><left>]], { desc = "[r]eplace selected text" })
 vim.keymap.set("n", "<leader>dd", vim.diagnostic.setloclist, { desc = "[d]iagnostic (location list)" })
 vim.keymap.set("n", "<leader>wd", vim.diagnostic.setqflist, { desc = "[d]iagnostic (quickfix list)" })
 vim.keymap.set(
@@ -50,6 +67,11 @@ vim.keymap.set("n", "<leader>q", function()
   local action = qf_winid > 0 and "cclose" or "copen"
   vim.cmd("botright " .. action)
 end, { noremap = true, silent = true, desc = "[q]uickfix list toggle" })
+vim.api.nvim_create_user_command("Make", function(opts)
+  vim.cmd("silent make! " .. opts.args)
+  vim.cmd("redraw!")
+  vim.cmd("botright cwindow")
+end, { nargs = "*", complete = "file", desc = "make → quickfix" })
 vim.keymap.set("n", "<left>", "<Nop>")
 vim.keymap.set("n", "<right>", "<Nop>")
 vim.keymap.set("n", "<up>", "<Nop>")
@@ -97,13 +119,13 @@ vim.opt.smartcase = true
 vim.opt.hlsearch = true
 vim.opt.incsearch = true
 vim.opt.foldmethod = "expr"
-vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.opt.foldlevelstart = 99
 vim.api.nvim_create_autocmd("TextYankPost", {
   desc = "Highlight when yanking (copying) text",
   group = vim.api.nvim_create_augroup("augroup-highlight-yank", { clear = true }),
   callback = function()
-    vim.highlight.on_yank()
+    vim.hl.on_yank()
   end,
 })
 vim.api.nvim_create_autocmd("VimLeave", {
@@ -134,7 +156,7 @@ vim.api.nvim_create_autocmd("FileType", {
   pattern = "json",
   group = vim.api.nvim_create_augroup("augroup-json-options", { clear = true }),
   callback = function()
-    vim.keymap.set("n", "<leader>X", [[%!jq '.']], { buffer = true, desc = "e[X]ecute json formatting" })
+    vim.keymap.set("n", "<leader>X", "<cmd>%!jq '.'<CR>", { buffer = true, desc = "e[X]ecute json formatting" })
   end,
 })
 function _G.get_tabline()
@@ -163,12 +185,38 @@ vim.o.statusline = " %f [%{strlen(&fenc)?&fenc:&enc}] [%{&ff}] %y [%{&spelllang}
   .. "%="
   .. " [%n] %l/%L (%p%%), %c "
   .. "%#StatusLineNC#%{&mod?' [+] ':''}%*"
-local use_lazy_packages, _ = pcall(require, "my.init-lazy")
-if not use_lazy_packages then
-  if require("lazy.core.config").plugins["redox.nvim"] == nil then
-    require("my.theme")
+vim.o.completeopt = "menuone,noselect,noinsert,fuzzy,popup"
+local function group(name, fallback)
+  local mod = "my." .. name
+  local ok, err = pcall(require, mod)
+  if ok then
+    return
   end
 
+  err = tostring(err)
+  local missing = err:find(("module '%s' not found"):format(mod), 1, true) ~= nil
+  local msg
+  if not missing then
+    msg = ("%s failed: %s"):format(mod, err)
+  elseif fallback then
+    msg = ("%s not found, using fallback"):format(mod)
+  end
+  if msg then
+    vim.schedule(function()
+      vim.notify(msg, vim.log.levels.WARN)
+    end)
+  end
+
+  if fallback then
+    fallback()
+  end
+end
+group("editor")
+group("writing")
+group("theme", function()
+  vim.cmd.colorscheme("vim")
+end)
+group("file-explorer", function()
   vim.g.netrw_bufsettings = "noma nomod nu rnu nobl nowrap ro"
   vim.g.netrw_liststyle = 3
   vim.g.netrw_browse_split = 0
@@ -190,4 +238,7 @@ if not use_lazy_packages then
     [[:execute "vimgrep /" . expand("<cword>") . "/j **" | cw<CR>]],
     { desc = "current [w]ord" }
   )
-end
+end)
+group("dev", function()
+  vim.keymap.set("n", "<leader>df", "gg=G", { desc = "[f]ormat" })
+end)

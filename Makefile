@@ -1,12 +1,17 @@
-.PHONY: all build clean help tangle
+.PHONY: all build check clean help tangle
 
 VENV_DIR := .venv
 VENV_PYTHON := $(VENV_DIR)/bin/python
 VENV_PIP := $(VENV_DIR)/bin/pip
 MD_TANGLE := $(VENV_DIR)/bin/md-tangle
+# stylua from PATH, else the one mason installs for nvim
+STYLUA ?= $(shell command -v stylua || echo $(HOME)/.local/share/nvim/mason/bin/stylua)
 
-# Default target - clean and build
-all: clean build
+# Lua output checked against stylua (each dir uses its nearest .stylua.toml)
+STYLUA_PATHS := dist/nvim
+
+# Default target - clean, build and check
+all: clean build check
 
 # Create virtual environment if it doesn't exist
 $(VENV_PYTHON):
@@ -42,6 +47,10 @@ build: $(MD_TANGLE)
 	$(MD_TANGLE) configurations/wezterm.md -f -d dist/wezterm/
 	$(MD_TANGLE) configurations/xmodmap.md -f -d dist/xmodmap/
 	$(MD_TANGLE) configurations/yazi.md -f -d dist/yazi/
+
+# Check that tangled Lua matches the stylua rules
+check:
+	$(STYLUA) --check $(STYLUA_PATHS)
 
 # Show md-tangle help page
 help: $(MD_TANGLE)

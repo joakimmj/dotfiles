@@ -1,0 +1,6 @@
+require("my.dev.mason")
+require("my.dev.lsp")
+require("my.dev.treesitter")
+require("my.dev.formatting")
+require("my.dev.lazydev")
+require("my.dev.fidget")
