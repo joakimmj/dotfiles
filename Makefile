@@ -8,7 +8,7 @@ MD_TANGLE := $(VENV_DIR)/bin/md-tangle
 STYLUA ?= $(shell command -v stylua || echo $(HOME)/.local/share/nvim/mason/bin/stylua)
 
 # Lua output checked against stylua (each dir uses its nearest .stylua.toml)
-STYLUA_PATHS := dist/nvim
+STYLUA_PATHS := dist/nvim dist/wezterm
 
 # Default target - clean, build and check
 all: clean build check
