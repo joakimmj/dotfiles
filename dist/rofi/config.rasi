@@ -1,6 +1,6 @@
 configuration {
     modi:                       "drun,run";
-    show-icons:                 false;
+    show-icons:                 true;
     display-drun:               "Apps";
     display-run:                "";
     display-filebrowser:        "";
@@ -9,4 +9,4 @@ configuration {
     window-format:              "{w} · {c} · {t}";
 }
 
-@theme "./redox.rasi"
+@theme "./redox-center.rasi"

@@ -3,19 +3,25 @@
 Application launcher and `dmenu` replacement, used by [sway](sway.md)
 (`$menu` → `rofi -show run`, `$menu-daemon` → `rofi -show drun`).
 
-The theme is a horizontal, `dmenu`-style bar using the
-[redox](https://github.com/joakimmj/redox.nvim) colors. It is a copy of
-[`extras/rofi/redox.rasi`](https://github.com/joakimmj/redox.nvim/blob/main/extras/rofi/redox.rasi)
-in `redox.nvim`, so update it from there when the theme changes.
+Two themes using the [redox](https://github.com/joakimmj/redox.nvim) colors:
+- `redox.rasi`: a horizontal, `dmenu`-style bar at the top of the screen. It
+  also holds the colors.
+- `redox-center.rasi`: a centered launcher, the one in use. It imports
+  `redox.rasi` and only changes the layout.
+
+Both are copies of
+[`extras/rofi/`](https://github.com/joakimmj/redox.nvim/tree/main/extras/rofi)
+in `redox.nvim`, so update them from there when the theme changes.
 
 ## Config
 
 Enable the `drun` (apps) and `run` (commands) modes, and show the generic name
-of apps next to their name. Load the theme from `redox.rasi`.
+of apps next to their name, with icons. Load the centered theme; use
+`@theme "./redox.rasi"` instead for the top bar.
 ```css tangle:~/.config/rofi/config.rasi
 configuration {
     modi:                       "drun,run";
-    show-icons:                 false;
+    show-icons:                 true;
     display-drun:               "Apps";
     display-run:                "";
     display-filebrowser:        "";
@@ -24,7 +30,7 @@ configuration {
     window-format:              "{w} · {c} · {t}";
 }
 
-@theme "./redox.rasi"
+@theme "./redox-center.rasi"
 ```
 
 ## Theme
@@ -328,5 +334,75 @@ error-message {
     border-color:                @border-colour;
     background-color:            @background-colour;
     text-color:                  @foreground-colour;
+}
+```
+
+## Centered theme
+
+Layout on top of `redox.rasi`: a centered box with search on top, a list
+below and the mode switcher at the bottom. Colors come from the import.
+```css tangle:~/.config/rofi/redox-center.rasi
+@import "redox.rasi"
+```
+
+Main window: 600px wide in the middle of the screen, with a rounded border in the accent color.
+```css tangle:~/.config/rofi/redox-center.rasi
+window {
+    location:                    center;
+    anchor:                      center;
+    width:                       600px;
+    border:                      2px solid;
+    border-radius:               12px;
+    border-color:                @border-colour;
+}
+```
+
+Main box: input bar, results and mode switcher stacked vertically.
+```css tangle:~/.config/rofi/redox-center.rasi
+mainbox {
+    orientation:                 vertical;
+    children:                    [ "inputbar", "listview", "mode-switcher" ];
+    spacing:                     10px;
+    padding:                     15px;
+}
+```
+
+Input bar: prompt pill, then the search entry filling the rest of the row.
+```css tangle:~/.config/rofi/redox-center.rasi
+inputbar {
+    spacing:                     10px;
+    background-color:            transparent;
+    children:                    [ "prompt", "entry" ];
+}
+entry {
+    expand:                      true;
+    width:                       0px;
+    horizontal-align:            0.0;
+}
+```
+
+Results: one vertical column of 8 rows.
+```css tangle:~/.config/rofi/redox-center.rasi
+listview {
+    layout:                      vertical;
+    lines:                       8;
+    columns:                     1;
+    fixed-height:                true;
+    spacing:                     4px;
+}
+element {
+    padding:                     6px 12px;
+    border-radius:               8px;
+}
+```
+
+Mode switcher: rounded buttons. Switch with `Shift+←`/`Shift+→` or `Ctrl+Tab`.
+```css tangle:~/.config/rofi/redox-center.rasi
+mode-switcher {
+    spacing:                     8px;
+}
+button {
+    padding:                     6px;
+    border-radius:               100%;
 }
 ```
