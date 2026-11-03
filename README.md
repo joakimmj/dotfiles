@@ -19,6 +19,7 @@ tangled with the CLI tool [md-tangle][1].
 * [git](configurations/git.md)
 * [nano](configurations/nano.md)
 * [nvim](configurations/nvim.md)
+* [rofi](configurations/rofi.md)
 * [sway](configurations/sway.md)
     * [wallpaper](assets/wallpaper.png)
 * [tmux](configurations/tmux.md)

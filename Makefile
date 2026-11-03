@@ -41,6 +41,7 @@ build: $(MD_TANGLE)
 	$(MD_TANGLE) configurations/nano.md -f -d dist/nano/
 	$(MD_TANGLE) configurations/nvim.md -i plugins -f -d dist/nvim/nvim/
 	$(MD_TANGLE) configurations/nvim.md -f -d dist/nvim/nvim-lite/
+	$(MD_TANGLE) configurations/rofi.md -f -d dist/rofi/
 	$(MD_TANGLE) configurations/sway.md -f -d dist/sway/
 	$(MD_TANGLE) configurations/tmux.md -f -d dist/tmux/
 	$(MD_TANGLE) configurations/waybar.md -f -d dist/waybar/
