@@ -875,6 +875,8 @@ wk.add({
   { "<leader>ct", group = "[t]oggles", mode = { "n", "x" } },
   { "<leader>cg", group = "[g]oto", mode = { "n", "x" } },
   { "<leader>d", group = "[d]ocument" },
+  { "<leader>m", group = "[m]arkdown", mode = { "n", "v" } },
+  { "<leader>mf", group = "[f]ormat", mode = { "n", "v" } },
   { "<leader>s", group = "[s]earch" },
   { "<leader>S", group = "[S]ession" },
   { "<leader>t", group = '[t]emporary ("scratch") files' },
@@ -1068,6 +1070,7 @@ require("my.dev.treesitter")
 require("my.dev.formatting")
 require("my.dev.lazydev")
 require("my.dev.fidget")
+require("my.dev.console-log")
 ```
 
 #### mason
@@ -1497,6 +1500,82 @@ require("fidget").setup({
 })
 ```
 
+#### console-log
+
+`console.log` scaffolding for JS/TS buffers. `<leader>cl` takes the word under
+the cursor (or the visual selection) and writes a labelled log statement on the
+line below:
+```js
+console.log("-- [file.ts:42] user", { user })
+console.log("-- [file.ts:43] user.name", { ["user.name"]: user.name })
+```
+Non-identifiers (`user.name`, `arr[0]`) are not valid object shorthand, so they
+get a computed string key instead. The label points at the log statement's own
+line, not the variable's.
+
+Keymaps are buffer-local (via `FileType` autocmd), so `<leader>cl` stays free
+everywhere else.
+```lua tangle:~/.config/nvim/lua/my/dev/console-log.lua tags:plugins,dev
+---@param expr string
+---@return boolean # true if expr is a bare JS identifier (valid object shorthand)
+local function is_identifier(expr)
+  return expr:match("^[%a_$][%w_$]*$") ~= nil
+end
+
+---@param expr string
+---@param lnum integer? line to insert after, 1-indexed; defaults to the cursor line
+local function insert_log(expr, lnum)
+  expr = vim.trim(expr)
+  if expr == "" then
+    return
+  end
+
+  lnum = lnum or vim.api.nvim_win_get_cursor(0)[1]
+
+  local file = vim.fn.expand("%:t")
+  if file == "" then
+    file = "[No Name]"
+  end
+
+  local value = is_identifier(expr) and ("{ %s }"):format(expr) or ('{ ["%s"]: %s }'):format(expr, expr)
+
+  local indent = (vim.api.nvim_buf_get_lines(0, lnum - 1, lnum, false)[1] or ""):match("^%s*")
+  local line = ('%sconsole.log("-- [%s:%d] %s", %s)'):format(indent, file, lnum + 1, expr, value)
+
+  vim.api.nvim_buf_set_lines(0, lnum, lnum, false, { line })
+  vim.api.nvim_win_set_cursor(0, { lnum + 1, #indent })
+end
+```
+
+Text covered by the current visual selection, joined onto one line. Must be
+called while still in visual mode, hence `getregion()` over the live `v`/`.`
+positions instead of the `'<`/`'>` marks.
+```lua tangle:~/.config/nvim/lua/my/dev/console-log.lua tags:plugins,dev
+---@return string expr
+---@return integer lnum # last line of the selection
+local function selection()
+  local from, to = vim.fn.getpos("v"), vim.fn.getpos(".")
+  local region = vim.fn.getregion(from, to, { type = vim.fn.mode() })
+  return table.concat(vim.tbl_map(vim.trim, region), " "), math.max(from[2], to[2])
+end
+
+vim.api.nvim_create_autocmd("FileType", {
+  desc = "console.log scaffolding for JS/TS",
+  group = vim.api.nvim_create_augroup("dev-console-log", { clear = true }),
+  pattern = { "javascript", "javascriptreact", "typescript", "typescriptreact", "vue", "svelte" },
+  callback = function(args)
+    vim.keymap.set("n", "<leader>cl", function()
+      insert_log(vim.fn.expand("<cword>"))
+    end, { buffer = args.buf, desc = "console [l]og word under cursor" })
+    vim.keymap.set("x", "<leader>cl", function()
+      local expr, lnum = selection()
+      vim.cmd.normal({ vim.keycode("<Esc>"), bang = true })
+      insert_log(expr, lnum)
+    end, { buffer = args.buf, desc = "console [l]og selection" })
+  end,
+})
+```
+
 ### tmp
 > `tags:tmp`
 
@@ -1504,8 +1583,6 @@ Scratch space for trying out plugins under development. Plugins are loaded
 from a local directory by prepending it to the runtimepath (no `vim.pack`), and
 their help tags are generated. A missing directory gives a warning and returns
 `false`, so the setup can be guarded.
-
-Uncomment and adjust the example to load a local plugin.
 ```lua tangle:~/.config/nvim/lua/my/tmp/init.lua tags:tmp
 ---@param dir string
 ---@return boolean loaded
@@ -1521,8 +1598,224 @@ local function add_local(dir)
   end)
   return false
 end
+```
 
--- if add_local("~/dev/nvim-plugins/my-plugin.nvim") then
---   require("my-plugin").setup({})
--- end
+#### md-drafting
+
+Markdown authoring/presentation, loaded from `~/dev/nvim-plugins/md-drafting.nvim`
+```lua tangle:~/.config/nvim/lua/my/tmp/init.lua tags:tmp
+local has_md = add_local("~/dev/nvim-plugins/md-drafting.nvim")
+if has_md then
+  local md = require("md-drafting")
+
+  md.setup({
+    add_commands = true,
+    task_states = {
+      not_done = { "[ ]", "[/]" },
+      done = { "[x]" },
+    },
+    link_providers = {
+      local_file = {
+        dir = {
+          link = ".",
+          image = "assets",
+        },
+      },
+    },
+    callout_types = {
+      "NOTE",
+      "TIP",
+      "IMPORTANT",
+      "WARNING",
+      "CAUTION",
+    },
+    presentation = {
+      width = 100,
+      header_gap = 1,
+      win_opts = {
+        wrap = true,
+        linebreak = true,
+        number = true,
+      },
+      keymaps = {
+        next = "n",
+        previous = "p",
+        quit = "q",
+      },
+    },
+    focus_mode = {
+      width = 80,
+      header_gap = 1,
+      stats = { "words", "lines" },
+      typewriter = true,
+      win_opts = {
+        wrap = true,
+        linebreak = true,
+        conceallevel = 2,
+        cursorline = true,
+        spell = false,
+      },
+    },
+    typewriter = {
+      position = 0.4,
+    },
+  })
+
+  vim.api.nvim_set_hl(0, "MdDraftingHeader", {
+    bg = "#2E3434",
+    fg = "#E3A36F",
+    bold = true,
+    underline = true,
+  })
+
+  vim.keymap.set({ "n", "v" }, "<leader>zz", md.typewriter.toggle, { desc = "Toggle typewriter mode" })
+```
+
+Action menus (markdown buffers only)
+```lua tangle:~/.config/nvim/lua/my/tmp/init.lua tags:tmp
+  vim.api.nvim_create_autocmd("FileType", {
+    desc = "md-drafting action menu",
+    group = vim.api.nvim_create_augroup("md-drafting", { clear = true }),
+    pattern = "markdown",
+    callback = function()
+      vim.keymap.set({ "n", "v" }, "<leader>mi", function()
+        md.actions.open_menu("insert")
+      end, { buffer = true, desc = "[i]nsert actions" })
+      vim.keymap.set({ "n", "v" }, "<leader>mf", function()
+        md.actions.open_menu("formatting")
+      end, { buffer = true, desc = "[f]ormatting actions" })
+      vim.keymap.set({ "n", "v" }, "<leader>mv", function()
+        md.actions.open_menu("view")
+      end, { buffer = true, desc = "[v]iew actions" })
+      vim.keymap.set({ "n", "v" }, "<leader>ca", md.actions.open_all, { buffer = true, desc = "MD Actions" })
+      vim.keymap.set("i", "<C-c>", md.actions.open_all, { buffer = true, desc = "MD Actions" })
+    end,
+  })
+end
+```
+
+#### memoria
+
+Brains of markdown engrams, loaded from `~/dev/nvim-plugins/memoria.nvim`.
+Requires md-drafting, since its actions are registered in md-drafting's action
+menu (`<leader>mm`). `with_picked_brain` picks a brain, then acts on its name.
+```lua tangle:~/.config/nvim/lua/my/tmp/init.lua tags:tmp
+if has_md and add_local("~/dev/nvim-plugins/memoria.nvim") then
+  local mia = require("memoria")
+  local md = require("md-drafting")
+
+  mia.setup({
+    add_commands = true,
+    engrams = {
+      date_format = "YYYY-MM-DD",
+      concept_form = "slug",
+      filename = { prefix = "date", date_format = "YYYY-MM-DD" },
+      content_template = "# %title%\n\n%cursor%",
+      task_markers = {
+        not_done = { "[ ]", "[/]" },
+        done = { "[x]", "[X]" },
+      },
+    },
+    synapses = {
+      up = { inverse = "down", list = true, show_empty = true },
+      down = { inverse = "up", list = true, show_empty = true },
+    },
+    frontmatter = {
+      created = { kind = "value", list = false, default = "%date%" },
+      tags = { kind = "concept", concept_type = "tag", list = true },
+    },
+    concepts = {
+      tag = { fields = { "description" } },
+    },
+  })
+
+  ---@param run fun(name: string)
+  local function with_picked_brain(run)
+    mia.brain.pick(function(picked)
+      run(picked.name)
+    end)
+  end
+```
+
+Register memoria actions
+```lua tangle:~/.config/nvim/lua/my/tmp/init.lua tags:tmp
+  for _, action in ipairs({
+    {
+      label = "New engram",
+      run = function()
+        mia.engram.add_engram()
+      end,
+    },
+    {
+      label = "Add synapse",
+      run = function()
+        mia.synapse.add_synapse()
+      end,
+    },
+    {
+      label = "Rebuild atlas",
+      run = function()
+        mia.atlas.rebuild_atlas()
+      end,
+    },
+    {
+      label = "Rebuild atlas (fix)",
+      run = function()
+        mia.atlas.rebuild_atlas(nil, { fix = true })
+      end,
+    },
+    {
+      label = "Switch brain",
+      run = function()
+        with_picked_brain(function(name)
+          if mia.brain.switch(name) then
+            vim.notify(("memoria: active brain '%s'"):format(name))
+          end
+        end)
+      end,
+    },
+    {
+      label = "List brains",
+      run = function()
+        mia.brain.print_list()
+      end,
+    },
+    {
+      label = "Open brain config",
+      run = function()
+        mia.brain.open_config()
+      end,
+    },
+    {
+      label = "Add brain",
+      run = function()
+        vim.ui.input({ prompt = "Brain folder: ", completion = "dir" }, function(path)
+          if not path or path == "" then
+            return
+          end
+          local added = mia.brain.add(path)
+          if added then
+            vim.notify(("memoria: added brain '%s' at %s"):format(added.name, added.location))
+          end
+        end)
+      end,
+    },
+    {
+      label = "Deregister brain",
+      run = function()
+        with_picked_brain(function(name)
+          if mia.brain.deregister(name) then
+            vim.notify(("memoria: deregistered brain '%s'"):format(name))
+          end
+        end)
+      end,
+    },
+  }) do
+    md.actions.register("memoria", action)
+  end
+
+  vim.keymap.set("n", "<leader>mm", function()
+    md.actions.open_menu("memoria")
+  end, { desc = "[m]emoria actions" })
+end
 ```
