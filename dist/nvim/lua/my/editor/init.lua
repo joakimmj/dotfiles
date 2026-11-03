@@ -104,6 +104,8 @@ wk.add({
   { "<leader>ct", group = "[t]oggles", mode = { "n", "x" } },
   { "<leader>cg", group = "[g]oto", mode = { "n", "x" } },
   { "<leader>d", group = "[d]ocument" },
+  { "<leader>m", group = "[m]arkdown", mode = { "n", "v" } },
+  { "<leader>mf", group = "[f]ormat", mode = { "n", "v" } },
   { "<leader>s", group = "[s]earch" },
   { "<leader>S", group = "[S]ession" },
   { "<leader>t", group = '[t]emporary ("scratch") files' },
