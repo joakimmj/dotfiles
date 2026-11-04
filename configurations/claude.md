@@ -299,6 +299,39 @@ hook also writes `session_mode` to track what was injected at launch — this le
 `UserPromptSubmit` detect mid-session mode switches and emit full override rules
 instead of a short reminder.
 
+#### Plugin manifest
+
+Bump `version` on every change, otherwise Claude Code does not treat it as an
+update (see [Update](#update)).
+
+```json tangle:~/.claude/plugins/no-fluff/.claude-plugin/plugin.json
+{
+  "name": "no-fluff",
+  "version": "1.0.4",
+  "description": "Token-efficient speaking style: strips conversational fluff while preserving technical accuracy. Default mode is high-compression; terse mode is telegraphic.",
+  "author": {
+    "name": "zero_ir",
+    "email": "joakim@myrvoll.dev"
+  }
+}
+```
+
+Local marketplace that exposes the plugin (`no-fluff-local`):
+
+```json tangle:~/.claude/plugins/no-fluff/.claude-plugin/marketplace.json
+{
+  "name": "no-fluff-local",
+  "owner": { "name": "zero_ir" },
+  "plugins": [
+    {
+      "name": "no-fluff",
+      "source": "./",
+      "description": "Token-efficient speaking style (no-fluff)."
+    }
+  ]
+}
+```
+
 #### Hook registration
 
 ```json tangle:~/.claude/plugins/no-fluff/hooks/hooks.json
