@@ -2,6 +2,7 @@
 
 <!-- TOC -->
 - [Claude](#claude)
+  - [Keybindings](#keybindings)
   - [Skills](#skills)
     - [Handover](#handover)
     - [Study notes](#study-notes)
@@ -11,6 +12,7 @@
       - [Update](#update)
       - [Usage](#usage)
       - [State](#state)
+      - [Plugin manifest](#plugin-manifest)
       - [Hook registration](#hook-registration)
       - [Style rules](#style-rules)
       - [SessionStart / SubagentStart handler](#sessionstart--subagentstart-handler)
@@ -23,6 +25,21 @@ local plugins.
 
 ```md tangle:~/.claude/CLAUDE.md
 # Global Claude memory
+```
+
+## Keybindings
+
+Scroll with `j`/`k` in the pane (transcript) view.
+
+```json tangle:~/.claude/keybindings.json
+{
+  "bindings": [
+    {
+      "context": "Pane",
+      "bindings": { "j": "pane:scrollDown", "k": "pane:scrollUp" }
+    }
+  ]
+}
 ```
 
 ## Skills

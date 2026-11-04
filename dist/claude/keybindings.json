@@ -1,0 +1,8 @@
+{
+  "bindings": [
+    {
+      "context": "Pane",
+      "bindings": { "j": "pane:scrollDown", "k": "pane:scrollUp" }
+    }
+  ]
+}
