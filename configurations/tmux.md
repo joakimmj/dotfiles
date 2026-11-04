@@ -168,9 +168,9 @@ bind-key -T root C-a switch-client -T my-keys
 bind-key -T my-keys -N "Reload config" r source-file ~/.config/tmux/tmux.conf \; display-message "~/.config/tmux/tmux.conf reloaded"
 bind-key -T my-keys -N "Edit config" e send-keys "nvim ~/.config/tmux/tmux.conf" Enter
 bind-key -T my-keys -N "Jump to last window" Space last-window
-bind-key -T my-keys -N "Popup terminal" t display-popup -w 80% -h 80% -T "[ TERMINAL ]" -S "fg=#E3A36F" -E
+bind-key -T my-keys -N "Popup terminal" t display-popup -w 80% -h 80% -T "[ TERMINAL ]" -S "fg=#E3A36F" -d "#{pane_current_path}" -E
 bind-key -T my-keys -N "Popup search and create session" s display-popup -T "[ CREATE/OPEN SESSION ]" -S "fg=#E3A36F" -E "tmuxs"
-bind-key -T my-keys -N "Popup search and create window" w display-popup -T "[ CREATE/OPEN WINDOW ]" -S "fg=#E3A36F" -E "dev"
+bind-key -T my-keys -N "Popup search and create window" w run-shell "tmux display-popup -T '[ CREATE/OPEN WINDOW ]' -S 'fg=#E3A36F' -E \"dev -s '#{session_name}'\""
 bind-key -T my-keys -N "Jump to directory" j send-keys "cd $(find -L ~/dev ~/projects ~/.config -mindepth 1 -maxdepth 1 -type d | fzf)" Enter
 bind-key -T my-keys -N "Search up" / copy-mode \; send-key "?"
 ```
@@ -202,6 +202,7 @@ bind-key -T my-keys c switch-client -T cheatsheets
 bind-key -T cheatsheets -N "Cheatsheet" c display-popup -T "[ CHEATSHEETS ]" -S "fg=#E3A36F" -E "cht-sh"
 bind-key -T cheatsheets -N "Cheatsheet (programming languages)" l display-popup -T "[ CHEATSHEETS ]" -S "fg=#E3A36F" -E "cht-lang"
 bind-key -T cheatsheets -N "Cheatsheet (utils)" u display-popup -T "[ CHEATSHEETS ]" -S "fg=#E3A36F" -E "cht-util"
+bind-key -T cheatsheets -N "TLDR" t display-popup -T "[ CHEATSHEETS ]" -S "fg=#E3A36F" -E "cht-tldr"
 bind-key -T cheatsheets -N "Cheatsheet for vim motions" v display-popup -T "[ CHEATSHEETS ]" -S "fg=#E3A36F" -E "less ~/.config/tmux/docs/vim-motions.md"
 ```
 
@@ -338,60 +339,65 @@ esac
 ### My dev script
 > Strongly influenced by [tmux-sessionizer](https://github.com/ThePrimeagen/.dotfiles/blob/master/bin/.local/scripts/tmux-sessionizer)
 
-Use `dev <directory> (optional)` to start new session.
+Use `dev [-s <session>] [<directory>]` to open a directory as a window in a
+session (default session: `dev`).
 ```sh tangle:~/bin/dev
 #!/usr/bin/env bash
 ```
 
-Directories to search (`~/dev` and `~/dev/private`)
+Project roots to search (`~/dev` and `~/dev/private`): each subfolder is a
+candidate. `extra` holds single folders that are listed as-is.
 ```sh tangle:~/bin/dev
-dirs="~/dev ~/dev/private"
+dirs=(~/dev ~/dev/private)
+extra=()
 ```
 
-If no directory is given we use fuzzy search (`fzf`) the directories defined above.
+Default window per session (`window:dir`), only created when the session is
+first created. Other sessions start with a window for the selected directory.
 ```sh tangle:~/bin/dev
-if [[ $# -eq 1 ]]; then
-    path=$1
-else
-    path=$(eval "find -L $dirs -mindepth 1 -maxdepth 1 -type d | fzf")
-fi
+declare -A defaults=([dev]="home:$HOME")
 ```
 
-If nothing gets selected, we exit the script
+Pick session with `-s` (default `dev`)
 ```sh tangle:~/bin/dev
-if [[ -z $path ]]; then
-    exit 0
-fi
+session=dev
+[[ ${1:-} == -s ]] && { session=$2; shift 2; }
 ```
 
-Extract window name based on folder name.
+If no directory is given we use fuzzy search (`fzf`) the directories defined
+above. If nothing gets selected, we exit the script. The window name is based on
+the folder name.
 ```sh tangle:~/bin/dev
-selected_dir=$(basename "$path" | tr . _)
+path=${1:-$({ find -L "${dirs[@]}" -mindepth 1 -maxdepth 1 -type d 2>/dev/null
+              printf '%s\n' "${extra[@]}"; } | fzf)}
+[[ -z $path ]] && exit 0
+name=$(basename "$path" | tr '.:' '_')
 ```
 
-Create `dev` session with default `home` window if it does not exist
+Create the session if it does not exist (`=` makes tmux match names exactly)
 ```sh tangle:~/bin/dev
-if ! tmux has-session -t dev 2> /dev/null; then
-    tmux new-session -d -x - -y - -s dev -n home -c ~/
-fi
-if ! tmux has-session -t dev:home 2> /dev/null; then
-    tmux new-window -d -t dev -n home -c ~/
+if ! tmux has-session -t "=$session" 2>/dev/null; then
+    d=${defaults[$session]:-}
+    if [[ -n $d ]]; then
+        tmux new-session -d -x - -y - -s "$session" -n "${d%%:*}" -c "${d#*:}"
+    else
+        tmux new-session -d -x - -y - -s "$session" -n "$name" -c "$path"
+    fi
 fi
 ```
 
 Create window for selected directory if it does not exist
 ```sh tangle:~/bin/dev
-if ! tmux has-session -t dev:$selected_dir 2> /dev/null; then
-    tmux new-window -t dev -n $selected_dir -c $path
-fi
+tmux list-windows -t "=$session" -F '#W' | grep -qxF "$name" ||
+    tmux new-window -t "=$session:" -n "$name" -c "$path"
 ```
 
-If running outside of `tmux` attach the new session, if not switch to it
+If running outside of `tmux` attach the session, if not switch to it
 ```sh tangle:~/bin/dev
-if [[ -z $TMUX ]]; then
-    tmux attach-session -d -t dev:$selected_dir
+if [[ -z ${TMUX:-} ]]; then
+    tmux attach-session -d -t "=$session:=$name"
 else
-    tmux switch-client -t dev:$selected_dir
+    tmux switch-client -t "=$session:=$name"
 fi
 ```
 

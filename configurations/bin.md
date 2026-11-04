@@ -32,6 +32,19 @@ read -p "Enter query: " query
 curl -s cht.sh/"${util}${query:+~$query}" | less -R
 ```
 
+Browse `tldr` pages with `fzf` (requires `tldr`)
+```bash tangle:~/bin/cht-tldr
+#!/usr/bin/env bash
+
+options="---[ C-c to quit | Enter to continue ]-----------------------------------------"
+echo $options
+while true
+do
+  tldr --list | awk '{print $1}' | fzf --preview 'tldr {+1}' | xargs tldr
+  read -p "$options " user_input
+done
+```
+
 ## JWT
 
 Decode JWT token

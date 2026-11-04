@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+options="---[ C-c to quit | Enter to continue ]-----------------------------------------"
+echo $options
+while true
+do
+  tldr --list | awk '{print $1}' | fzf --preview 'tldr {+1}' | xargs tldr
+  read -p "$options " user_input
+done
