@@ -219,6 +219,7 @@ Alias for stashing only untracked files
         git add -A;                 \
         git status -sb;             \
     }; f"
+    stash-force = "!git checkout stash -- . && git stash drop" # Force pop stash (overwrite from stash)
 ```
 
 #### Shortcuts
@@ -243,6 +244,7 @@ Even shorter aliases for often used commands
     dsw         = diff --staged --word-diff                 # Show staged changes (by word)
     l           = log --graph                               # Changelog
     ll          = log --graph --all                         # Changelog (all changes)
+    lm          = "!git log --format='%C(dim #7EC1AE)(%ar | %ae)%C(reset)%n%C(ul bold #CD8B64)%s%C(reset)%n%b%n'"
     ms          = maintenance start                         # Cron job that cleans repo (makes git faster)
     p           = pull                                      # Pull your changes to remote
     rd          = diff @{upstream}                          # Show diff between local and remote
@@ -281,5 +283,12 @@ Commit template
 # - `refactor`: refactoring production code, eg. renaming a variable
 # - `test`: adding missing tests, refactoring tests; no production code change
 # - `chore`: updating grunt tasks etc; no production code change
+# - `build`: Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
+# - `ci`: Changes to CI configuration files and scripts (examples: Github Actions, SauceLabs)
+# - `perf`: A code change that improves performance
+#
+# Other tags used in message footer:
+# - `BREAKING CHANGE`: a brief summary of the breaking change, a blank line, and a detailed description of the breaking change that also includes migration instructions.
+# - `DEPRECATED`: a short description of what is deprecated, a blank line, and a detailed description of the deprecation that also mentions the recommended update path.
 ```
 
