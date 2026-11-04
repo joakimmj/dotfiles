@@ -239,7 +239,6 @@ fi
 Set aliases for bash
 ```bash tangle:~/.bash_aliases
 alias ..='cd ..'
-alias -='cd -'
 alias ls='ls -p --color=auto'
 alias l='ls -Fl --color=auto'
 alias ll='ls -Fl --color=auto'
