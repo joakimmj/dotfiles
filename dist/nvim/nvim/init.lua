@@ -23,6 +23,10 @@ vim.keymap.set("n", "<leader>tl", function()
   local current = vim.diagnostic.config().virtual_lines or false
   vim.diagnostic.config({ virtual_lines = not current })
 end, { desc = "[t]oggle virtual [l]ines" })
+vim.keymap.set("n", "<C-w>D", function()
+  local current = vim.diagnostic.config().virtual_lines or false
+  vim.diagnostic.config({ virtual_lines = not current })
+end, { desc = "Toggle diagnostics" })
 vim.keymap.set("n", "<leader>tv", function()
   local current = vim.diagnostic.config().virtual_text or false
   vim.diagnostic.config({ virtual_text = not current })

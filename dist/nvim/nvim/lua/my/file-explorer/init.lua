@@ -15,12 +15,10 @@ require("snacks").setup({
       explorer = {
         layout = {
           preset = "sidebar",
+          preview = true,
           layout = {
             width = 80,
           },
-          config = function(layout)
-            layout.preview = nil
-          end,
         },
         focus = "list",
       },

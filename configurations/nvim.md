@@ -148,6 +148,10 @@ vim.keymap.set("n", "<leader>tl", function()
   local current = vim.diagnostic.config().virtual_lines or false
   vim.diagnostic.config({ virtual_lines = not current })
 end, { desc = "[t]oggle virtual [l]ines" })
+vim.keymap.set("n", "<C-w>D", function()
+  local current = vim.diagnostic.config().virtual_lines or false
+  vim.diagnostic.config({ virtual_lines = not current })
+end, { desc = "Toggle diagnostics" })
 vim.keymap.set("n", "<leader>tv", function()
   local current = vim.diagnostic.config().virtual_text or false
   vim.diagnostic.config({ virtual_text = not current })
@@ -908,8 +912,8 @@ File navigation + fuzzy pickers via
 fails) is `netrw`, configured in `init.lua`.
 
 Picker layout is `ivy`, or `ivy_split` if the window is narrower than 120
-columns. The explorer is a sidebar with the preview shown inside the sidebar
-(clearing `layout.preview`).
+columns. The explorer is a sidebar with the preview pane enabled
+(`preview = true`).
 ```lua tangle:~/.config/nvim/lua/my/file-explorer/init.lua tags:plugins,file-explorer
 vim.pack.add({
   { src = "https://github.com/folke/snacks.nvim" },
@@ -928,12 +932,10 @@ require("snacks").setup({
       explorer = {
         layout = {
           preset = "sidebar",
+          preview = true,
           layout = {
             width = 80,
           },
-          config = function(layout)
-            layout.preview = nil
-          end,
         },
         focus = "list",
       },
