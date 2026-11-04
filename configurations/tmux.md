@@ -300,7 +300,7 @@ restore_session() {
         tmux new-session -d -x - -y - -s "$session_name" -n "$window_name" -c "$dir"
       fi
       if ! tmux has-session -t "$session_name:$window_name" 2>/dev/null; then
-        tmux new-window -d -t "$sessione_name" -n "$window_name" -c "$dir"
+        tmux new-window -d -t "$session_name" -n "$window_name" -c "$dir"
       fi
     fi
   done < "$session_file"
