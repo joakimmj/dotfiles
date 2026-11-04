@@ -29,7 +29,7 @@ clean:
 
 # Build all configuration files
 build: $(MD_TANGLE)
-	$(MD_TANGLE) configurations/bash.md -f -d dist/bash/
+	$(MD_TANGLE) configurations/bash.md -i java -f -d dist/bash/
 	$(MD_TANGLE) configurations/bin.md -f -d dist/bin/
 	$(MD_TANGLE) configurations/claude.md -f -d dist/claude/
 	$(MD_TANGLE) configurations/conkeror.md -f -d dist/conkeror/

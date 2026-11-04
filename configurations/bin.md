@@ -32,6 +32,18 @@ read -p "Enter query: " query
 curl -s cht.sh/"${util}${query:+~$query}" | less -R
 ```
 
+Preview a file with `bat` if available, otherwise `cat` (used by `fzf` previews
+in aliases and `wt`)
+```bash tangle:~/bin/fzf-preview
+#!/usr/bin/env bash
+
+if type bat >/dev/null; then
+	bat "$@"
+else
+	cat "$@"
+fi
+```
+
 Browse `tldr` pages with `fzf` (requires `tldr`)
 ```bash tangle:~/bin/cht-tldr
 #!/usr/bin/env bash

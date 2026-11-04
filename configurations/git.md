@@ -264,7 +264,10 @@ Set files to ignore by default.
 .session.vim
 .tmp.*
 .factorypath
+.worktrees
 ```
+
+`.worktrees` is where the `wt` helper (see [bash](bash.md)) creates worktrees.
 
 ## Template
 
