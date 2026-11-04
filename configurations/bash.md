@@ -38,10 +38,26 @@ if [ -f /etc/bash_completion ]; then
 fi
 ```
 
-## Pager and editor
-Set `less` as the pager (also for `man` and `systemd`), and `vi` as the editor.
+## Core
+Everything below goes in `~/.bash_core`, loaded from `~/.bashrc`. `~/.bashrc`
+keeps only the parts that depend on the system (completion files, `$PATH`,
+`/etc` definitions), so `.bash_core` can be sourced as is from e.g. a
+home-manager generated `.bashrc`.
 
 ```bash tangle:~/.bashrc
+if [ -f ~/.bash_core ]; then
+    . ~/.bash_core
+fi
+```
+
+```bash tangle:~/.bash_core
+# .bash_core: system agnostic shell setup, sourced from ~/.bashrc
+```
+
+### Pager and editor
+Set `less` as the pager (also for `man` and `systemd`), and `vi` as the editor.
+
+```bash tangle:~/.bash_core
 export EDITOR=vi
 export PAGER=less
 export MANPAGER=less
@@ -49,12 +65,12 @@ export SYSTEMD_PAGER=less
 export VISUAL=vi
 ```
 
-## Time zone
-```bash tangle:~/.bashrc
+### Time zone
+```bash tangle:~/.bash_core
 export TZ=Europe/Oslo
 ```
 
-## History control
+### History control
 Ignore duplicates and spaces in the git history.
 
 > A value of `ignoredups` causes lines which match the previous history entry 
@@ -63,26 +79,26 @@ Ignore duplicates and spaces in the git history.
 > A value of `erasedups` causes all previous lines matching the current line 
 > to be removed from the history list before that line is saved.
 
-```bash tangle:~/.bashrc
+```bash tangle:~/.bash_core
 HISTCONTROL=ignoreboth:erasedups
 ```
 
 Append to the history file, don't overwrite it
-```bash tangle:~/.bashrc
+```bash tangle:~/.bash_core
 shopt -s histappend
 ```
 
-## Exit
+### Exit
 Require `<C-d>` at an empty prompt three times in a row to exit. Protects
 against accidental exits, e.g. with homerow-mod ctrl keys where a single press
 is too easy to hit.
-```bash tangle:~/.bashrc
+```bash tangle:~/.bash_core
 IGNOREEOF=3
 ```
 
 ## Prompt
 
-The prompt lives in its own file, `.bash_ps1`, which is sourced from `.bashrc`
+The prompt lives in its own file, `.bash_ps1`, which is sourced from `.bash_core`
 (and can be sourced from other shells, e.g. nix dev-shells).
 
 Show git status in prompt.
@@ -175,25 +191,25 @@ PS1="\[$redox_rust\]╭─\$(get_tags)[\[$redox_teal\]\A\[$redox_rust\]]-[\[$red
 
 Load the prompt from `.bash_ps1`. It must be sourced before the `vi` mode
 cursor below, which reuses `$redox_rust`.
-```bash tangle:~/.bashrc
+```bash tangle:~/.bash_core
 if [ -f ~/.bash_ps1 ]; then
     . ~/.bash_ps1
 fi
 ```
 
 Set `vi` mode
-```bash tangle:~/.bashrc
+```bash tangle:~/.bash_core
 set -o vi
 ```
 
 Allow using `<C-l>` to clear screen in both modes.
-```bash tangle:~/.bashrc
+```bash tangle:~/.bash_core
 bind -m vi-command 'Control-l: clear-screen'
 bind -m vi-insert 'Control-l: clear-screen'
 ```
 
 Change cursor between the two modes
-```bash tangle:~/.bashrc
+```bash tangle:~/.bash_core
 bind "set show-mode-in-prompt on"
 bind "set vi-cmd-mode-string \"\1\e[2 q$redox_rust\2\""
 bind "set vi-ins-mode-string \"\1\e[6 q$redox_rust\2\""
@@ -202,7 +218,7 @@ bind "set vi-ins-mode-string \"\1\e[6 q$redox_rust\2\""
 ## Alias
 
 Load aliases from `.bash_aliases`
-```bash tangle:~/.bashrc
+```bash tangle:~/.bash_core
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
@@ -210,7 +226,7 @@ fi
 
 Load the Java helpers (`.bash_java`, only present when tangled with `-i java`)
 and the `wt` worktree helper (`.worktree_aliases`)
-```bash tangle:~/.bashrc
+```bash tangle:~/.bash_core
 if [ -f ~/.bash_java ]; then
     . ~/.bash_java
 fi
@@ -380,12 +396,12 @@ jitest() {
 
 `wt` mirrors `git worktree` verb-for-verb (`wt add`, `wt list`, `wt remove`, ...)
 with a few extras: auto path `<repo>/.worktrees/<branch>`, `cd` into the
-worktree, an `fzf` picker, and upstream tracking. Sourced from `.bashrc`
+worktree, an `fzf` picker, and upstream tracking. Sourced from `.bash_core`
 because it has to change the directory of the parent shell.
 
 ```bash tangle:~/.worktree_aliases
 # git worktree helper — regular-clone + <repo>/.worktrees/ model.
-# Sourced from ~/.bashrc — defines the `wt` function set (must be sourced, not
+# Sourced from ~/.bash_core — defines the `wt` function set (must be sourced, not
 # executed, so `wt cd`/`wt add` can change the parent shell's directory).
 #
 # `wt` mirrors `git worktree` verb-for-verb so daily use teaches the real CLI.

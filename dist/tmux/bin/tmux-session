@@ -8,6 +8,10 @@ else
   session_file=~/.tmux-session
 fi
 
+# Sessions skipped by `save` (regex), can be extended in local.sh
+ignore=scratchpad
+[[ -f ~/.config/tmux/local.sh ]] && . ~/.config/tmux/local.sh
+
 restore_session() {
   tmux start-server
 
@@ -31,7 +35,7 @@ restore_session() {
 case "$1" in
 save)
   echo "-- Saving:"
-  tmux list-windows -a -F "#S,#W,#{pane_current_path}" | grep -v "^scratchpad" > "$session_file"
+  tmux list-windows -a -F "#S,#W,#{pane_current_path}" | grep -Ev "^($ignore)" > "$session_file"
   cat "$session_file"
   exit 0
   ;;

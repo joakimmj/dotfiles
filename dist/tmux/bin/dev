@@ -2,6 +2,7 @@
 dirs=(~/dev ~/dev/private)
 extra=()
 declare -A defaults=([dev]="home:$HOME")
+[[ -f ~/.config/tmux/local.sh ]] && . ~/.config/tmux/local.sh
 session=dev
 [[ ${1:-} == -s ]] && { session=$2; shift 2; }
 path=${1:-$({ find -L "${dirs[@]}" -mindepth 1 -maxdepth 1 -type d 2>/dev/null

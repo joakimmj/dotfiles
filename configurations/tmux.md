@@ -214,6 +214,15 @@ bind-key -T my-keys l switch-client -T my-layouts
 bind-key -T my-layouts -N "Development layout" d source-file ~/.config/tmux/layouts/dev-layout
 ```
 
+##### Local overrides
+
+Machine specific settings (extra popups, other directories to jump to, ...) go
+in `~/.config/tmux/local.conf`. It is not part of this repo. `-q` ignores a
+missing file, and since it is sourced last it can rebind any key above.
+``` tangle:~/.config/tmux/tmux.conf
+source-file -q ~/.config/tmux/local.conf
+```
+
 ## Layouts
 
 Dev layout
@@ -224,6 +233,15 @@ selectp -t 0
 ```
 
 ## Scripts
+
+The scripts below (`tmuxs`, `tmux-session`, `dev`) read machine specific
+settings from `~/.config/tmux/local.sh` if it exists (not part of this repo). It
+is plain bash that is sourced after the defaults, so it can override these
+variables:
+- `dirs`: array, project roots to search (`tmuxs`, `dev`)
+- `extra`: array, single folders to list as-is (`dev`)
+- `defaults`: associative array, default window per session (`dev`)
+- `ignore`: regex of session names `tmux-session save` skips
 
 ### TMUX session
 > Author: [ThePrimeagen](https://github.com/ThePrimeagen)  
@@ -236,7 +254,8 @@ Use `tmuxs <directory> (optional)` to start new session.
 
 Directories to search (`~/dev` and `~/dev/private`)
 ```sh tangle:~/bin/tmuxs
-dirs="~/dev ~/dev/private"
+dirs=(~/dev ~/dev/private)
+[[ -f ~/.config/tmux/local.sh ]] && . ~/.config/tmux/local.sh
 ```
 
 If no directory is given we use fuzzy search (`fzf`) the directories defined above.
@@ -244,7 +263,7 @@ If no directory is given we use fuzzy search (`fzf`) the directories defined abo
 if [[ $# -eq 1 ]]; then
     path=$1
 else
-    path=$(eval "find -L $dirs -mindepth 1 -maxdepth 1 -type d | fzf")
+    path=$(find -L "${dirs[@]}" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | fzf)
 fi
 ```
 
@@ -291,6 +310,10 @@ else
   session_file=~/.tmux-session
 fi
 
+# Sessions skipped by `save` (regex), can be extended in local.sh
+ignore=scratchpad
+[[ -f ~/.config/tmux/local.sh ]] && . ~/.config/tmux/local.sh
+
 restore_session() {
   tmux start-server
 
@@ -314,7 +337,7 @@ restore_session() {
 case "$1" in
 save)
   echo "-- Saving:"
-  tmux list-windows -a -F "#S,#W,#{pane_current_path}" | grep -v "^scratchpad" > "$session_file"
+  tmux list-windows -a -F "#S,#W,#{pane_current_path}" | grep -Ev "^($ignore)" > "$session_file"
   cat "$session_file"
   exit 0
   ;;
@@ -356,6 +379,7 @@ Default window per session (`window:dir`), only created when the session is
 first created. Other sessions start with a window for the selected directory.
 ```sh tangle:~/bin/dev
 declare -A defaults=([dev]="home:$HOME")
+[[ -f ~/.config/tmux/local.sh ]] && . ~/.config/tmux/local.sh
 ```
 
 Pick session with `-s` (default `dev`)

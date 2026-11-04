@@ -94,3 +94,5 @@
     stus        = stash save --keep-index                   # Stash changes (unstaged)
     stp         = stash pop                                 # Pop stashed changes
     u           = remote update origin --prune              # Update remote info
+[include]
+    path = ~/.config/git/config.local

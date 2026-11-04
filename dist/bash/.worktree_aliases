@@ -1,5 +1,5 @@
 # git worktree helper — regular-clone + <repo>/.worktrees/ model.
-# Sourced from ~/.bashrc — defines the `wt` function set (must be sourced, not
+# Sourced from ~/.bash_core — defines the `wt` function set (must be sourced, not
 # executed, so `wt cd`/`wt add` can change the parent shell's directory).
 #
 # `wt` mirrors `git worktree` verb-for-verb so daily use teaches the real CLI.

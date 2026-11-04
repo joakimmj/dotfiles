@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
-dirs="~/dev ~/dev/private"
+dirs=(~/dev ~/dev/private)
+[[ -f ~/.config/tmux/local.sh ]] && . ~/.config/tmux/local.sh
 if [[ $# -eq 1 ]]; then
     path=$1
 else
-    path=$(eval "find -L $dirs -mindepth 1 -maxdepth 1 -type d | fzf")
+    path=$(find -L "${dirs[@]}" -mindepth 1 -maxdepth 1 -type d 2>/dev/null | fzf)
 fi
 if [[ -z $path ]]; then
     exit 0

@@ -257,6 +257,17 @@ Even shorter aliases for often used commands
     u           = remote update origin --prune              # Update remote info
 ```
 
+### Local overrides
+
+Machine specific settings (identity, signing, work `includeIf`, extra URL
+shortcuts) go in `~/.config/git/config.local`. It is not part of this repo. A
+missing file is silently ignored, and since it is included last it overrides
+everything above.
+``` tangle:~/.config/git/config
+[include]
+    path = ~/.config/git/config.local
+```
+
 ## Ignore
 Set files to ignore by default.
 
