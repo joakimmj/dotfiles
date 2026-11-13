@@ -1,0 +1,27 @@
+{
+  "engrams": {
+    "filename": {
+      "prefix": "concept"
+    }
+  },
+  "frontmatter": {
+    "tool": {
+      "kind": "concept",
+      "concept_type": "tool",
+      "list": false
+    },
+    "tags": {
+      "kind": "concept",
+      "concept_type": "tag",
+      "list": true
+    }
+  },
+  "synapses": {
+    "up": {
+      "show_empty": false
+    },
+    "down": {
+      "show_empty": false
+    }
+  }
+}

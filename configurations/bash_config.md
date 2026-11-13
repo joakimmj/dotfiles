@@ -1,3 +1,8 @@
+---
+created: 2018-11-11
+tool: bash
+tags: [shell]
+---
 # Bashrc
 Add header information
 ```bash tangle:~/.bashrc
@@ -7,8 +12,11 @@ Add header information
 ```
 
 ## Git sources
-Add completion and git status to prompt. Copy the files `.git-completion.bash`
-and `.git-prompt.sh` to your home directory (`$HOME`/`~/`).
+Add completion and git status to prompt. `.git-completion.bash` and
+`.git-prompt.sh` are copied from `assets/` to the home directory.
+
+<!-- TANGLE_CP:assets/.git-completion.bash tangle:~/.git-completion.bash -->
+<!-- TANGLE_CP:assets/.git-prompt.sh tangle:~/.git-prompt.sh -->
 
 ```bash tangle:~/.bashrc
 source ~/.git-completion.bash
@@ -322,7 +330,7 @@ alias vimm='NVIM_APPNAME=nvim-lite nvim -S .session.vim'
 Helper functions for starting and testing maven projects. They live in their
 own file, `.bash_java`, and are only tangled when the `java` tag is included:
 ```bash
-md-tangle configurations/bash.md -i java
+md-tangle configurations/bash_config.md -i java
 ```
 
 > If you need a custom trust store, add `-Djavax.net.ssl.trustStore=<path>` to

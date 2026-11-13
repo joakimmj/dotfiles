@@ -29,25 +29,25 @@ clean:
 
 # Build all configuration files
 build: $(MD_TANGLE)
-	$(MD_TANGLE) configurations/bash.md -i java -f -d dist/bash/
-	$(MD_TANGLE) configurations/bin.md -f -d dist/bin/
-	$(MD_TANGLE) configurations/claude.md -f -d dist/claude/
-	$(MD_TANGLE) configurations/conkeror.md -f -d dist/conkeror/
-	$(MD_TANGLE) configurations/conky.md -f -d dist/conky/
-	$(MD_TANGLE) configurations/emacs.md -f -d dist/emacs/
-	$(MD_TANGLE) configurations/git.md -f -d dist/git/
-	$(MD_TANGLE) configurations/i3.md -f -d dist/i3/
-	$(MD_TANGLE) configurations/ideavimrc.md -f -d dist/ideavim/
-	$(MD_TANGLE) configurations/nano.md -f -d dist/nano/
-	$(MD_TANGLE) configurations/nvim.md -i plugins -f -d dist/nvim/nvim/
-	$(MD_TANGLE) configurations/nvim.md -f -d dist/nvim/nvim-lite/
-	$(MD_TANGLE) configurations/rofi.md -f -d dist/rofi/
-	$(MD_TANGLE) configurations/sway.md -f -d dist/sway/
-	$(MD_TANGLE) configurations/tmux.md -f -d dist/tmux/
-	$(MD_TANGLE) configurations/waybar.md -f -d dist/waybar/
-	$(MD_TANGLE) configurations/wezterm.md -f -d dist/wezterm/
-	$(MD_TANGLE) configurations/xmodmap.md -f -d dist/xmodmap/
-	$(MD_TANGLE) configurations/yazi.md -f -d dist/yazi/
+	$(MD_TANGLE) configurations/bash_config.md -i java -f -d dist/bash/
+	$(MD_TANGLE) configurations/bin_config.md -f -d dist/bin/
+	$(MD_TANGLE) configurations/claude_config.md -f -d dist/claude/
+	$(MD_TANGLE) configurations/conkeror_config.md -f -d dist/conkeror/
+	$(MD_TANGLE) configurations/conky_config.md -f -d dist/conky/
+	$(MD_TANGLE) configurations/emacs_config.md -f -d dist/emacs/
+	$(MD_TANGLE) configurations/git_config.md -f -d dist/git/
+	$(MD_TANGLE) configurations/i3_config.md -f -d dist/i3/
+	$(MD_TANGLE) configurations/ideavim_config.md -f -d dist/ideavim/
+	$(MD_TANGLE) configurations/nano_config.md -f -d dist/nano/
+	$(MD_TANGLE) configurations/nvim_config.md -i plugins -f -d dist/nvim/nvim/
+	$(MD_TANGLE) configurations/nvim_config.md -f -d dist/nvim/nvim-lite/
+	$(MD_TANGLE) configurations/rofi_config.md -f -d dist/rofi/
+	$(MD_TANGLE) configurations/sway_config.md -f -d dist/sway/
+	$(MD_TANGLE) configurations/tmux_config.md -f -d dist/tmux/
+	$(MD_TANGLE) configurations/waybar_config.md -f -d dist/waybar/
+	$(MD_TANGLE) configurations/wezterm_config.md -f -d dist/wezterm/
+	$(MD_TANGLE) configurations/xmodmap_config.md -f -d dist/xmodmap/
+	$(MD_TANGLE) configurations/yazi_config.md -f -d dist/yazi/
 
 # Check that tangled Lua matches the stylua rules
 check:
@@ -58,7 +58,7 @@ help: $(MD_TANGLE)
 	$(MD_TANGLE) --help
 
 # Tangle a specific configuration (drop-in for md-tangle; args after --).
-# Usage: make tangle -- configurations/nvim.md -i plugins -f -d dist/nvim/
+# Usage: make tangle -- configurations/nvim_config.md -i plugins -f -d dist/nvim/
 tangle: $(MD_TANGLE)
 	$(MD_TANGLE) $(filter-out tangle,$(MAKECMDGOALS))
 

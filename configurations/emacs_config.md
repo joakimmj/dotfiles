@@ -1,3 +1,8 @@
+---
+created: 2018-11-20
+tool: emacs
+tags: [editor]
+---
 # Emacs
 
 ## Dependencies

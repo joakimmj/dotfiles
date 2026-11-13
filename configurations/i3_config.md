@@ -1,3 +1,8 @@
+---
+created: 2018-11-11
+tool: i3
+tags: [wm]
+---
 # i3 wm
 
 ## Config
@@ -207,7 +212,11 @@ bindsym $super+$ctrl+Left workspace prev
 
 ### Modes
 #### System
-Exit i3 (logs you out of your X session)
+Exit i3 (logs you out of your X session). The lock screen image is copied
+from `assets/lock-screen.png`.
+
+<!-- TANGLE_CP:assets/lock-screen.png tangle:~/.config/i3/lock-screen.png -->
+
 ```bash tangle:~/.config/i3/config
 mode $mode-system {
     bindsym l exec --no-startup-id i3lock -p "win" -f -i ~/.config/i3/lock-screen.png -c 2d3333, mode $mode-default, exec pkill i3-nagbar
@@ -433,7 +442,9 @@ conky.text = [[
 ## Scripts
 
 ### Autostart
-Copy wallpaper from `configurations/assets/wallpaper.png` to `.config/i3/`.
+Wallpaper is copied from `assets/wallpaper.png` to `~/.config/i3/`.
+
+<!-- TANGLE_CP:assets/wallpaper.png tangle:~/.config/i3/wallpaper.png -->
 
 ```bash tangle:~/.config/i3/autostart.sh
 ## resolution

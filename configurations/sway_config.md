@@ -1,3 +1,8 @@
+---
+created: 2026-01-27
+tool: sway
+tags: [wm]
+---
 # Sway
 
 ## Config
@@ -77,6 +82,8 @@ Example configuration:
 > output HDMI-A-1 resolution 1920x1080 position 1920,0
 
 You can get the names of your outputs by running: swaymsg -t get_outputs
+
+<!-- TANGLE_CP:assets/wallpaper.png tangle:~/.config/sway/wallpaper.png -->
 
 ```bash tangle:~/.config/sway/config
 output * bg ~/.config/sway/wallpaper.png fill

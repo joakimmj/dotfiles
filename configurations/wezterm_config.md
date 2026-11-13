@@ -1,3 +1,8 @@
+---
+created: 2025-11-05
+tool: wezterm
+tags: [terminal]
+---
 # WezTerm
 
 <!-- TANGLE_CP:assets/wallpaper.png tangle:~/.config/wezterm/background.png -->

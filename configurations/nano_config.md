@@ -1,3 +1,8 @@
+---
+created: 2018-11-11
+tool: nano
+tags: [editor]
+---
 # Nanorc
 Add header information
 ```bash tangle:~/.nanorc

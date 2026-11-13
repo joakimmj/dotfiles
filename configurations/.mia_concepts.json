@@ -1,0 +1,110 @@
+{
+  "ai": {
+    "display_name": "AI",
+    "type": "tag"
+  },
+  "bash": {
+    "display_name": "Bash",
+    "type": "tool"
+  },
+  "bin": {
+    "display_name": "bin",
+    "type": "tool"
+  },
+  "browser": {
+    "display_name": "Browser",
+    "type": "tag"
+  },
+  "claude": {
+    "display_name": "Claude",
+    "type": "tool"
+  },
+  "conkeror": {
+    "display_name": "Conkeror",
+    "type": "tool"
+  },
+  "conky": {
+    "display_name": "Conky",
+    "type": "tool"
+  },
+  "desktop": {
+    "display_name": "Desktop",
+    "type": "tag"
+  },
+  "editor": {
+    "display_name": "Editor",
+    "type": "tag"
+  },
+  "emacs": {
+    "display_name": "Emacs",
+    "type": "tool"
+  },
+  "git": {
+    "display_name": "Git",
+    "type": "tool"
+  },
+  "i3": {
+    "display_name": "i3",
+    "type": "tool"
+  },
+  "ideavim": {
+    "display_name": "IdeaVim",
+    "type": "tool"
+  },
+  "nano": {
+    "display_name": "nano",
+    "type": "tool"
+  },
+  "nvim": {
+    "display_name": "Neovim",
+    "type": "tool"
+  },
+  "rofi": {
+    "display_name": "Rofi",
+    "type": "tool"
+  },
+  "scripts": {
+    "display_name": "Scripts",
+    "type": "tag"
+  },
+  "shell": {
+    "display_name": "Shell",
+    "type": "tag"
+  },
+  "sway": {
+    "display_name": "Sway",
+    "type": "tool"
+  },
+  "terminal": {
+    "display_name": "Terminal",
+    "type": "tag"
+  },
+  "tmux": {
+    "display_name": "tmux",
+    "type": "tool"
+  },
+  "vcs": {
+    "display_name": "VCS",
+    "type": "tag"
+  },
+  "waybar": {
+    "display_name": "Waybar",
+    "type": "tool"
+  },
+  "wezterm": {
+    "display_name": "WezTerm",
+    "type": "tool"
+  },
+  "wm": {
+    "display_name": "Window manager",
+    "type": "tag"
+  },
+  "xmodmap": {
+    "display_name": "Xmodmap",
+    "type": "tool"
+  },
+  "yazi": {
+    "display_name": "Yazi",
+    "type": "tool"
+  }
+}

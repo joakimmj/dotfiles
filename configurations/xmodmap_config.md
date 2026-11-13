@@ -1,3 +1,8 @@
+---
+created: 2018-11-11
+tool: xmodmap
+tags: [desktop]
+---
 # Xmodmap
 
 ## Set Caps Lock to Ctrl

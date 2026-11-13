@@ -5,29 +5,29 @@ tangled with the CLI tool [md-tangle][1].
 
 ## Configurations
 
-* [bash](configurations/bash.md)
+* [bash](configurations/bash_config.md)
     * [.git-completion](configurations/assets/.git-completion.bash)
     * [.git-prompt](configurations/assets/.git-prompt.sh)
-* [bin](configurations/bin.md)
-* [claude](configurations/claude.md)
-* [conkeror](configurations/conkeror.md)
-* [emacs](configurations/emacs.md)
-* [i3](configurations/i3.md)
+* [bin](configurations/bin_config.md)
+* [claude](configurations/claude_config.md)
+* [conkeror](configurations/conkeror_config.md)
+* [emacs](configurations/emacs_config.md)
+* [i3](configurations/i3_config.md)
     * [wallpaper](configurations/assets/wallpaper.png)
     * [lock-screen](configurations/assets/lock-screen.png)
-* [ideavimrc](configurations/ideavimrc.md)
-* [git](configurations/git.md)
-* [nano](configurations/nano.md)
-* [nvim](configurations/nvim.md)
-* [rofi](configurations/rofi.md)
-* [sway](configurations/sway.md)
+* [ideavimrc](configurations/ideavim_config.md)
+* [git](configurations/git_config.md)
+* [nano](configurations/nano_config.md)
+* [nvim](configurations/nvim_config.md)
+* [rofi](configurations/rofi_config.md)
+* [sway](configurations/sway_config.md)
     * [wallpaper](configurations/assets/wallpaper.png)
-* [tmux](configurations/tmux.md)
+* [tmux](configurations/tmux_config.md)
     * [vim-motions](configurations/assets/vim-motions.md)
-* [waybar](configurations/waybar.md)
-* [WezTerm](configurations/wezterm.md)
-* [Xmodmap](configurations/xmodmap.md)
-* [Yazi](configurations/yazi.md)
+* [waybar](configurations/waybar_config.md)
+* [WezTerm](configurations/wezterm_config.md)
+* [Xmodmap](configurations/xmodmap_config.md)
+* [Yazi](configurations/yazi_config.md)
 
 ### Tangle
 
@@ -41,7 +41,7 @@ python3 -m pip install md-tangle
 
 Now you can [tangle][1] the file want by e.g.:
 ```bash
-md-tangle configurations/bin.md
+md-tangle configurations/bin_config.md
 ```
 
 Or update the [sources](dist) with:

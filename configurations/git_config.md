@@ -1,3 +1,8 @@
+---
+created: 2019-05-03
+tool: git
+tags: [vcs]
+---
 # Git
 
 ## Git config
@@ -278,7 +283,7 @@ Set files to ignore by default.
 .worktrees
 ```
 
-`.worktrees` is where the `wt` helper (see [bash](bash.md)) creates worktrees.
+`.worktrees` is where the `wt` helper (see [bash](bash_config.md)) creates worktrees.
 
 ## Template
 

@@ -1,3 +1,8 @@
+---
+created: 2019-05-03
+tool: conky
+tags: [desktop]
+---
 # Conky 
 
 ## Config

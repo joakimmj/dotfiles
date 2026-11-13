@@ -1,3 +1,8 @@
+---
+created: 2025-11-05
+tool: bin
+tags: [shell, scripts]
+---
 # bin
 
 ## Cheat sheet

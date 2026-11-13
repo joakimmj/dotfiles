@@ -1,3 +1,8 @@
+---
+created: 2026-01-27
+tool: waybar
+tags: [desktop]
+---
 # waybar
 
 ## Modules

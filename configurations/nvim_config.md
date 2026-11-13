@@ -1,3 +1,8 @@
+---
+created: 2025-11-05
+tool: nvim
+tags: [editor]
+---
 # Nvim
 
 Requires Neovim `0.12+` (plugins are managed by the built-in `vim.pack`).
@@ -49,7 +54,7 @@ This `Neovim` config can be generated using `md-tangle` with different options.
 
 For a simple configuration without any plugins, just run:
 ```bash
-md-tangle configurations/nvim.md
+md-tangle configurations/nvim_config.md
 ```
 
 The config is split into logical groups, each living in its own module under
@@ -63,12 +68,12 @@ The config is split into logical groups, each living in its own module under
 
 You can include all plugins by running:
 ```bash
-md-tangle configurations/nvim.md -i plugins
+md-tangle configurations/nvim_config.md -i plugins
 ```
 
 or cherry-pick the groups you want:
 ```bash
-md-tangle configurations/nvim.md -i editor,theme,file-explorer
+md-tangle configurations/nvim_config.md -i editor,theme,file-explorer
 ```
 
 Groups that are not tangled are skipped silently. If the group has a native

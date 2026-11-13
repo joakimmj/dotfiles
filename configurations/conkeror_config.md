@@ -1,3 +1,8 @@
+---
+created: 2018-11-11
+tool: conkeror
+tags: [browser]
+---
 # Conkerorrc
 Add header information
 ```javascript tangle:~/.config/.conkerorrc

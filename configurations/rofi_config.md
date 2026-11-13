@@ -1,6 +1,11 @@
+---
+created: 2026-11-03
+tool: rofi
+tags: [desktop]
+---
 # Rofi
 
-Application launcher and `dmenu` replacement, used by [sway](sway.md)
+Application launcher and `dmenu` replacement, used by [sway](sway_config.md)
 (`$menu` → `rofi -show run`, `$menu-daemon` → `rofi -show drun`).
 
 Two themes using the [redox](https://github.com/joakimmj/redox.nvim) colors:
