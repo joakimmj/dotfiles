@@ -1,6 +1,6 @@
 # WezTerm
 
-<!-- TANGLE_CP:../assets/wallpaper.png tangle:~/.config/wezterm/background.png -->
+<!-- TANGLE_CP:assets/wallpaper.png tangle:~/.config/wezterm/background.png -->
 
 ```lua tangle:~/.config/wezterm/wezterm.lua
 local wezterm = require("wezterm")

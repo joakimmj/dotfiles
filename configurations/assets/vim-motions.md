@@ -5,15 +5,15 @@
 ### Movement
 
 | Key           | Action                                            |
-|---------------|---------------------------------------------------| 
+|---------------|---------------------------------------------------|
 | h             | move cursor left                                  |
 | j             | move cursor down                                  |
 | k             | move cursor up                                    |
-| l             | move cursor right                                 | 
+| l             | move cursor right                                 |
 | w             | move to start of next word                        |
 | W             | move to start of next word (inc. punctuation)     |
 | b             | move to start of previous word                    |
-| B             | move to start of previous word (inc. punctuation) | 
+| B             | move to start of previous word (inc. punctuation) |
 | 0             | move to start of line                             |
 | $             | move to end of line                               |
 | H             | move to first line in document                    |
@@ -30,7 +30,7 @@
 ### Window manipulation
 
 | Key     | Action                  |
-|---------|-------------------------| 
+|---------|-------------------------|
 | <C-w> v | split window vertical   |
 | <C-w> s | split window horizontal |
 | <C-w> c | close current window    |
@@ -42,7 +42,7 @@
 |----------------|----------------------------|
 | i              | insert before cursor       |
 | I              | insert at start of line    |
-| a              | insert after cursor        | 
+| a              | insert after cursor        |
 | A              | insert at end of line      |
 | o              | add new line below cursor  |
 | O              | add new line above cursor  |
@@ -69,7 +69,7 @@
 ### Search
 
 | Key | Action         |
-|-----|----------------| 
+|-----|----------------|
 | n   | next match     |
 | N   | previous match |
 
@@ -77,7 +77,7 @@
 
 | Key   | Action                     |
 |-------|----------------------------|
-| v     | enter visual mode          | 
+| v     | enter visual mode          |
 | V     | enter linewise visual mode |
 | <C-v> | start visual block mode    |
 | >     | shift text left            |
@@ -110,8 +110,8 @@ https://vimhelp.org/quickref.txt.html
 |   | gm      | to middle of the screen line                                                   |
 |   | gM      | to middle of the line                                                          |
 | N | \|      | to column N (default: 1)                                                       |
-| N | f{char} | to the Nth occurrence of {char} to the right                                   |   
-| N | F{char} | to the Nth occurrence of {char} to the left                                    |  
+| N | f{char} | to the Nth occurrence of {char} to the right                                   |
+| N | F{char} | to the Nth occurrence of {char} to the left                                    |
 | N | t{char} | till before the Nth occurrence of {char} to the right                          |
 | N | T{char} | till before the Nth occurrence of {char} to the left                           |
 | N | ;       | repeat the last "f", "F", "t", or "T" N times                                  |

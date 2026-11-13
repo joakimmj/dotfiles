@@ -6,23 +6,24 @@ tangled with the CLI tool [md-tangle][1].
 ## Configurations
 
 * [bash](configurations/bash.md)
-    * [.git-completion](assets/.git-completion.bash)
-    * [.git-prompt](assets/.git-prompt.sh)
+    * [.git-completion](configurations/assets/.git-completion.bash)
+    * [.git-prompt](configurations/assets/.git-prompt.sh)
 * [bin](configurations/bin.md)
 * [claude](configurations/claude.md)
 * [conkeror](configurations/conkeror.md)
 * [emacs](configurations/emacs.md)
 * [i3](configurations/i3.md)
-    * [wallpaper](assets/wallpaper.png)
-    * [lock-screen](assets/lock-screen.png)
+    * [wallpaper](configurations/assets/wallpaper.png)
+    * [lock-screen](configurations/assets/lock-screen.png)
 * [ideavimrc](configurations/ideavimrc.md)
 * [git](configurations/git.md)
 * [nano](configurations/nano.md)
 * [nvim](configurations/nvim.md)
 * [rofi](configurations/rofi.md)
 * [sway](configurations/sway.md)
-    * [wallpaper](assets/wallpaper.png)
+    * [wallpaper](configurations/assets/wallpaper.png)
 * [tmux](configurations/tmux.md)
+    * [vim-motions](configurations/assets/vim-motions.md)
 * [waybar](configurations/waybar.md)
 * [WezTerm](configurations/wezterm.md)
 * [Xmodmap](configurations/xmodmap.md)
@@ -58,7 +59,7 @@ deactivate
 Built around a gray/green base $\color{#2E3434}{\blacksquare}$ **#2E3434**,
 with pastel gray/green and rust/orange accents.
 
-![color palette](./assets/redox-color-palette.png)
+![color palette](./configurations/assets/redox-color-palette.png)
 
 ### Neutrals (gray–green)
 

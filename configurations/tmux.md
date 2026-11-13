@@ -197,6 +197,9 @@ bind-key -T my-keys -N "Popup scratchpad (current window)" P if-shell 'echo "#{s
 ##### Cheatsheet
 
 Prefixed with `C-a c`
+
+<!-- TANGLE_CP:assets/vim-motions.md tangle:~/.config/tmux/docs/vim-motions.md -->
+
 ``` tangle:~/.config/tmux/tmux.conf
 bind-key -T my-keys c switch-client -T cheatsheets
 bind-key -T cheatsheets -N "Cheatsheet" c display-popup -T "[ CHEATSHEETS ]" -S "fg=#E3A36F" -E "cht-sh"
