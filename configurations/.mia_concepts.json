@@ -59,6 +59,10 @@
     "display_name": "Neovim",
     "type": "tool"
   },
+  "plugin": {
+    "display_name": "Plugin",
+    "type": "tag"
+  },
   "rofi": {
     "display_name": "Rofi",
     "type": "tool"
@@ -69,6 +73,10 @@
   },
   "shell": {
     "display_name": "Shell",
+    "type": "tag"
+  },
+  "skill": {
+    "display_name": "Skill",
     "type": "tag"
   },
   "sway": {

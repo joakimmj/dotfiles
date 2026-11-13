@@ -32,6 +32,9 @@ build: $(MD_TANGLE)
 	$(MD_TANGLE) configurations/bash_config.md -i java -f -d dist/bash/
 	$(MD_TANGLE) configurations/bin_config.md -f -d dist/bin/
 	$(MD_TANGLE) configurations/claude_config.md -f -d dist/claude/
+	$(MD_TANGLE) configurations/claude_handover.md -f -d dist/claude/skills/handover/
+	$(MD_TANGLE) configurations/claude_no_fluff.md -f -d dist/claude/plugins/no-fluff/
+	$(MD_TANGLE) configurations/claude_study_notes.md -f -d dist/claude/skills/study-notes/
 	$(MD_TANGLE) configurations/conkeror_config.md -f -d dist/conkeror/
 	$(MD_TANGLE) configurations/conky_config.md -f -d dist/conky/
 	$(MD_TANGLE) configurations/emacs_config.md -f -d dist/emacs/
