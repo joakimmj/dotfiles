@@ -29,7 +29,9 @@ clean:
 
 # Build all configuration files
 build: $(MD_TANGLE)
-	$(MD_TANGLE) configurations/bash_config.md -i java -f -d dist/bash/
+	$(MD_TANGLE) configurations/bash_config.md -f -d dist/bash/
+	$(MD_TANGLE) configurations/bash_java.md -f -d dist/bash/
+	$(MD_TANGLE) configurations/bash_worktrees.md -f -d dist/bash/
 	$(MD_TANGLE) configurations/bin_config.md -f -d dist/bin/
 	$(MD_TANGLE) configurations/claude_config.md -f -d dist/claude/
 	$(MD_TANGLE) configurations/claude_handover.md -f -d dist/claude/skills/handover/

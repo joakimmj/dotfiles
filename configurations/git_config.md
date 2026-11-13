@@ -283,7 +283,7 @@ Set files to ignore by default.
 .worktrees
 ```
 
-`.worktrees` is where the `wt` helper (see [bash](bash_config.md)) creates worktrees.
+`.worktrees` is where the `wt` helper (see [bash worktrees](bash_worktrees.md)) creates worktrees.
 
 ## Template
 

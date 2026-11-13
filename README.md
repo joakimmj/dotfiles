@@ -6,6 +6,8 @@ tangled with the CLI tool [md-tangle][1].
 ## Configurations
 
 * [bash](configurations/bash_config.md)
+    * [java helpers](configurations/bash_java.md)
+    * [git worktrees](configurations/bash_worktrees.md)
     * [.git-completion](configurations/assets/.git-completion.bash)
     * [.git-prompt](configurations/assets/.git-prompt.sh)
 * [bin](configurations/bin_config.md)
