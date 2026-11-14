@@ -190,7 +190,16 @@ vim.o.statusline = " %f [%{strlen(&fenc)?&fenc:&enc}] [%{&ff}] %y [%{&spelllang}
   .. " [%n] %l/%L (%p%%), %c "
   .. "%#StatusLineNC#%{&mod?' [+] ':''}%*"
 vim.o.completeopt = "menuone,noselect,noinsert,fuzzy,popup"
+local lite = (vim.env.NVIM_LITE or "") ~= ""
+
 local function group(name, fallback)
+  if lite and name ~= "writing" then
+    if fallback then
+      fallback()
+    end
+    return
+  end
+
   local mod = "my." .. name
   local ok, err = pcall(require, mod)
   if ok then

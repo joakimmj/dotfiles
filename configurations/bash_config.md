@@ -324,8 +324,9 @@ Add alias for opening `nvim` with last session
 alias nvimm='nvim -S .session.vim'
 ```
 
-Aliases for non-plugin based `nvim`
+Aliases for non-plugin based `nvim` (plugin groups skipped, see `NVIM_LITE` in
+[nvim](nvim_config.md))
 ```bash tangle:~/.bash_aliases
-alias vim='NVIM_APPNAME=nvim-lite nvim'
-alias vimm='NVIM_APPNAME=nvim-lite nvim -S .session.vim'
+alias vim='NVIM_LITE=1 nvim'
+alias vimm='NVIM_LITE=1 nvim -S .session.vim'
 ```

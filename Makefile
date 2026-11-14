@@ -44,8 +44,12 @@ build: $(MD_TANGLE)
 	$(MD_TANGLE) configurations/i3_config.md -f -d dist/i3/
 	$(MD_TANGLE) configurations/ideavim_config.md -f -d dist/ideavim/
 	$(MD_TANGLE) configurations/nano_config.md -f -d dist/nano/
-	$(MD_TANGLE) configurations/nvim_config.md -i plugins -f -d dist/nvim/nvim/
-	$(MD_TANGLE) configurations/nvim_config.md -f -d dist/nvim/nvim-lite/
+	$(MD_TANGLE) configurations/nvim_config.md -f -d dist/nvim/
+	$(MD_TANGLE) configurations/nvim_writing.md -f -d dist/nvim/lua/my/writing/
+	$(MD_TANGLE) configurations/nvim_editor.md -f -d dist/nvim/lua/my/editor/
+	$(MD_TANGLE) configurations/nvim_theme.md -f -d dist/nvim/lua/my/theme/
+	$(MD_TANGLE) configurations/nvim_file_explorer.md -f -d dist/nvim/lua/my/file-explorer/
+	$(MD_TANGLE) configurations/nvim_dev.md -f -d dist/nvim/lua/my/dev/
 	$(MD_TANGLE) configurations/rofi_config.md -f -d dist/rofi/
 	$(MD_TANGLE) configurations/sway_config.md -f -d dist/sway/
 	$(MD_TANGLE) configurations/tmux_config.md -f -d dist/tmux/
@@ -63,7 +67,7 @@ help: $(MD_TANGLE)
 	$(MD_TANGLE) --help
 
 # Tangle a specific configuration (drop-in for md-tangle; args after --).
-# Usage: make tangle -- configurations/nvim_config.md -i plugins -f -d dist/nvim/
+# Usage: make tangle -- configurations/nvim_config.md -f -d dist/nvim/
 tangle: $(MD_TANGLE)
 	$(MD_TANGLE) $(filter-out tangle,$(MAKECMDGOALS))
 

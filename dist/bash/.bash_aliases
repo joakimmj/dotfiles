@@ -31,5 +31,5 @@ alias kill-process="ps -ux --no-headers | fzf --multi | awk '{print \$2}' | xarg
 alias nvimf="rg --hidden --files --ignore --glob '!.git' | fzf --preview 'fzf-preview {}' | xargs nvim"
 alias cats="fzf --preview 'fzf-preview {}'"
 alias nvimm='nvim -S .session.vim'
-alias vim='NVIM_APPNAME=nvim-lite nvim'
-alias vimm='NVIM_APPNAME=nvim-lite nvim -S .session.vim'
+alias vim='NVIM_LITE=1 nvim'
+alias vimm='NVIM_LITE=1 nvim -S .session.vim'
